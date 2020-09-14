@@ -3,8 +3,6 @@ function cyfr(encryptedString, key, type) {
 
     const blocks = encryptedString.match(/.{1,4}/g); // тут пока не переменное число
     const lengthOfMemo2 = encryptedString.length % key.length !== 0 ?  blocks.length-1 : blocks.length
-
-    console.log(blocks);
    
     const memo2 = type === "encrypt" ? encrypt(blocks, lengthOfMemo2, key) : decrypt(blocks, lengthOfMemo2, key) 
 
@@ -29,8 +27,7 @@ function encrypt(blocks, memoLength, key) {
         const cyfredBlockJ = []
         for(let i=0; i<key.length; i++) { // шифрование для блока i
             const key1 = key[i]-1
-            const modification = memoLength - key1 // модификация задачи
-            cyfredBlockJ.push(blocks[j][modification])
+            cyfredBlockJ.push(blocks[j][key1])
         }
         memo2.push(cyfredBlockJ)
     }
@@ -41,12 +38,14 @@ function encrypt(blocks, memoLength, key) {
 function decrypt(blocks, memoLength,  key) {
     const memo2 = []
     
+    // 3241 -> 3102
+    key = "4213"
+
     for(let j=0; j<memoLength; j++) { // для всех блоков, кроме последнего
         const cyfredBlockJ = []
         for(let i=0; i<key.length; i++) { // шифрование для блока i
             const key1 = key[i]-1
-            const modification = memoLength - key1 // модификация задачи
-            cyfredBlockJ[key1]= blocks[i][modification]
+            cyfredBlockJ[i] = blocks[j][key1]
         }
         memo2.push(cyfredBlockJ)
     }
