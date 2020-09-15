@@ -15,27 +15,31 @@
 
 import argparse
 import numpy as np
+import string
+from parseArgs import parseArgs
 
 
-parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('dataCount', type=int, help='This will be option two')
-parser.add_argument('output', nargs='?', help='This will be option two')
+charset = string.ascii_letters + string.punctuation + string.digits
+ 
+
+parser = argparse.ArgumentParser(description='Создает рандомные числа.')
+parser.add_argument('dataCount', type=int, help='Количество генерируемых данных')
+parser.add_argument('output', nargs='?', help='Путь к выходному файлу, по умолчанию - консоль')
 
 
-parser.add_argument('-seed', default=0, help='This will be option two')
-parser.add_argument('-t', '-type', default='int', dest="type")
+parser.add_argument('-seed', default=0, help='Значения инициализции генератора')
+parser.add_argument('-t', '-type', default='int', dest="type", help='Тип данных, которые мы подаем')
 parser.add_argument('-d', '-distribution', dest="distibution")
-parser.add_argument('-mean', dest="mean")
-parser.add_argument('-std', dest="std")
-parser.add_argument('-min_value', dest="min_value")
-parser.add_argument('-max_value', dest="max_value")
-
-
-
+parser.add_argument('-mean', dest="mean", type=float)
+parser.add_argument('-std', dest="std", type=float)
+parser.add_argument('-min_value', dest="min_value", type=int)
+parser.add_argument('-max_value', dest="max_value", type=int)
+parser.add_argument('-c', '-charset', default=charset, dest="charset")
+parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
-print(args)
 
+parseArgs(args)
 
 np.random.seed(args.seed)
 
@@ -44,8 +48,12 @@ resultedData = []
 for i in range(0, args.dataCount):
     if args.type == 'int':
         data = np.random.randint(args.dataCount)
+
         resultedData.append(data)
     elif args.type == 'float':
+        # print(np.random.normal(args.mean, args.std, [args.min_value, args.max_value]))
+        # print(np.random.uniform(args.mean, args.std, [args.min_value, args.max_value]))
+
         data = np.random.random()
         resultedData.append(data)
     elif args.type == "str":
@@ -54,7 +62,7 @@ for i in range(0, args.dataCount):
          raise Exception("Unknown type")
 
 
-if (args.output):
+if args.output:
     with open(args.output, 'w') as f:
         f.writelines(str(resultedData))
 else:
