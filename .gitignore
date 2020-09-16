@@ -4,5 +4,3 @@ __pycache__
 
 cmake-build-debug*
 conaninfo.txt
-
-out*

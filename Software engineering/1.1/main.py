@@ -38,8 +38,10 @@ parser.add_argument('-c', '-charset', default=charset, dest="charset")
 parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
-
 parseArgs(args)
+
+
+eachStringLength = 10 # что-то я не нашел в аргументах параметр для длины каждой строки
 
 np.random.seed(args.seed)
 
@@ -57,7 +59,13 @@ for i in range(0, args.dataCount):
         data = np.random.random()
         resultedData.append(data)
     elif args.type == "str":
-        pass
+        integerCharset = [ord(char) for char in args.charset]
+        arr = []
+        for i in range(eachStringLength):
+            randomChar = chr(np.random.choice(integerCharset))
+            arr.append(randomChar)
+        resultedData.append("".join(arr))
+
     else:
          raise Exception("Unknown type")
 
