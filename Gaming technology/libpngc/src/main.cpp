@@ -1,23 +1,19 @@
-#include <string>
-#include "lib.h"
 #include <iostream>
+#include "lib.h"
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        std::cout << "args not found";
-        std::cout << "args: src_image destination_image";
-        return -1;
-    }
 
-    std::string src = argv[1], dest = argv[2];
-    std::cout << "src: " <<  src;
-    std::cout << "dest: " <<  dest;
-
+    char* src = "C:\\Users\\Sapfir\\Documents\\6\\libpngc\\data\\4.png";
+    char* dest0 = "C:\\Users\\Sapfir\\Documents\\6\\libpngc\\data\\out0.png";
+    char* dest6 = "C:\\Users\\Sapfir\\Documents\\6\\libpngc\\data\\out6.png";
+    char* dest9 = "C:\\Users\\Sapfir\\Documents\\6\\libpngc\\data\\out9.png";
 
     read_png_file(src);
+    process_file();
+    write_png_file(dest0, 0);
+    write_png_file(dest6, 6);
+    write_png_file(dest9, 9);
 
 
     return 0;
 }
-
-

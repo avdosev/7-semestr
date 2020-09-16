@@ -1,10 +1,16 @@
-#ifndef IMAGE_TRANSFORMER_LIB_H
-#define IMAGE_TRANSFORMER_LIB_H
+//
+// Created by Sapfir on 11.09.2020.
+//
+
+#ifndef MYLIBPNG_LIB_H
+#define MYLIBPNG_LIB_H
 
 #include <string>
 
-void read_png_file(std::string src);
-void write_png_file(char* file_name);
+void read_png_file(char* file_name);
+void saveWithCompression(int compression);
+void write_png_file(char* file_name, int compression);
 void process_file();
 
-#endif //IMAGE_TRANSFORMER_LIB_H
+
+#endif //MYLIBPNG_LIB_H

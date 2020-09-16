@@ -1,3 +1,8 @@
+//
+// Created by Sapfir on 11.09.2020.
+//
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,6 +35,28 @@ png_infop info_ptr;
 int number_of_passes;
 png_bytep * row_pointers;
 
+void saveWithCompression(int compression) {
+    png_set_IHDR(png_ptr, info_ptr, width, height,
+                 bit_depth, color_type, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+
+    png_set_compression_level(png_ptr, compression);
+    png_write_info(png_ptr, info_ptr);
+
+    if (setjmp(png_jmpbuf(png_ptr)))
+        abort_("[write_png_file] Error during writing bytes");
+
+    png_write_image(png_ptr, row_pointers);
+
+
+    /* end write */
+    if (setjmp(png_jmpbuf(png_ptr)))
+        abort_("[write_png_file] Error during end of write");
+
+    png_write_end(png_ptr, NULL);
+
+}
+
 void read_png_file(char* file_name)
 {
     char header[8];    // 8 is the maximum size that can be checked
@@ -39,9 +66,7 @@ void read_png_file(char* file_name)
     if (!fp)
         abort_("[read_png_file] File %s could not be opened for reading", file_name);
     fread(header, 1, 8, fp);
-//    if (png_sig_cmp(header, 0, 8))
-//        abort_("[read_png_file] File %s is not recognized as a PNG file", file_name);
-//
+
     /* initialize stuff */
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
@@ -81,11 +106,9 @@ void read_png_file(char* file_name)
 
     fclose(fp);
 
-
 }
 
-
-void write_png_file(char* file_name)
+void write_png_file(char* file_name, int compression)
 {
     /* create file */
     FILE *fp = fopen(file_name, "wb");
@@ -113,55 +136,34 @@ void write_png_file(char* file_name)
     if (setjmp(png_jmpbuf(png_ptr)))
         abort_("[write_png_file] Error during writing header");
 
-    png_set_IHDR(png_ptr, info_ptr, width, height,
-                 bit_depth, color_type, PNG_INTERLACE_NONE,
-                 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-
-    png_write_info(png_ptr, info_ptr);
 
 
-    /* write bytes */
-    if (setjmp(png_jmpbuf(png_ptr)))
-        abort_("[write_png_file] Error during writing bytes");
-
-    png_write_image(png_ptr, row_pointers);
+    // сжатие
+    saveWithCompression(compression);
 
 
-    /* end write */
-    if (setjmp(png_jmpbuf(png_ptr)))
-        abort_("[write_png_file] Error during end of write");
 
-    png_write_end(png_ptr, NULL);
-
-    /* cleanup heap allocation */
-    for (y=0; y<height; y++)
-        free(row_pointers[y]);
-    free(row_pointers);
-
-    fclose(fp);
+//    /* cleanup heap allocation */
+//    for (y=0; y<height; y++)
+//        free(row_pointers[y]);
+//    free(row_pointers);
+//
+//    fclose(fp);
 }
 
 
 void process_file(void)
 {
-    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB)
-        abort_("[process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA "
-               "(lacks the alpha channel)");
+    for (int y=0; y<height/2 ; y++) {
+        for (int x=0; x<width; x++) {
+            png_byte* ptr = &(row_pointers[height-y-1][width-x-1 *3]);
 
-    if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
-        abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
-               PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
-
-    for (y=0; y<height; y++) {
-        png_byte* row = row_pointers[y];
-        for (x=0; x<width; x++) {
-            png_byte* ptr = &(row[x*4]);
-            printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
-                   x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
-
-            /* set red value to 0 and green value to the blue one */
-            ptr[0] = 0;
-            ptr[1] = ptr[2];
+            auto temp = row_pointers[height-y-1 *3][width-x-1 *3];
+            row_pointers[height-y-1 *3][width-x-1 *3] = row_pointers[y][x];
+            row_pointers[y][x] = temp;
         }
+
     }
+
+
 }
