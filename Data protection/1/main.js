@@ -1,7 +1,7 @@
 
 function cyfr(encryptedString, key, type) {
 
-    const blocks = encryptedString.match(/.{1,4}/g); // тут пока не переменное число
+    const blocks = encryptedString.match(/.{1,2}/g); // тут пока не переменное число
     const isEven = encryptedString.length % key.length === 0
    
     const memo2 = type === "encrypt" ? encrypt(blocks, isEven, key) : decrypt(blocks, isEven, key) 
