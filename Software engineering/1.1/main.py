@@ -16,7 +16,7 @@
 import argparse
 import numpy as np
 import string
-from parseArgs import parseArgs
+from parseArgs import validateArgs, writeResult
 
 
 charset = string.ascii_letters + string.punctuation + string.digits
@@ -38,14 +38,15 @@ parser.add_argument('-c', '-charset', default=charset, dest="charset")
 parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
-parseArgs(args)
+validateArgs(args)
 
 
-eachStringLength = 10 # что-то я не нашел в аргументах параметр для длины каждой строки
+eachStringLength = 10  # что-то я не нашел в аргументах параметр для длины каждой строки
 
 np.random.seed(args.seed)
 
 resultedData = []
+
 
 for i in range(0, args.dataCount):
     if args.type == 'int':
@@ -53,27 +54,19 @@ for i in range(0, args.dataCount):
 
         resultedData.append(data)
     elif args.type == 'float':
-        # print(np.random.normal(args.mean, args.std, [args.min_value, args.max_value]))
-        # print(np.random.uniform(args.mean, args.std, [args.min_value, args.max_value]))
 
         data = np.random.random()
         resultedData.append(data)
     elif args.type == "str":
-        integerCharset = [ord(char) for char in args.charset]
-        arr = []
-        for i in range(eachStringLength):
-            randomChar = chr(np.random.choice(integerCharset))
-            arr.append(randomChar)
-        resultedData.append("".join(arr))
+        data = [np.random.choice(args.charset) for i in range(eachStringLength)]
+        s_data = "".join(data)
+
+        resultedData.append(s_data)
 
     else:
          raise Exception("Unknown type")
 
 
-if args.output:
-    with open(args.output, 'w') as f:
-        f.writelines(str(resultedData))
-else:
-    print(resultedData)
 
+writeResult(args, resultedData)
 

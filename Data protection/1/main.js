@@ -2,54 +2,49 @@
 function cyfr(encryptedString, key, type) {
 
     const blocks = encryptedString.match(/.{1,4}/g); // тут пока не переменное число
-    const lengthOfMemo2 = encryptedString.length % key.length !== 0 ?  blocks.length-1 : blocks.length
+    const isEven = encryptedString.length % key.length === 0
    
-    const memo2 = type === "encrypt" ? encrypt(blocks, lengthOfMemo2, key) : decrypt(blocks, lengthOfMemo2, key) 
+    const memo2 = type === "encrypt" ? encrypt(blocks, isEven, key) : decrypt(blocks, isEven, key) 
 
-    console.log(memo2);
+    console.log(memo2)
 
-    if ( encryptedString.length % key.length !== 0) {
-        memo2.push([blocks[blocks.length-1]])
-    }
-
-    const res = memo2.map((block) => block.join("")).join("")
+    const res = memo2.join("")
 
     return res
 
 }
 
-
-function encrypt(blocks, memoLength, key) {
-
-    const memo2 = []
-
-    for(let j=0; j<memoLength; j++) { // для всех блоков, кроме последнего
-        const cyfredBlockJ = []
-        for(let i=0; i<key.length; i++) { // шифрование для блока i
-            const key1 = key[i]-1
-            cyfredBlockJ.push(blocks[j][key1])
-        }
-        memo2.push(cyfredBlockJ)
-    }
-
-    return memo2
+function reverseString(str) {
+    return str.split("").reverse().join("");
 }
 
-function decrypt(blocks, memoLength,  key) {
-    const memo2 = []
-    
-    // 3241 -> 3102
-    key = "4213"
+function code(blocks, isEven) {
+    console.log("Input", blocks);
 
-    for(let j=0; j<memoLength; j++) { // для всех блоков, кроме последнего
-        const cyfredBlockJ = []
-        for(let i=0; i<key.length; i++) { // шифрование для блока i
-            const key1 = key[i]-1
-            cyfredBlockJ[i] = blocks[j][key1]
-        }
-        memo2.push(cyfredBlockJ)
+    const removed = !isEven ? blocks.splice(-1,1)[0] : []
+
+    const memo2 = blocks.reverse()
+
+    const res = []
+    for (let i=0; i<memo2.length; i++) {
+        res.push(memo2[i])
     }
-    return memo2
+
+    if (!isEven) {
+        res.push(removed)
+    }
+
+    return res
+}
+
+
+function encrypt(blocks, isEven, key) {
+    return code(blocks, isEven)
+}
+
+function decrypt(blocks, isEven,  key) {
+    return code(blocks, isEven)
+
 }
 
 
@@ -65,7 +60,5 @@ const encrypted = cyfr(memo1, edit, "encrypt")
 console.log("Зашифрованный текст:", encrypted);
 
 console.log("Расшифрованный текст:", cyfr(encrypted, edit, "decrypt"));
-
-
 
 

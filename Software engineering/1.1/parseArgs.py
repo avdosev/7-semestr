@@ -2,7 +2,7 @@ from timer import my_timer
 
 
 @my_timer
-def parseArgs(args):
+def validateArgs(args):
     print(args)
 
     types = ['int', 'float', 'str']
@@ -15,3 +15,12 @@ def parseArgs(args):
             raise Exception("Не задано распределение, допустимые значения: normal, uniform")
         if not args.mean and not args.min_value and not args.max_value and not args.std:
             raise Exception("Не заданы параметры распределения")
+
+
+@my_timer
+def writeResult(args, resultedData):
+    if args.output:
+        with open(args.output, 'w') as f:
+            f.writelines(str(resultedData))
+    else:
+        print(resultedData)
