@@ -20,6 +20,7 @@ int main() {
 	  
 	  if (!CryptEnumProviders(dwIndex++, NULL, 0, &dwType, pszName, &cbName))
 	  { 
+	    //Error("CryptEnumProviders");
 	    return 0;
 	  }
 	  
@@ -29,5 +30,6 @@ int main() {
 	  
 	  LocalFree(pszName);
 	}	
+	
 }
 
