@@ -6,7 +6,7 @@ function cyfr(encryptedString, key, type) {
    
     const memo2 = type === "encrypt" ? encrypt(blocks, isEven, key) : decrypt(blocks, isEven, key) 
 
-    console.log(memo2)
+    // console.log(memo2)
 
     const res = memo2.join("")
 
@@ -19,7 +19,7 @@ function reverseString(str) {
 }
 
 function code(blocks, isEven) {
-    console.log("Input", blocks);
+    // console.log("Input", blocks);
 
     const removed = !isEven ? blocks.splice(-1,1)[0] : []
 

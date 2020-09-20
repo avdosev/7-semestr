@@ -38,7 +38,7 @@ parser.add_argument('-c', '-charset', default=charset, dest="charset")
 parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
-validateArgs(args)
+validateArgs(args, args.timeit, "Парсинг аргументов: ")
 
 
 eachStringLength = 10  # что-то я не нашел в аргументах параметр для длины каждой строки
@@ -67,6 +67,5 @@ for i in range(0, args.dataCount):
          raise Exception("Unknown type")
 
 
-
-writeResult(args, resultedData)
+writeResult(args.output, resultedData, args.timeit, "Время вывода: ")
 
