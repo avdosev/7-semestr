@@ -37,7 +37,7 @@ int main() {
     LPCSTR UserName = "MyKeyContainer"; // название ключевого контейнера
     HCRYPTKEY hKey; // дескриптор ключа
 //-------------------------------------------------------------------
-    unsigned int start_time = clock(); // начальное время
+    unsigned int start_time_all = clock(); // начальное время
 
 // Инициализация криптопровайдера, получение дескриптора криптопровайдера
     if(CryptAcquireContext(
@@ -96,40 +96,40 @@ int main() {
             CRYPT_EXPORTABLE,
             &hKey);
 
-    char string[]="Test";
+    char string[]="borodin nikolay";
     DWORD count=strlen(string);
 
-    if (!CryptEncrypt(hKey, 0, true, 0, (BYTE*)string,
-                      &count, strlen(string)))
+
+    unsigned int start_time = clock(); // начальное время
+    if (!CryptEncrypt(hKey, 0, true, 0, (BYTE*)string, &count, strlen(string)))
     {
         std::cout << "CryptEncrypt Error";
         return 0;
     }
     std::cout << string << std::endl;
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time;
+    std::cout << "Encrypted time: " << search_time << "ms" << std::endl;
 
 
+    unsigned int start_time2 = clock(); // начальное время
     if(!CryptDecrypt(hKey, 0, true, 0, (BYTE*)string, &count))
     {
         std::cout << "CryptDecrypt";
         return 0;
     }
-
     std::cout << string << std::endl;
+    unsigned int end_time2 = clock(); // конечное время
+    unsigned int search_time2 = end_time2 - start_time2;
+    std::cout << "Decrypted time: " << search_time2 << "ms" << std::endl;
 
 
-    unsigned int end_time = clock(); // конечное время
-    unsigned int search_time = end_time - start_time;
 
-    std::cout << "Work time: " << search_time << "ms" << std::endl;
-
+    //
     if(resultOfKeyGenerator)
     {
         printf("A session key has been created.\n");
 
-//        std::cout << CryptGetUserKey(hCryptProv, AT_KEYEXCHANGE, &hKey) << std::endl;
-//        std::cout << "Public key is received" << std::endl;
-
-//        std::cout << "hKey: " << hKey << std::endl;
     }
     else
     {
@@ -151,6 +151,11 @@ int main() {
     {
         printf("The handle could not be released.\n");
     }
+
+
+    unsigned int end_time_all = clock(); // конечное время
+    unsigned int search_time_all = end_time_all - start_time_all;
+    std::cout << "All work time: " << search_time_all << "ms" << std::endl;
 
 }
 
