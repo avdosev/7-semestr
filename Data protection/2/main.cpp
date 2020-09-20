@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <ctime>
-
+#include <fstream>
+#include "vector"
+#include "string"
 
 int main() {
     DWORD dwIndex = 0;
@@ -32,6 +34,8 @@ int main() {
 
 
     std::cout << std::endl;
+
+    // тест времени
 
     HCRYPTPROV hCryptProv = NULL; // дескриптор криптопровайдера
     LPCSTR UserName = "MyKeyContainer"; // название ключевого контейнера
@@ -96,8 +100,26 @@ int main() {
             CRYPT_EXPORTABLE,
             &hKey);
 
-    char string[]="borodin nikolay";
-    DWORD count=strlen(string);
+
+    std::ifstream file("../Automotive_5.json");
+    if (!file.is_open()) {
+        std::cout << "File not opened";
+        return 0;
+    }
+
+    std::vector<char> vector;
+
+
+    for (std::string line; std::getline(file, line); ){
+        for (auto ch: line) {
+            vector.push_back(ch);
+        }
+    }
+
+    auto string = vector.data();
+
+
+    DWORD count= vector.size();
 
 
     unsigned int start_time = clock(); // начальное время
@@ -106,7 +128,7 @@ int main() {
         std::cout << "CryptEncrypt Error";
         return 0;
     }
-    std::cout << string << std::endl;
+    //std::cout << string << std::endl;
     unsigned int end_time = clock(); // конечное время
     unsigned int search_time = end_time - start_time;
     std::cout << "Encrypted time: " << search_time << "ms" << std::endl;
@@ -118,7 +140,7 @@ int main() {
         std::cout << "CryptDecrypt";
         return 0;
     }
-    std::cout << string << std::endl;
+    //std::cout << string << std::endl;
     unsigned int end_time2 = clock(); // конечное время
     unsigned int search_time2 = end_time2 - start_time2;
     std::cout << "Decrypted time: " << search_time2 << "ms" << std::endl;
