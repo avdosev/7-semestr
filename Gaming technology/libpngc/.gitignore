@@ -3,3 +3,4 @@ graph_info.json
 .idea
 cmake-build-debug
 conanbuildinfo.*
+out*

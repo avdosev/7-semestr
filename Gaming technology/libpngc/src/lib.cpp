@@ -14,8 +14,7 @@ extern "C" {
 #include <png.h>
 }
 
-void abort_(const char * s, ...)
-{
+void abort_(const char *s, ...) {
     va_list args;
             va_start(args, s);
     vfprintf(stderr, s, args);
@@ -33,7 +32,7 @@ png_byte bit_depth;
 png_structp png_ptr;
 png_infop info_ptr;
 int number_of_passes;
-png_bytep * row_pointers;
+png_bytep *row_pointers;
 
 void saveWithCompression(int compression) {
     png_set_IHDR(png_ptr, info_ptr, width, height,
@@ -57,8 +56,7 @@ void saveWithCompression(int compression) {
 
 }
 
-void read_png_file(char* file_name)
-{
+void read_png_file(char *file_name) {
     char header[8];    // 8 is the maximum size that can be checked
 
     /* open file and test for it being a png */
@@ -98,9 +96,9 @@ void read_png_file(char* file_name)
     if (setjmp(png_jmpbuf(png_ptr)))
         abort_("[read_png_file] Error during read_image");
 
-    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
-    for (y=0; y<height; y++)
-        row_pointers[y] = (png_byte*) malloc(png_get_rowbytes(png_ptr,info_ptr));
+    row_pointers = (png_bytep *) malloc(sizeof(png_bytep) * height);
+    for (y = 0; y < height; y++)
+        row_pointers[y] = (png_byte *) malloc(png_get_rowbytes(png_ptr, info_ptr));
 
     png_read_image(png_ptr, row_pointers);
 
@@ -108,8 +106,7 @@ void read_png_file(char* file_name)
 
 }
 
-void write_png_file(char* file_name, int compression)
-{
+void write_png_file(char *file_name, int compression) {
     /* create file */
     FILE *fp = fopen(file_name, "wb");
     if (!fp)
@@ -141,28 +138,24 @@ void write_png_file(char* file_name, int compression)
     // сжатие
     saveWithCompression(compression);
 
-
-
-//    /* cleanup heap allocation */
-//    for (y=0; y<height; y++)
-//        free(row_pointers[y]);
-//    free(row_pointers);
-//
-//    fclose(fp);
 }
 
 
-void process_file(void)
-{
-    for (int y=0; y<height/2 ; y++) {
-        for (int x=0; x<width; x++) {
-            png_byte* ptr = &(row_pointers[height-y-1][width-x-1 *3]);
+void process_file(void) {
 
-            auto temp = row_pointers[height-y-1 *3][width-x-1 *3];
-            row_pointers[height-y-1 *3][width-x-1 *3] = row_pointers[y][x];
-            row_pointers[y][x] = temp;
+    int colorType = png_get_color_type(png_ptr, info_ptr);
+
+    int colorCount = colorType == PNG_COLOR_TYPE_RGB ? 3 : 4;
+
+
+    for (int y = 0; y < height / 2; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int c = 0; c < colorCount; c++) {
+                auto temp = row_pointers[height - y - 1][(width - x - 1) * colorCount + c];
+                row_pointers[height - y - 1][(width - x - 1) * colorCount + c] = row_pointers[y][x * colorCount + c];
+                row_pointers[y][x * colorCount + c] = temp;
+            }
         }
-
     }
 
 
