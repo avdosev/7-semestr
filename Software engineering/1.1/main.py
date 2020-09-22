@@ -17,6 +17,8 @@ import argparse
 import numpy as np
 import string
 from parseArgs import validateArgs, writeResult
+from randomizer import getRandomData
+
 
 
 charset = string.ascii_letters + string.punctuation + string.digits
@@ -29,9 +31,9 @@ parser.add_argument('output', nargs='?', help='Путь к выходному ф
 
 parser.add_argument('-seed', default=0, help='Значения инициализции генератора')
 parser.add_argument('-t', '-type', default='int', dest="type", help='Тип данных, которые мы подаем')
-parser.add_argument('-d', '-distribution', dest="distibution")
+parser.add_argument('-d', '-distribution', dest="distribution")
 parser.add_argument('-mean', dest="mean", type=float)
-parser.add_argument('-std', dest="std", type=float)
+parser.add_argument('-std', dest="std", type=float)  # === scale ?
 parser.add_argument('-min_value', dest="min_value", type=int)
 parser.add_argument('-max_value', dest="max_value", type=int)
 parser.add_argument('-c', '-charset', default=charset, dest="charset")
@@ -41,30 +43,13 @@ args = parser.parse_args()
 validateArgs(args, args.timeit, "Парсинг аргументов: ")
 
 
-eachStringLength = 10  # что-то я не нашел в аргументах параметр для длины каждой строки
 
 np.random.seed(args.seed)
 
-resultedData = []
+resultedData = getRandomData(args.dataCount, args.type, args.distribution, args.min_value, args.max_value, args.std, args.mean, args.charset)
 
 
-for i in range(0, args.dataCount):
-    if args.type == 'int':
-        data = np.random.randint(args.dataCount)
 
-        resultedData.append(data)
-    elif args.type == 'float':
-
-        data = np.random.random()
-        resultedData.append(data)
-    elif args.type == "str":
-        data = [np.random.choice(args.charset) for i in range(eachStringLength)]
-        s_data = "".join(data)
-
-        resultedData.append(s_data)
-
-    else:
-         raise Exception("Unknown type")
 
 
 writeResult(args.output, resultedData, args.timeit, "Время вывода: ")
