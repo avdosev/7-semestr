@@ -21,7 +21,7 @@ from randomizer import getRandomData
 
 
 
-charset = string.ascii_letters + string.punctuation + string.digits
+charset = string.ascii_letters + string.digits
  
 
 parser = argparse.ArgumentParser(description='Создает рандомные числа.')
