@@ -2,6 +2,7 @@ import numpy as np
 from config import eachStringLength
 import random
 import scipy.stats as ss
+from timer import timeTest
 
 
 def getUniformInt(dataCount, minValue, maxValue):  # Return random integers from the "discrete uniform" distribution
@@ -25,35 +26,34 @@ def getUniformFloat(dataCount, minValue, maxValue):
     return np.random.uniform(minValue, maxValue, dataCount)
 
 
-def getRandomString(dataCount, charset, symbolsCountOfEachString):
-    res = []
-
-    for i in range(dataCount):
-        data = [np.random.choice(list(charset)) for i in range(symbolsCountOfEachString)]
-        s_data = "".join(data)
-        res.append(s_data)
-
-    return res
+def getRandomString(charset, symbolsCountOfEachString):
+    return "".join([np.random.choice(list(charset)) for i in range(symbolsCountOfEachString)])
 
 
+def getRandomStrings(dataCount, charset, symbolsCountOfEachString):
+    return [getRandomString(charset, symbolsCountOfEachString) for i in range(dataCount)]
 
 
-def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset):
-    randomNumber = []
+def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset, timeit, outputTimeit):
 
-    if type == 'int':
-        if distribution == 'uniform':
-            randomNumber = getUniformInt(dataCount, minValue, maxValue)
-        elif distribution == 'normal':
-            randomNumber = getNormalInt(dataCount, mean, std, minValue, maxValue)
-    elif type == 'float':
-        if distribution == 'uniform':
-            randomNumber = getUniformFloat(dataCount, minValue, maxValue)
-        elif distribution == 'normal':
-            randomNumber = getNormalFloat(dataCount, mean, std)
-    elif type == "str":
-        randomNumber = getRandomString(dataCount, charset, eachStringLength)
-    else:
-        raise Exception("Unknown type")
+    @timeTest(timeit, outputTimeit)
+    def getRandomDataInner():
+        randomNumber = []
 
-    return randomNumber
+        if type == 'int':
+            if distribution == 'uniform':
+                randomNumber = getUniformInt(dataCount, minValue, maxValue)
+            elif distribution == 'normal':
+                randomNumber = getNormalInt(dataCount, mean, std, minValue, maxValue)
+        elif type == 'float':
+            if distribution == 'uniform':
+                randomNumber = getUniformFloat(dataCount, minValue, maxValue)
+            elif distribution == 'normal':
+                randomNumber = getNormalFloat(dataCount, mean, std)
+        elif type == "str":
+            randomNumber = getRandomStrings(dataCount, charset, eachStringLength)
+        else:
+            raise Exception("Unknown type")
+
+        return randomNumber
+    return getRandomDataInner()

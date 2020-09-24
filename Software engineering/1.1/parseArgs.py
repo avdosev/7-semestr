@@ -12,6 +12,8 @@ def validateArgs(args, timeit, outputTimeit):
         if args.type == 'int' or args.type == 'float':
             if not args.distribution:
                 raise Exception("Не задано распределение, допустимые значения: normal, uniform")
+            if args.distribution == 'normal' and args.type == 'int':
+                raise Exception("Нормальное распределение временно не поддерживается для целых чисел")
             if args.distribution == "uniform" and not args.min_value and not args.max_value:
                 raise Exception("Не заданы параметры равномерного распределения")
             if args.distribution == "normal" and not args.mean and not args.std:

@@ -15,14 +15,11 @@
 
 import argparse
 import numpy as np
-import string
 from parseArgs import validateArgs, writeResult
 from randomizer import getRandomData
+from config import charset
 
 
-
-charset = string.ascii_letters + string.digits
- 
 
 parser = argparse.ArgumentParser(description='Создает рандомные числа.')
 parser.add_argument('dataCount', type=int, help='Количество генерируемых данных')
@@ -40,15 +37,13 @@ parser.add_argument('-c', '-charset', default=charset, dest="charset")
 parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
+
 validateArgs(args, args.timeit, "Парсинг аргументов: ")
-
-
 
 np.random.seed(args.seed)
 
-resultedData = getRandomData(args.dataCount, args.type, args.distribution, args.min_value, args.max_value, args.std, args.mean, args.charset)
-
-
+resultedData = getRandomData(args.dataCount, args.type, args.distribution, args.min_value,
+                             args.max_value, args.std, args.mean, args.charset, args.timeit, "Время генерации: ")
 
 
 
