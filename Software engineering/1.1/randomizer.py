@@ -27,7 +27,7 @@ def getUniformFloat(dataCount, minValue, maxValue):
 
 
 def getRandomString(charset, symbolsCountOfEachString):
-    return "".join([np.random.choice(list(charset)) for i in range(symbolsCountOfEachString)])
+    return "".join(np.random.choice(list(charset), symbolsCountOfEachString))
 
 
 def getRandomStrings(dataCount, charset, symbolsCountOfEachString):
@@ -35,7 +35,7 @@ def getRandomStrings(dataCount, charset, symbolsCountOfEachString):
 
 
 def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset, timeit, outputTimeit):
-
+    """Диспатчер для рандомных данных, вызывает функции в зависимости от аргументов"""
     @timeTest(timeit, outputTimeit)
     def getRandomDataInner():
         randomNumber = []

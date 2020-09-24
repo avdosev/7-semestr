@@ -15,7 +15,8 @@
 
 import argparse
 import numpy as np
-from parseArgs import validateArgs, writeResult
+from parseArgs import validateArgs
+from outputPipe import writeResult
 from randomizer import getRandomData
 from config import charset
 
@@ -38,7 +39,7 @@ parser.add_argument('-timeit', action='store_true', dest="timeit")
 args = parser.parse_args()
 
 
-validateArgs(args, args.timeit, "Парсинг аргументов: ")
+validateArgs(args, args.timeit, "Время парсинга аргументов: ")
 
 np.random.seed(args.seed)
 

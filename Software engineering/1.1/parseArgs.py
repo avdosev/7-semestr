@@ -3,7 +3,6 @@ from config import types
 
 
 def validateArgs(args, timeit, outputTimeit):
-
     @timeTest(timeit, outputTimeit)
     def validateArgsInner(args):
         if args.type not in types:
@@ -22,13 +21,3 @@ def validateArgs(args, timeit, outputTimeit):
                 raise Exception("Scale должен быть не негативным")
     return validateArgsInner(args)
 
-
-def writeResult(outputPipe, resultedData, timeit, outputTimeit):
-    @timeTest(timeit, outputTimeit)
-    def writeResultInner(outputPipe, resultedData):
-        if outputPipe:
-            with open(outputPipe, 'w') as f:
-                f.writelines(str(resultedData))
-        else:
-            print(resultedData)
-    return writeResultInner(outputPipe, resultedData)
