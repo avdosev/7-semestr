@@ -18,7 +18,7 @@ import numpy as np
 from parseArgs import validateArgs
 from outputPipe import writeResult
 from randomizer import getRandomData
-from config import charset
+from config import charset, eachStringLength
 
 
 if __name__ == '__main__':
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('-min_value', dest="min_value", type=int)
     parser.add_argument('-max_value', dest="max_value", type=int)
     parser.add_argument('-c', '-charset', default=charset, dest="charset")
+    parser.add_argument('-l', '-strLength', default=eachStringLength, dest='strLength', type=int)
     parser.add_argument('-timeit', action='store_true', dest="timeit")
     args = parser.parse_args()
 
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     np.random.seed(args.seed)
 
     resultedData = getRandomData(args.dataCount, args.type, args.distribution, args.min_value,
-                                 args.max_value, args.std, args.mean, args.charset, args.timeit, "Время генерации: ")
+                                 args.max_value, args.std, args.mean, args.charset, args.strLength, args.timeit, "Время генерации: ")
 
 
     writeResult(args.output, resultedData, args.timeit, "Время вывода: ")
