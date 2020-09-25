@@ -17,7 +17,7 @@ def validateArgs(args, timeit, outputTimeit):
                 raise Exception("Не заданы параметры равномерного распределения")
             if args.distribution == "normal" and not args.mean and not args.std:
                 raise Exception("Не заданы параметры нормального распределения")
-            if args.std < 0:
+            if args.std and args.std < 0:
                 raise Exception("Scale должен быть не негативным")
     return validateArgsInner(args)
 

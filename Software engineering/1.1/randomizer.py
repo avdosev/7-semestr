@@ -3,6 +3,8 @@ from config import eachStringLength
 import random
 import scipy.stats as ss
 from timer import timeTest
+import sys
+
 
 
 def getUniformInt(dataCount, minValue, maxValue):  # Return random integers from the "discrete uniform" distribution
@@ -36,6 +38,8 @@ def getRandomStrings(dataCount, charset, symbolsCountOfEachString):
 
 def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset, timeit, outputTimeit):
     """Диспатчер для рандомных данных, вызывает функции в зависимости от аргументов"""
+    np.set_printoptions(threshold=sys.maxsize)
+
     @timeTest(timeit, outputTimeit)
     def getRandomDataInner():
         randomNumber = []
