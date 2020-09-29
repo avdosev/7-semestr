@@ -1,11 +1,19 @@
 import React from 'react';
 import './App.css';
-import {Elevator} from "./Elevator";
+import {Floor} from "./Floor";
+import {Grid} from "semantic-ui-react";
+
+const floors: React.ReactElement[] = []
+for(let i=0; i<7; i++) {
+  floors.push(<Floor/>)
+}
+
 
 function App() {
   return (
     <div className="App">
-    <Elevator></Elevator>
+        {floors}
+
     </div>
   );
 }
