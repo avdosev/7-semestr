@@ -15,7 +15,7 @@ public class MyCube : MonoBehaviour
     void Update()
     {
         float speed = 100;
-        transform.RotateAround(cube.transform.position, Vector3.up, speed * Time.deltaTime);
+        transform.RotateAround(new Vector3(0, 1, 0), new Vector3(0, 1, 0), speed * Time.deltaTime);
         
     }
 }
