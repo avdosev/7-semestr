@@ -1,20 +1,20 @@
 import matplotlib.pyplot as plt
 from config import charset, eachStringLength
-from randomizer import getRandomData
-from timer import timeTest
+import randomizer
+from Plot import Plot
 import time
 
 
-def testFactory(testCount, dataCount, type, distribution, min_value, max_value, std, mean, charset, strLength):
+def testFactory(testCount, randomizer, startDataCount, *args):
     resTimes = []
     dataArray = []
     for i in range(testCount):  # N замеров
         start_time = time.time()
-        randomData = getRandomData(dataCount, type, distribution, min_value, max_value, std, mean, charset, strLength)
+        randomData = randomizer(startDataCount, *args) # тут мы от
         delta_time = time.time() - start_time
         resTimes.append(delta_time)
-        dataArray.append(dataCount)
-        dataCount*=2
+        dataArray.append(startDataCount)
+        startDataCount*=2
     return resTimes, dataArray
 
 
@@ -26,22 +26,35 @@ def drawPlot(timeArray, dataArray, title):
     plt.title(title)
     plt.show()
 
-def drawAccumulatedPlot():
-    pass
 
-
-def normalFloatTest():
-    (timeArray, dataArray) = testFactory(17, 1000, "float", "normal", 0, 1, 0.2, 0.5, charset, 25)
+def normalFloatTest(testCount, startDataCount):
+    (timeArray, dataArray) = testFactory(testCount, randomizer.getNormalFloat, startDataCount, 0.1, 0.5)
     drawPlot(timeArray, dataArray, "normal float")
 
 
-def stringTest():
-    (timeArray, dataArray) = testFactory(17, 1000, "str", "normal", 0, 1, 0.2, 0.5, charset, 25)
+def uniformNumbersTest(testCount, startDataCount):
+    plot = Plot()
+
+    (timeArray, dataArray) = testFactory(testCount, randomizer.getUniformFloat, startDataCount, 0, 1)
+    plot.addPlot(timeArray, dataArray, "float")
+
+    (timeArray, dataArray) = testFactory(testCount, randomizer.getUniformInt, startDataCount, 0, 150)
+    plot.addPlot(timeArray, dataArray, "int")
+
+    plot.setLabels("Количество данных", "Время в секундах")
+    plot.draw("Uniform")
+
+
+def stringTest(testCount, startDataCount):
+    (timeArray, dataArray) = testFactory(testCount, randomizer.getRandomStrings, startDataCount, charset, 5)
     drawPlot(timeArray, dataArray, "string")
 
 
 if __name__ == '__main__':
-    normalFloatTest()
-    stringTest()
+    testCount = 17
+    startDataCount = 1000
+    normalFloatTest(testCount, startDataCount)
+    uniformNumbersTest(testCount, startDataCount)
+    stringTest(10, 100)
 
 
