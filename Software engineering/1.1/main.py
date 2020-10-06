@@ -45,6 +45,5 @@ if __name__ == '__main__':
     resultedData = getRandomData(args.dataCount, args.type, args.distribution, args.min_value,
                                  args.max_value, args.std, args.mean, args.charset, args.strLength, args.timeit, "Время генерации: ")
 
-
     writeResult(args.output, resultedData, args.timeit, "Время вывода: ")
 

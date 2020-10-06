@@ -34,7 +34,7 @@ def getRandomStrings(dataCount, charset, symbolsCountOfEachString):
     return [getRandomString(charset, symbolsCountOfEachString) for i in range(dataCount)]
 
 
-def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset, strLength,  timeit, outputTimeit):
+def getRandomData(dataCount, type, distribution, minValue, maxValue, std, mean, charset, strLength,  timeit=False, outputTimeit=""):
     """Диспатчер для рандомных данных, вызывает функции в зависимости от аргументов"""
     np.set_printoptions(threshold=sys.maxsize)
 
