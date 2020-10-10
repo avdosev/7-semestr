@@ -1,18 +1,14 @@
 import telebot
 import re
 from datetime import date, datetime
-import sqlite3
-
+from fileHelper import create, write, clear, read
 token = "1350019173:AAGFPOSocR0SSK3vHNPAlDKFchESgcuyzQg"
 
 bot = telebot.TeleBot(token)
 
 keys = ['-c', '-d']
-conn = sqlite3.connect('example.db', check_same_thread=False)
-c = conn.cursor()
-c.execute('''CREATE TABLE IF NOT EXISTS costs
-             (transferDate date, products text, price real)''')
-             
+file = create()
+
 
 def findFirstArgIndex(message):
     minIndex = 99999
@@ -53,17 +49,15 @@ def send_text(message: str):
         if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
             bot.send_message(message.chat.id, "О, вы из будущего, месье?")
             return
-
-        c.execute('INSERT INTO costs VALUES (?, ?, ?)', (messageDate, ", ".join(products), cost))
+        write(file, messageDate, products, cost)
         bot.send_message(message.chat.id, "Записали")
     if command == "/delete":
-        c.execute('TRUNCATE costs')
+        clear(file)
         bot.send_message(message.chat.id, "История забыта, снова все сначала")
     if command == "/earned":
         pass
     if command == "/my_cost":
-        c.execute('SELECT * FROM costs')
-        records = c.fetchall()
+        records = read(file)
         res_str = []
         for prod in records:
             cost_date, products, cost = prod
