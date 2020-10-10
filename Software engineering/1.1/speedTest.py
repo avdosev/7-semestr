@@ -46,12 +46,19 @@ def uniformNumbersTest(testCount, startDataCount):
 
 
 def stringTest(testCount, startDataCount):
-    (timeArray, dataArray) = testFactory(testCount, randomizer.getRandomStrings, startDataCount, charset, 5)
-    drawPlot(timeArray, dataArray, "string")
+    plot = Plot()
+    strLength = 5
+    for i in range(5):
+        (timeArray, dataArray) = testFactory(testCount, randomizer.getRandomStrings, startDataCount, charset, strLength)
+        plot.addPlot(timeArray, dataArray, strLength)
+        strLength*=5
+    plot.setLabels("Количество данных", "Время в секундах")
+    plot.draw("Strings")
+
 
 
 if __name__ == '__main__':
-    testCount = 17
+    testCount = 20
     startDataCount = 1000
     normalFloatTest(testCount, startDataCount)
     uniformNumbersTest(testCount, startDataCount)
