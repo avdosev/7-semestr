@@ -26,6 +26,20 @@ def findDate(message):
     i = message.index(keys[1])+1
     return message[i]
 
+def operation(args, message, isSpend):
+    minIndex = findFirstArgIndex(args)
+
+    products = [prod.replace(",", "") for prod in args[1:minIndex]]
+
+    messageDate = findDate(args)
+    cost = findCost(args)
+
+    if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
+        bot.send_message(message.chat.id, "О, вы из будущего, месье?")
+        return
+    write(file, messageDate, products, cost, isSpend)
+    bot.send_message(message.chat.id, "Записали")
+
 
 @bot.message_handler(content_types=['text'])
 def send_text(message: str):
@@ -33,36 +47,27 @@ def send_text(message: str):
     
     command = args[0]
 
-
     if command == "/spend":
-        minIndex = findFirstArgIndex(args)
-
-        products = [prod.replace(",", "") for prod in args[1:minIndex]]
-
-        messageDate = findDate(args)
-        cost = findCost(args)
-        print(command)
-        print(products)
-        print(cost)
-        print(messageDate)
-
-        if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
-            bot.send_message(message.chat.id, "О, вы из будущего, месье?")
-            return
-        write(file, messageDate, products, cost)
-        bot.send_message(message.chat.id, "Записали")
+        operation(args, message, True)
     if command == "/delete":
         clear(file)
         bot.send_message(message.chat.id, "История забыта, снова все сначала")
     if command == "/earned":
-        pass
+        operation(args, message, False)
     if command == "/my_cost":
         records = read(file)
         res_str = []
+        finalSum = 0
         for prod in records:
-            cost_date, products, cost = prod
-            res_str.append(f"За {cost}руб. было куплено {products}. Дата покупки: {cost_date} ")
-        res_str.append("Оставшийся бюджет: ")
+            cost_date, products, cost, isSpend = prod
+            if isSpend:
+                finalSum -= cost
+                res_str.append(f"За {cost}руб. было куплено {products}. Дата покупки: {cost_date} ")
+            else:
+                finalSum += cost
+                res_str.append(f"{cost}руб. было получено {products}. Дата получения: {cost_date} ")
+
+        res_str.append(f"Оставшийся бюджет: {finalSum}")
         bot.send_message(message.chat.id, "\n".join(res_str))
 
 bot.polling()
