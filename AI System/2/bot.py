@@ -6,37 +6,48 @@ token = "1350019173:AAGFPOSocR0SSK3vHNPAlDKFchESgcuyzQg"
 
 bot = telebot.TeleBot(token)
 
-keys = ['-c', '-d']
 file = create()
-
 
 def findFirstArgIndex(message):
     minIndex = 99999
-    for key in keys:
+    for key in ['-c', '-d']:
         if (message.index(key) < minIndex):
             minIndex = message.index(key)
     return minIndex
 
-
 def findCost(message):
-    i = message.index(keys[0])+1
-    return message[i]
+    pattern = r"-c \d+\.?\d"
+    return re.findall(pattern, message)
 
 def findDate(message):
-    i = message.index(keys[1])+1
-    return message[i]
+    pattern = r"-d \d\d\.\d\d\.\d{4}"
+    return re.findall(pattern, message)
+
+def findCommand(message):
+    pattern = r"(\/spend)|(\/earned)|(\/my_list)|(\/delete)"
+    return re.findall(pattern, message)
+
 
 def operation(args, message, isSpend):
-    minIndex = findFirstArgIndex(args)
+    messageDate = findDate(message.text)
+    if len(messageDate) == 0:
+        bot.send_message(message.chat.id, "Не указана дата")
+        return
+    cost = findCost(message.text)
+    if len(cost) == 0:
+        bot.send_message(message.chat.id, "Не указана сумма")
+        return
 
-    products = [prod.replace(",", "") for prod in args[1:minIndex]]
-
-    messageDate = findDate(args)
-    cost = findCost(args)
+    messageDate = messageDate[0].replace("-d ", "")
+    cost = cost[0].replace("-c ", "")
 
     if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
         bot.send_message(message.chat.id, "О, вы из будущего, месье?")
         return
+
+    minIndex = findFirstArgIndex(args)
+    products = [prod.replace(",", "") for prod in args[1:minIndex]]
+
     write(file, messageDate, products, cost, isSpend)
     bot.send_message(message.chat.id, "Записали")
 
@@ -45,7 +56,7 @@ def operation(args, message, isSpend):
 def send_text(message: str):
     args: list = message.text.split(" ")
     
-    command = args[0]
+    command = findCommand(message.text)
 
     if command == "/spend":
         operation(args, message, True)
