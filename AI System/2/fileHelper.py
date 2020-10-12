@@ -13,7 +13,7 @@ def write(c, messageDate, products, cost, isSpend):
     c.execute('INSERT INTO costs VALUES (?, ?, ?, ?)', (messageDate, ", ".join(products), cost, isSpend))
 
 def clear(c):
-    c.execute('TRUNCATE costs')
+    c.execute('DELETE FROM costs')
 
 def read(c):
     c.execute('SELECT * FROM costs')

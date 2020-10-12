@@ -2,53 +2,65 @@ import telebot
 import re
 from datetime import date, datetime
 from fileHelper import create, write, clear, read
+from argparse import findFirstArgIndex
+
 token = "1350019173:AAGFPOSocR0SSK3vHNPAlDKFchESgcuyzQg"
 
 bot = telebot.TeleBot(token)
 
 file = create()
 
-def findFirstArgIndex(message):
-    minIndex = 99999
-    for key in ['-c', '-d']:
-        if (message.index(key) < minIndex):
-            minIndex = message.index(key)
-    return minIndex
 
 def findCost(message):
     pattern = r"-c \d+\.?\d"
     return re.findall(pattern, message)
 
-def findDate(message):
+def findExactDate(message):
     pattern = r"-d \d\d\.\d\d\.\d{4}"
-    return re.findall(pattern, message)
+    exactDate = re.findall(pattern, message)
+    return exactDate
+
 
 def findCommand(message):
-    pattern = r"(\/spend)|(\/earned)|(\/my_list)|(\/delete)"
+    pattern = r"(\/spend)|(\/earned)|(\/my_cost)|(\/delete)"
     return re.findall(pattern, message)
 
+def findTodayDate(message):
+    patternToday = r"-d сегодня"
+    return re.findall(patternToday, message)
 
 def operation(args, message, isSpend):
-    messageDate = findDate(message.text)
-    if len(messageDate) == 0:
+    messageDate = findExactDate(message.text)
+    todayMessageDate = findTodayDate(message.text)
+    if len(messageDate) == 0 and len(todayMessageDate) == 0:
         bot.send_message(message.chat.id, "Не указана дата")
         return
+
+    
     cost = findCost(message.text)
     if len(cost) == 0:
         bot.send_message(message.chat.id, "Не указана сумма")
         return
 
-    messageDate = messageDate[0].replace("-d ", "")
+
     cost = cost[0].replace("-c ", "")
 
-    if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
-        bot.send_message(message.chat.id, "О, вы из будущего, месье?")
-        return
+    userDate = None
+    if (len(messageDate) != 0):
+        messageDate = messageDate[0].replace("-d ", "")
+        if datetime.strptime(messageDate, "%d.%m.%Y").date() > date.today():
+            bot.send_message(message.chat.id, "О, вы из будущего, месье?")
+            return
+        userDate = messageDate
+    elif len(todayMessageDate) != 0:
+        todayMessageDate = todayMessageDate[0].replace("-d ", "")
+        userDate = datetime.today().date()
+
 
     minIndex = findFirstArgIndex(args)
     products = [prod.replace(",", "") for prod in args[1:minIndex]]
 
-    write(file, messageDate, products, cost, isSpend)
+    write(file, userDate, products, cost, isSpend)
     bot.send_message(message.chat.id, "Записали")
 
 
@@ -57,7 +69,9 @@ def send_text(message: str):
     args: list = message.text.split(" ")
     
     command = findCommand(message.text)
-
+    print(command)
+    command = args[0]
+ 
     if command == "/spend":
         operation(args, message, True)
     if command == "/delete":
