@@ -2,21 +2,21 @@ import React from 'react';
 import './App.css';
 import {Floor} from "./Floor";
 import {Grid} from "semantic-ui-react";
-
-
-const floors: React.ReactElement[] = []
-for(let i=0; i<7; i++) {
-  floors.push(<Floor key={i+1} floorNumber={i+1}/>)
-}
+import Elevator from './Elevator';
+import {floorsCount} from "./config/config";
 
 
 function App() {
-  return (
-    <div className="App">
-        {floors}
-
-    </div>
-  );
+    const floors: React.ReactElement[] = []
+    for (let i = floorsCount; i > 0; i--) {
+        floors.push(<Floor key={i} floorNumber={i}/>)
+    }
+    return (
+        <div className="App">
+            {floors}
+            {<Elevator/>}
+        </div>
+    );
 }
 
 export default App;

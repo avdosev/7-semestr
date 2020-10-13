@@ -8,10 +8,15 @@ export interface IFloor {
 export class Floor extends React.Component<IFloor>{
 
     render() {
+        const onMove = (floorNumber: number, direction: string) => () => {
+            console.log(floorNumber, direction);
+            
+        }
+
         return <>
             <Header>{this.props.floorNumber} этаж</Header>
-            <Button icon="arrow alternate circle up" />
-            <Button icon="arrow alternate circle down" />
+            <Button icon="arrow alternate circle up" onClick={onMove(this.props.floorNumber, "Up")} />
+            <Button icon="arrow alternate circle down" onClick={onMove(this.props.floorNumber, "Down")}/>
             </>;
     }
 }
