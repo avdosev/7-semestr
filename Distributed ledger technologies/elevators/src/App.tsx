@@ -3,9 +3,10 @@ import './App.css';
 import {Floor} from "./Floor";
 import {Grid} from "semantic-ui-react";
 
+
 const floors: React.ReactElement[] = []
 for(let i=0; i<7; i++) {
-  floors.push(<Floor/>)
+  floors.push(<Floor key={i+1} floorNumber={i+1}/>)
 }
 
 
