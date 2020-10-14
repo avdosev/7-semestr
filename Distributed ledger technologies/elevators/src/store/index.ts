@@ -3,7 +3,6 @@ import createRootReducer from "./reducers";
 import logger from "redux-logger";
 
 
-
 const middlewares = [logger ];
 
 const rootReducerWithRouter = createRootReducer()

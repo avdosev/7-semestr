@@ -1,8 +1,0 @@
-
-
-const TYPES = {
-
-
-}
-
-export { TYPES }

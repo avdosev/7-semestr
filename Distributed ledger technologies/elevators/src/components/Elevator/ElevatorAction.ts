@@ -1,4 +1,6 @@
+import {injectable} from "inversify";
 
+@injectable()
 export class ElevatorAction {
     public changeElevatorFloor = (toFloor: number) => ({
         type: "CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR",
