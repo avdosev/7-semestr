@@ -10,11 +10,14 @@ import {Floors} from "./Floors/Floors";
 import {myContainer} from "../config/inversify.config";
 import {TYPES} from "../typings/types";
 import {ElevatorAction} from "./Elevator/ElevatorAction";
-
+import {store} from "../store";
 
 
 function App() {
-
+    const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
+    setInterval(() => {
+        store.dispatch(elevator.movingElevator())
+    }, 2000)
     
     return (
         <div className="App">

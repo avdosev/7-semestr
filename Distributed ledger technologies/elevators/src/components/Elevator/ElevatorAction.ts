@@ -17,10 +17,9 @@ export class ElevatorAction {
         }
     })
 
-    public movingElevator = (previousFloor: number, nextFloor: number) => ({
+    public movingElevator = () => ({
         type: "MOVING_ELEVATOR",
         payload: {
-            previousFloor, nextFloor
         }
     })
 }
