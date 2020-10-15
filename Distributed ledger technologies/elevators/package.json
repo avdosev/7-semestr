@@ -13,6 +13,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/redux-logger": "^3.0.8",
     "inversify": "^5.0.1",
+    "js-priority-queue": "^0.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
@@ -22,6 +23,7 @@
     "reflect-metadata": "^0.1.13",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.1",
+    "tinyqueue": "^2.0.3",
     "typescript": "~3.7.2"
   },
   "scripts": {

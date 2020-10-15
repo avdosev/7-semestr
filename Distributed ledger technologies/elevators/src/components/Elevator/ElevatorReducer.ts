@@ -14,9 +14,12 @@ export default class ElevatorReducer {
     public callFromFloor(state: ElevatorStore, payload: {fromFloor: number, direction: MoveDirection}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor)
+        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, 1)
         newState.elevator = new ElevatorManager(newQueue)
-        newState.elevator.currentFloor = newState.elevator.getLast();
+        const last = newState.elevator.getLast()
+        if (last) {
+            newState.elevator.currentFloor = last.toFloor
+        }
 
         return newState
     }
@@ -24,10 +27,12 @@ export default class ElevatorReducer {
     public callFromElevator(state: ElevatorStore, payload: {toFloor: number}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor)
+        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 1)
         newState.elevator = new ElevatorManager(newQueue)
-        newState.elevator.currentFloor = newState.elevator.getLast();
-
+        const last = newState.elevator.getLast()
+        if (last) {
+            newState.elevator.currentFloor = last.toFloor
+        }
         return newState
     }
 

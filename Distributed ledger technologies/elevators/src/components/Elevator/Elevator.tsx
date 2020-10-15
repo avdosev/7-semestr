@@ -15,15 +15,13 @@ export interface IElevator {
 export default class Elevator extends React.Component<IElevator> {
 
     render() {
-        // setInterval(() => {
-        //     this.props.actions.movingElevator(7, 1)
-        // }, 1000)
 
         const buttons = []
         for (let i = 0; i < floorsCount; i++) {
             buttons.push(<Button size="mini" content={i + 1} onClick={() => this.props.actions.changeElevatorFloor(i + 1)}/>)
         }
 
-        return <div style={{ backgroundColor: 'grey', width: 150, marginTop: ( floorsCount - this.props.elevator.currentFloor)*100}}> {buttons} </div>;
+        return <div style={{ backgroundColor: 'grey', width: 150, transition: "ease-in 2s", marginTop: ( floorsCount - this.props.elevator.currentFloor)*100}}> {buttons} </div>;
+
     }
 }
