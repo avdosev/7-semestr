@@ -1,4 +1,5 @@
 import {injectable} from "inversify";
+import {MoveDirection} from "../../typings/common";
 
 @injectable()
 export class ElevatorAction {
@@ -9,10 +10,17 @@ export class ElevatorAction {
         }
     })
 
-    public callElevatorFromFloor = (fromFloor: number) => ({
+    public callElevatorFromFloor = (fromFloor: number, direction: MoveDirection) => ({
         type: "CALL_ELEVATOR_FROM_FLOOR",
         payload: {
-            fromFloor
+            fromFloor, direction
+        }
+    })
+
+    public movingElevator = (previousFloor: number, nextFloor: number) => ({
+        type: "MOVING_ELEVATOR",
+        payload: {
+            previousFloor, nextFloor
         }
     })
 }

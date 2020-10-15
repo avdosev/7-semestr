@@ -22,7 +22,8 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
         actions: {
             ...bindActionCreators({
                 callElevatorFromFloor: actions.callElevatorFromFloor,
-                changeElevatorFloor: actions.changeElevatorFloor
+                changeElevatorFloor: actions.changeElevatorFloor,
+                movingElevator: actions.movingElevator
             }, dispatch)
         }
     }
@@ -30,7 +31,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
 
 const authAction = (state: RootStore) => {
     return {
-
+        elevator: state.elevator.elevator
     }
 }
 
