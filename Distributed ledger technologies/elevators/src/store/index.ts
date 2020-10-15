@@ -8,6 +8,6 @@ const middlewares = [logger ];
 const rootReducerWithRouter = createRootReducer()
 export type RootStore = ReturnType<typeof rootReducerWithRouter>
 
-export const store = compose(applyMiddleware(...middlewares))(createStore)(rootReducerWithRouter);
+export const store = compose()(createStore)(rootReducerWithRouter);
 
 
