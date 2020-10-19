@@ -13,6 +13,7 @@ public class Object1 : MonoBehaviour
 
     void Start()
     {
+        object1.GetComponent<Renderer>().material.color = Color.red;
         selectColorObject1 = selectColorObject1.GetComponent<Dropdown>();
 
         selectColorObject1.onValueChanged.AddListener(delegate {

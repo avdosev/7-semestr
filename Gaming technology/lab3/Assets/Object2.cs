@@ -12,6 +12,8 @@ public class Object2 : MonoBehaviour
     public GameObject object2;
     void Start()
     {
+        object2.GetComponent<Renderer>().material.color = Color.red;
+
         selectColorObject2 = selectColorObject2.GetComponent<Dropdown>();
         //Add listener for when the value of the Dropdown changes, to take action
         selectColorObject2.onValueChanged.AddListener(delegate {
