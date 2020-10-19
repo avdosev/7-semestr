@@ -24,19 +24,7 @@ public class Object1 : MonoBehaviour
     //Ouput the new value of the Dropdown into Text
     void DropdownValueChanged(Dropdown change)
     {
-        Debug.Log(change.value);
-        var currentObject = object1.GetComponent<Renderer>();
-        switch (change.value) {
-            case 0:
-                currentObject.material.color = Color.red;
-                break;
-            case 1:
-                currentObject.material.color = Color.green;
-                break;
-            case 2:
-                currentObject.material.color = Color.blue;
-                break;
-        }
+        Utils.ChangeColorForObject(object1, change.value);
     }
 
     //Run your mouse over the GameObject to change the Renderer's material color to black
