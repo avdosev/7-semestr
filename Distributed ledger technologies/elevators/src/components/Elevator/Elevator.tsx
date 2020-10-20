@@ -17,14 +17,16 @@ export interface IElevator {
 export default class Elevator extends React.Component<IElevator> {
 
     render() {
-        const floorsQueue = this.props.elevator.floorsQueue.data.map((floor) => floor.toFloor)
 
         const buttons = []
         for (let i = 0; i < floorsCount; i++) {
+            const isActiveButton = this.props.elevator.floorsQueue.data.find((floor) =>
+                floor.toFloor === i+1)?.calledFromElevator
+
             buttons.push(<Button
                 size="mini"
                 content={i + 1}
-                negative={floorsQueue.includes(i+1)}
+                negative={isActiveButton}
                 onClick={() => this.props.actions.changeElevatorFloor(i + 1)}
             />)
         }

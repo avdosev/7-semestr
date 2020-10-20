@@ -2,6 +2,7 @@ import {injectable} from "inversify";
 import {ActionTypePayload, AnyActionName, ElevatorStore, MoveDirection} from "../../typings/common";
 import {elevatorStore} from "./ElevatorStore";
 import {ElevatorManager} from "../../services/elevatorManager";
+import {getDirection} from "../../services/Utils";
 
 
 @injectable()
@@ -14,7 +15,7 @@ export default class ElevatorReducer {
     public callFromFloor(state: ElevatorStore, payload: {fromFloor: number, direction: MoveDirection}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, 1)
+        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, 1, false, payload.direction)
         newState.elevator = new ElevatorManager(newQueue, newState.elevator.currentFloor)
 
         return newState
@@ -23,7 +24,7 @@ export default class ElevatorReducer {
     public callFromElevator(state: ElevatorStore, payload: {toFloor: number}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 1)
+        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 1, true)
         newState.elevator = new ElevatorManager(newQueue, newState.elevator.currentFloor)
 
         return newState
