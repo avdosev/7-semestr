@@ -35,15 +35,17 @@ export default class ElevatorReducer {
         const newElevator = new ElevatorManager(newState.elevator.floorsQueue, newState.elevator.currentFloor)
         const lastFloor = newElevator.floorsQueue.peek()
         if (lastFloor) {
-            newElevator.currentFloor = lastFloor.toFloor;
-            // if (newElevator.currentFloor < lastFloor.toFloor) {
-            //     newElevator.currentFloor++;
-            // } else if (newElevator.currentFloor > lastFloor.toFloor) {
-            //     newElevator.currentFloor--;
-            // } else {
-                newElevator.floorsQueue.pop()
-            // }
-            // console.log(newElevator.currentFloor)
+            if (newElevator.currentFloor < lastFloor.toFloor) {
+                newElevator.currentFloor++;
+            } else if (newElevator.currentFloor > lastFloor.toFloor) {
+                newElevator.currentFloor--;
+            } else {
+                // setTimeout(() => {
+                    newElevator.floorsQueue.pop()
+                // }, 500)
+
+            }
+            console.log(newElevator.currentFloor)
         }
         newState.elevator = newElevator;
 

@@ -3,7 +3,7 @@ import './App.css';
 import {Floor} from "./Floor/Floor";
 import {Grid, GridColumn} from "semantic-ui-react";
 import Elevator from './Elevator/Elevator';
-import {floorsCount} from "../config/config";
+import {elevatorSpeed, floorsCount} from "../config/config";
 import ElevatorContainer from "./Elevator/ElevatorContainer";
 import FloorContainer from "./Floor/FloorContainer";
 import {Floors} from "./Floors/Floors";
@@ -17,7 +17,7 @@ function App() {
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
     setInterval(() => {
         store.dispatch(elevator.movingElevator())
-    }, 1000)
+    }, elevatorSpeed)
     
     return (
         <div className="App">
