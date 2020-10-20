@@ -17,7 +17,7 @@ function App() {
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
     setInterval(() => {
         store.dispatch(elevator.movingElevator())
-    }, 2000)
+    }, 1000)
     
     return (
         <div className="App">
