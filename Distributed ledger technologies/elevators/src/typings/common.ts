@@ -17,4 +17,4 @@ export type ElevatorStore = {
     elevator: ElevatorManager
 }
 
-export type MoveDirection = "up" | "down"
+export type MoveDirection = "up" | "down" | "stopped"

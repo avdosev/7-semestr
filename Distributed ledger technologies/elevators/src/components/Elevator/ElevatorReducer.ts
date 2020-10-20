@@ -15,8 +15,16 @@ export default class ElevatorReducer {
     public callFromFloor(state: ElevatorStore, payload: {fromFloor: number, direction: MoveDirection}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, 1, false, payload.direction)
-        newState.elevator = new ElevatorManager(newQueue, newState.elevator.currentFloor)
+        let priority = 2
+        if (newState.elevator.isPreferToMoveDown() && payload.direction === "down" && newState.elevator.currentFloor > payload.fromFloor) {
+            priority = 1
+        } else if (newState.elevator.isPreferToMoveUp() && payload.direction === "up" && newState.elevator.currentFloor < payload.fromFloor) {
+            priority = 1
+        }
+        // меньше приоритет - быстрее выполнится
+
+        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, priority, false, payload.direction)
+        newState.elevator = new ElevatorManager(newState.elevator)
 
         return newState
     }
@@ -24,8 +32,8 @@ export default class ElevatorReducer {
     public callFromElevator(state: ElevatorStore, payload: {toFloor: number}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 1, true)
-        newState.elevator = new ElevatorManager(newQueue, newState.elevator.currentFloor)
+        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 2, true)
+        newState.elevator = new ElevatorManager(newState.elevator)
 
         return newState
     }
@@ -33,21 +41,8 @@ export default class ElevatorReducer {
     public movingElevator(state: ElevatorStore, payload: {}) {
         const newState = {...state}
 
-        const newElevator = new ElevatorManager(newState.elevator.floorsQueue, newState.elevator.currentFloor)
-        const lastFloor = newElevator.floorsQueue.peek()
-        if (lastFloor) {
-            if (newElevator.currentFloor < lastFloor.toFloor) {
-                newElevator.currentFloor++;
-            } else if (newElevator.currentFloor > lastFloor.toFloor) {
-                newElevator.currentFloor--;
-            } else {
-                // setTimeout(() => {
-                    newElevator.floorsQueue.pop()
-                // }, 500)
-
-            }
-            console.log(newElevator.currentFloor)
-        }
+        const newElevator = new ElevatorManager(newState.elevator)
+        newElevator.resolve()
         newState.elevator = newElevator;
 
         return newState
