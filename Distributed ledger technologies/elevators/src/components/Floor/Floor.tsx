@@ -3,12 +3,14 @@ import {Button, Header} from "semantic-ui-react";
 import {ElevatorAction} from "../Elevator/ElevatorAction";
 import {MoveDirection} from "../../typings/common";
 import LightBulb from "../LightBulb/LightBulb";
-import {ElevatorManager} from "../../services/elevatorManager";
+import {ElevatorManager} from "../../services/ElevatorManager";
+import {ElevatorDispatcher} from "../../services/ElevatorDispatcher";
+import {elevatorsCount} from "../../config/config";
 
 export interface IFloor {
     floorNumber: number
     actions: ElevatorAction
-    elevator: ElevatorManager
+    elevators: ElevatorDispatcher
 }
 
 export class Floor extends React.Component<IFloor>{
@@ -18,16 +20,30 @@ export class Floor extends React.Component<IFloor>{
             this.props.actions.callElevatorFromFloor(floorNumber, direction)
         }
         const isActiveButton = (floorNumber: number, direction: MoveDirection) => {
-            return this.props.elevator.floorsQueue.data.find((floor) =>
-                floor.toFloor === floorNumber &&
-                floor.direction === direction)?.calledFromElevator === false
+            const elevatorsCalls = []
+            for (let i=0; i<elevatorsCount; i++) {
+                const call = this.props.elevators.floorsQueue[i].data.find((floor) =>
+                    floor.toFloor === floorNumber &&
+                    floor.direction === direction)?.calledFromElevator === false
+                elevatorsCalls.push(call)
+            }
+            return elevatorsCalls.find((call) => call)
+        }
+
+        const lighters = []
+        for (let i=0; i<elevatorsCount; i++) {
+            lighters.push(<LightBulb currentFloor={this.props.elevators.getCurrentFloor(i)}/>)
         }
 
         return <>
             <Header>{this.props.floorNumber} этаж</Header>
-            <LightBulb currentFloor={this.props.elevator.currentFloor}/>
-            <Button icon="arrow alternate circle up" negative={isActiveButton(this.props.floorNumber, "up")} onClick={onMove(this.props.floorNumber, "up")} />
-            <Button icon="arrow alternate circle down" negative={isActiveButton(this.props.floorNumber, "down")} onClick={onMove(this.props.floorNumber, "down")}/>
+            {lighters}
+            <Button icon="arrow alternate circle up"
+                    negative={isActiveButton(this.props.floorNumber, "up")}
+                    onClick={onMove(this.props.floorNumber, "up")} />
+            <Button icon="arrow alternate circle down"
+                    negative={isActiveButton(this.props.floorNumber, "down")}
+                    onClick={onMove(this.props.floorNumber, "down")}/>
             </>;
     }
 }

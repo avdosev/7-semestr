@@ -1,4 +1,5 @@
-import {ElevatorManager} from "../services/elevatorManager";
+import {ElevatorManager} from "../services/ElevatorManager";
+import {ElevatorDispatcher} from "../services/ElevatorDispatcher";
 
 export interface ActionTypePayload<PayloadType, ActionType> {
     type: ActionType;
@@ -14,7 +15,7 @@ export type AnyActionName = string
 
 
 export type ElevatorStore = {
-    elevator: ElevatorManager
+    elevators: ElevatorDispatcher
 }
 
 export type MoveDirection = "up" | "down" | "stopped"

@@ -32,17 +32,30 @@ export class ElevatorManager {
         return this.currentMovingDirection === "up" || this.currentMovingDirection === "stopped"
     }
 
-    public addFloorToQueue(floorNumber: number, priority: number, calledFromElevator: boolean,  direction?: MoveDirection, ) {
-        this.floorsQueue.push({toFloor: floorNumber, priority: priority, direction: direction, calledFromElevator: calledFromElevator})
+    public addFloorToQueue(floorNumber: number, calledFromElevator: boolean, direction?: MoveDirection,) {
+        let currentPriority = 2
+        if (this.isPreferToMoveDown() && direction === "down" && this.currentFloor > floorNumber) {
+            currentPriority = 1
+        } else if (this.isPreferToMoveUp() && direction === "up" && this.currentFloor < floorNumber) {
+            currentPriority = 1
+        }
+        // меньше приоритет - быстрее выполнится
+
+        this.floorsQueue.push({
+            toFloor: floorNumber,
+            priority: currentPriority,
+            direction: direction,
+            calledFromElevator: calledFromElevator
+        })
         return this.floorsQueue
     }
-    
+
     public resolve() {
         const lastFloor = this.floorsQueue.peek()
         if (lastFloor) {
             if (this.currentFloor < lastFloor.toFloor) {
                 this.currentFloor++;
-                this.currentMovingDirection  = 'up'
+                this.currentMovingDirection = 'up'
             } else if (this.currentFloor > lastFloor.toFloor) {
                 this.currentFloor--;
                 this.currentMovingDirection = 'down'

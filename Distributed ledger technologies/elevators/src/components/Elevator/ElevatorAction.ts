@@ -3,10 +3,10 @@ import {MoveDirection} from "../../typings/common";
 
 @injectable()
 export class ElevatorAction {
-    public changeElevatorFloor = (toFloor: number) => ({
+    public changeElevatorFloor = (elevatorId: number, toFloor: number) => ({
         type: "CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR",
         payload: {
-            toFloor
+            toFloor, elevatorId
         }
     })
 
@@ -17,9 +17,10 @@ export class ElevatorAction {
         }
     })
 
-    public movingElevator = () => ({
+    public movingElevator = (elevatorId: number) => ({
         type: "MOVING_ELEVATOR",
         payload: {
+            elevatorId
         }
     })
 }

@@ -30,7 +30,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
 
 const authAction = (state: RootStore) => {
     return {
-        elevator: state.elevator.elevator
+        elevators: state.elevator.elevators
     }
 }
 

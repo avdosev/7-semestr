@@ -2,16 +2,18 @@ import React from "react";
 import {Button, Header} from "semantic-ui-react";
 import {elevatorSpeed, floorsCount} from "../../config/config";
 import {ElevatorAction} from "./ElevatorAction";
-import {ElevatorManager} from "../../services/elevatorManager";
+import {ElevatorManager} from "../../services/ElevatorManager";
 import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../typings/types";
 import LightBulb from "../LightBulb/LightBulb";
 import {Property} from "csstype";
+import {ElevatorDispatcher} from "../../services/ElevatorDispatcher";
 
 
 export interface IElevator {
     actions: ElevatorAction,
-    elevator: ElevatorManager
+    elevators: ElevatorDispatcher
+    elevatorId: number
 }
 
 export default class Elevator extends React.Component<IElevator> {
@@ -20,14 +22,14 @@ export default class Elevator extends React.Component<IElevator> {
 
         const buttons = []
         for (let i = 0; i < floorsCount; i++) {
-            const isActiveButton = this.props.elevator.floorsQueue.data.find((floor) =>
+            const isActiveButton = this.props.elevators.floorsQueue[this.props.elevatorId].data.find((floor) =>
                 floor.toFloor === i+1)?.calledFromElevator
 
             buttons.push(<Button
                 size="mini"
                 content={i + 1}
                 negative={isActiveButton}
-                onClick={() => this.props.actions.changeElevatorFloor(i + 1)}
+                onClick={() => this.props.actions.changeElevatorFloor(this.props.elevatorId, i + 1)}
             />)
         }
         // const speedByFloor = `ease-in ${elevatorSpeed/1000}s`
@@ -36,10 +38,10 @@ export default class Elevator extends React.Component<IElevator> {
             style={{
                 backgroundColor: 'grey',
                 width: 150, transition: "ease-in 0.3s",
-                marginTop: (floorsCount - this.props.elevator.currentFloor) * 110
+                marginTop: (floorsCount - this.props.elevators.getCurrentFloor(this.props.elevatorId)) * 110
             }}
         >
-            <LightBulb currentFloor={this.props.elevator.currentFloor}/>
+            <LightBulb currentFloor={this.props.elevators.getCurrentFloor(this.props.elevatorId)}/>
             {buttons}
         </div>;
 

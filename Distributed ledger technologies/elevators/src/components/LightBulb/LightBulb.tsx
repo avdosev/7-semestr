@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Header } from "semantic-ui-react";
 import {floorsCount} from "../../config/config";
-import {ElevatorManager} from "../../services/elevatorManager";
+import {ElevatorManager} from "../../services/ElevatorManager";
 import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../typings/types";
 

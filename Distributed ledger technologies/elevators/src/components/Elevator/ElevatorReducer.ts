@@ -1,8 +1,9 @@
 import {injectable} from "inversify";
 import {ActionTypePayload, AnyActionName, ElevatorStore, MoveDirection} from "../../typings/common";
 import {elevatorStore} from "./ElevatorStore";
-import {ElevatorManager} from "../../services/elevatorManager";
+import {ElevatorManager} from "../../services/ElevatorManager";
 import {getDirection} from "../../services/Utils";
+import {ElevatorDispatcher} from "../../services/ElevatorDispatcher";
 
 
 @injectable()
@@ -15,35 +16,28 @@ export default class ElevatorReducer {
     public callFromFloor(state: ElevatorStore, payload: {fromFloor: number, direction: MoveDirection}) {
         const newState = {...state}
 
-        let priority = 2
-        if (newState.elevator.isPreferToMoveDown() && payload.direction === "down" && newState.elevator.currentFloor > payload.fromFloor) {
-            priority = 1
-        } else if (newState.elevator.isPreferToMoveUp() && payload.direction === "up" && newState.elevator.currentFloor < payload.fromFloor) {
-            priority = 1
-        }
-        // меньше приоритет - быстрее выполнится
-
-        const newQueue = newState.elevator.addFloorToQueue(payload.fromFloor, priority, false, payload.direction)
-        newState.elevator = new ElevatorManager(newState.elevator)
+        const newQueue = newState.elevators.addTask(payload.fromFloor, false, payload.direction)
+        newState.elevators = new ElevatorDispatcher(newState.elevators.elevators)
 
         return newState
     }
 
-    public callFromElevator(state: ElevatorStore, payload: {toFloor: number}) {
+    public callFromElevator(state: ElevatorStore, payload: {toFloor: number, elevatorId: number}) {
         const newState = {...state}
 
-        const newQueue = newState.elevator.addFloorToQueue(payload.toFloor, 2, true)
-        newState.elevator = new ElevatorManager(newState.elevator)
+
+        const newQueue = newState.elevators.addTask(payload.toFloor,  true, "down", payload.elevatorId) // не оч корректно передал сюда дауна
+        newState.elevators = new ElevatorDispatcher(newState.elevators.elevators)
 
         return newState
     }
 
-    public movingElevator(state: ElevatorStore, payload: {}) {
+    public movingElevator(state: ElevatorStore, payload: {elevatorId: number}) {
         const newState = {...state}
 
-        const newElevator = new ElevatorManager(newState.elevator)
-        newElevator.resolve()
-        newState.elevator = newElevator;
+        const newElevators = new ElevatorDispatcher(newState.elevators.elevators)
+        newElevators.resolve(payload.elevatorId)
+        newState.elevators = newElevators;
 
         return newState
     }

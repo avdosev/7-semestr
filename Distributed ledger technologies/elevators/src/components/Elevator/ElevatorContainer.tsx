@@ -4,12 +4,12 @@ import {AnyAction, bindActionCreators, Dispatch} from "redux";
 import {RootStore} from "../../store";
 import {ElevatorAction} from "./ElevatorAction";
 import {TYPES} from "../../typings/types";
-import Elevator from "./Elevator";
+import Elevator, {IElevator} from "./Elevator";
 import {connect} from "react-redux"
 
 
 
-function ElevatorContainer(props: any) {
+function ElevatorContainer(props: IElevator) {
     return <Elevator {...props}/>
 }
 
@@ -31,7 +31,8 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
 
 const authAction = (state: RootStore) => {
     return {
-        elevator: state.elevator.elevator
+        elevators: state.elevator.elevators,
+
     }
 }
 

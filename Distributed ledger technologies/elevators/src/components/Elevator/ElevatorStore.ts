@@ -1,7 +1,9 @@
 import {ElevatorStore} from "../../typings/common";
-import {ElevatorManager} from "../../services/elevatorManager";
+import {ElevatorManager} from "../../services/ElevatorManager";
+import {ElevatorDispatcher} from "../../services/ElevatorDispatcher";
+import {elevatorsCount} from "../../config/config";
 
 
 export const elevatorStore: ElevatorStore = {
-    elevator: new ElevatorManager()
+    elevators: new ElevatorDispatcher([], elevatorsCount)
 }
