@@ -2,6 +2,7 @@ import time
 
 
 def timeTest(timeit=False, outputTimeit="Время выполнения функции"):
+    """Small time checker"""
     def my_timer(f):
         if timeit:
             def tmp(*args, **kwargs):

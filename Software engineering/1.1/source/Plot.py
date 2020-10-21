@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 
 
 class Plot:
+    """Small superset for matplotlib.pyplot."""
+
     newPlot: plt
 
     def __init__(self):

@@ -1,0 +1,1 @@
+set SPHINXBUILD="C:\Python38\Lib\site-packages\sphinx\cmd\build.py"

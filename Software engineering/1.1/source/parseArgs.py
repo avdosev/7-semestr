@@ -3,6 +3,8 @@ from config import types
 
 
 def validateArgs(args, timeit, outputTimeit):
+    """Check input args."""
+
     @timeTest(timeit, outputTimeit)
     def validateArgsInner(args):
         if args.type not in types:
