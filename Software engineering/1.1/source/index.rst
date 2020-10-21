@@ -3,7 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Randomizer's documentation!
 It's created for System Engineering subject
 ===============================
 
@@ -11,17 +10,27 @@ It's created for System Engineering subject
    :maxdepth: 2
    :caption: Contents:
 
+randomizer module
+-------------------------
+
 .. automodule:: randomizer
    :members:
+   :show-inheritance:
+
 
 .. automodule:: outputPipe
    :members:
+   :show-inheritance:
 
 .. automodule:: parseArgs
    :members:
+   :show-inheritance:
 
 .. automodule:: Plot
    :members:
+   :show-inheritance:
+
+
 
 
 
