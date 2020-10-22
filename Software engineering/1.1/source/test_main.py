@@ -1,5 +1,6 @@
 import unittest
 import sys
+
 sys.path.append("../")
 print(sys.path)
 import randomizer
@@ -7,7 +8,8 @@ from Plot import Plot
 import numpy as np
 
 
-class MyTestCase(unittest.TestCase):
+
+class RandomizerTest(unittest.TestCase):
     def test_size_is_equal(self):
         length = 100
         res = randomizer.getUniformInt(length, 0, 20)
@@ -23,6 +25,7 @@ class MyTestCase(unittest.TestCase):
         np.random.seed(1)
         secondRes = randomizer.getNormalFloat(*args)
         self.assertEqual(firstRes.all(), secondRes.all())
+
 
 
 if __name__ == '__main__':
