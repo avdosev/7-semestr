@@ -5,6 +5,11 @@ from main import main
 import os
 
 
+def validateWithArgs(args):
+    parser = parseArgs(args)
+    validateArgs(parser, parser.timeit, "")
+
+
 class ValidateArgsTest(unittest.TestCase):
 
     def test_no_data_count(self):
@@ -13,41 +18,33 @@ class ValidateArgsTest(unittest.TestCase):
 
     def test_incorrect_distribution(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'incorectDistribution'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'incorectDistribution'])
 
     def test_no_type_of_random_data(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'uniform'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'uniform'])
 
     def test_incorrect_type_of_random_data(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'uniform', '-t', 'mytype'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'uniform', '-t', 'mytype'])
 
     def test_normal_distribution_for_integer(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'normal', '-t', 'int'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'normal', '-t', 'int'])
 
     def test_no_distribution_params(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'uniform', '-t', 'float'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'uniform', '-t', 'float'])
 
     def test_negative_std(self):
         with self.assertRaises(Exception):
-            parser = parseArgs(['25', '-d', 'normal', '-t', 'float', '-mean', '1', '-std', '-1'])
-            validateArgs(parser, parser.timeit, "")
+            validateWithArgs(['25', '-d', 'normal', '-t', 'float', '-mean', '1', '-std', '-1'])
 
     def test_normal_distribution_float(self):  # нет исключения
-        parser = parseArgs(['25', '-d', 'normal', '-t', 'float', '-mean', '1', '-std', '3'])
-        validateArgs(parser, parser.timeit, "")
+        validateWithArgs(['25', '-d', 'normal', '-t', 'float', '-mean', '1', '-std', '3'])
 
     def test_uniform_distribution_float(self):  # нет исключения
-        parser = parseArgs(['25', '-d', 'uniform', '-t', 'float', '-min_value', '1', '-max_value', '3'])
-        validateArgs(parser, parser.timeit, "")
+        validateWithArgs(['25', '-d', 'uniform', '-t', 'float', '-min_value', '1', '-max_value', '3'])
 
     def test_write_in_file(self):
         outFile = './out.txt'
