@@ -20,10 +20,6 @@ class ValidateArgsTest(unittest.TestCase):
         with self.assertRaises(Exception):
             validateWithArgs(['25', '-d', 'incorectDistribution'])
 
-    def test_no_type_of_random_data(self):
-        with self.assertRaises(Exception):
-            validateWithArgs(['25', '-d', 'uniform'])
-
     def test_incorrect_type_of_random_data(self):
         with self.assertRaises(Exception):
             validateWithArgs(['25', '-d', 'uniform', '-t', 'mytype'])
@@ -45,6 +41,9 @@ class ValidateArgsTest(unittest.TestCase):
 
     def test_uniform_distribution_float(self):  # нет исключения
         validateWithArgs(['25', '-d', 'uniform', '-t', 'float', '-min_value', '1', '-max_value', '3'])
+
+    def test_uniform_distribution_int(self):  # нет исключения
+        validateWithArgs(['25', '-d', 'uniform', '-t', 'int', '-min_value', '1', '-max_value', '3'])
 
     def test_write_in_file(self):
         outFile = './out.txt'
