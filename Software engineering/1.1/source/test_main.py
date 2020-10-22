@@ -9,16 +9,20 @@ import numpy as np
 
 class MyTestCase(unittest.TestCase):
     def test_size_is_equal(self):
-        res = randomizer.getUniformInt(100, 0, 20)
-        self.assertEqual(len(res), 100)
+        length = 100
+        res = randomizer.getUniformInt(length, 0, 20)
+        self.assertEqual(len(res), length)
 
     def test_random_generation_with_same_seed_are_equal(self):
+        args = (10, 0, 2)
+
         np.random.seed(1)
-        firstRes = randomizer.getNormalFloat(10, 0, 2)
-        secondRes = randomizer.getNormalFloat(10, 0, 2)
-        print(firstRes)
-        print(secondRes)
-        self.assertEqual(firstRes, secondRes)
+        firstRes = randomizer.getNormalFloat(*args)
+
+        np.random.seed(99)
+        np.random.seed(1)
+        secondRes = randomizer.getNormalFloat(*args)
+        self.assertEqual(firstRes.all(), secondRes.all())
 
 
 if __name__ == '__main__':
