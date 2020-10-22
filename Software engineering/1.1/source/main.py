@@ -20,8 +20,11 @@ from outputPipe import writeResult
 from randomizer import getRandomData
 
 
-def main():
-    args = parseArgs(sys.argv[1:])
+def main(defaultArgs=None):
+    if not defaultArgs:
+        args = parseArgs(sys.argv[1:])
+    else:
+        args = parseArgs(defaultArgs)
 
     validateArgs(args, args.timeit, "Время парсинга аргументов: ")
 
