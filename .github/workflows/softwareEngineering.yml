@@ -22,9 +22,9 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        cd "Software\ engineering\1.1\source"
+        cd Software\ engineering/1.1/source/
         python -m pip install --upgrade pip
-        pip install  pytest
+        pip install  pytest numpy scipy matplotlib
     - name: Test with pytest
       run: |
         pytest
