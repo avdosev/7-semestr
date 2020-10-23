@@ -17,7 +17,6 @@ randomizer module
    :members:
    :show-inheritance:
 
-
 .. automodule:: outputPipe
    :members:
    :show-inheritance:

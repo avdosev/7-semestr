@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 
 
 class Plot:
-    """Small superset for matplotlib.pyplot."""
+    """
+    Small superset for matplotlib.pyplot.
+    """
 
     newPlot: plt
 

@@ -23,7 +23,13 @@ def parseArgs(args):
 
 
 def validateArgs(args, timeit, outputTimeit):
-    """Check input args."""
+    """
+    Check input args.
+    
+    :param args: object, mostly equal to sys.argv[1:]
+    :param timeit: boolean, if true, print time of function executed
+    :param outputTimeit: str, if :timeit is true, print this string before printing time
+    """
 
     @timeTest(timeit, outputTimeit)
     def validateArgsInner(args):
