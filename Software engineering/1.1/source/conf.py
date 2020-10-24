@@ -75,41 +75,6 @@ exclude_patterns = []
 pygments_style = None
 
 # -- Options for HTML output -------------------------------------------------
-import sphinx_bootstrap_theme
-
-html_theme = "bootstrap"
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-html_theme_options = {
-    # Navigation bar title. (Default: ``project`` value)
-    "navbar_title": "My Title",
-    # Tab name for entire site. (Default: "Site")
-    "navbar_site_name": "Documentation",
-    # 3rd argument = True indicates an arbitrary url
-    "navbar_links": [
-        ("Code", "https://github.com/kcarretto/arsenal", True),
-    ],
-    # Render the next and previous page links in navbar. (Default: true)
-    "navbar_sidebarrel": False,
-    # Render the current pages TOC in the navbar. (Default: true)
-    "navbar_pagenav": False,
-    # Global TOC depth for "site" navbar tab. (Default: 1)
-    # Switching to -1 shows all levels.
-    "globaltoc_depth": 2,
-    # Include hidden TOCs in Site navbar?
-    #
-    # Note: If this is "false", you cannot have mixed ``:hidden:`` and
-    # non-hidden ``toctree`` directives in the same page, or else the build
-    # will break.
-    #
-    # Values: "true" (default) or "false"
-    "globaltoc_includehidden": "true",
-    "navbar_fixed_top": "true",
-    # Hide documentation (.rst) source
-    "source_link_position": None,
-    "bootswatch_theme": "paper",
-    "bootstrap_version": "3",
-}
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
