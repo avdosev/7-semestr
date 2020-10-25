@@ -16,36 +16,22 @@ public class Main : MonoBehaviour
     {
         for (int i = 0; i < objects.Count; i++)
         {
-            var currentObject = objects[i];
-            currentObject.GetComponent<Renderer>().material.color = Color.red;
+            objects[i].GetComponent<Renderer>().material.color = Color.red;
             var selectColorObject = colorsDropdown[i].GetComponent<Dropdown>();
 
+            var newIndex = i; // чтобы при исполнении таски, мы не использовали последнее значение
             selectColorObject.onValueChanged.AddListener(delegate
             {
-                DropdownColorChanged(currentObject, selectColorObject);
+                DropdownColorChanged(objects[newIndex], selectColorObject);
+            });
+
+            var selectFormObject1 = formsDropdown[i].GetComponent<Dropdown>();
+            selectFormObject1.onValueChanged.AddListener(delegate
+            {
+                DropdownFormChanged(newIndex, objects[newIndex], selectFormObject1);
             });
         }
 
-        for (int i = 0; i < objects.Count; i++)
-        {
-
-        }
-        var selectFormObject1 = formsDropdown[0].GetComponent<Dropdown>();
-        selectFormObject1.onValueChanged.AddListener(delegate
-        {
-            DropdownFormChanged(0, objects[0], selectFormObject1);
-        });
-        var selectFormObject2 = formsDropdown[1].GetComponent<Dropdown>();
-        selectFormObject2.onValueChanged.AddListener(delegate
-        {
-            DropdownFormChanged(1, objects[1], selectFormObject2);
-        });
-
-        var selectFormObject3 = formsDropdown[2].GetComponent<Dropdown>();
-        selectFormObject3.onValueChanged.AddListener(delegate
-        {
-            DropdownFormChanged(2, objects[2], selectFormObject3);
-        });
     }
 
     void DropdownColorChanged(GameObject entity, Dropdown change)
@@ -58,7 +44,6 @@ public class Main : MonoBehaviour
         var tempObject = Utils.ChangeObjectForm(entity, change.value);
         Destroy(entity.GetComponent<Renderer>());
         objects[index] = tempObject;
-
         return tempObject;
     }
 
