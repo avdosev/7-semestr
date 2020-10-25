@@ -22,6 +22,7 @@ public class Utils
 
         var newObject1 = GameObject.CreatePrimitive(type);
         var newObjectComponent = newObject1.GetComponent<Renderer>();
+        // newObjectComponent.name = "Object1";
         newObjectComponent.material.color = oldObject1.material.color;
         newObjectComponent.transform.position = yourObject.transform.position;
         newObjectComponent.transform.localScale = yourObject.transform.localScale;
