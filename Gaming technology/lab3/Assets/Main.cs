@@ -11,7 +11,6 @@ public class Main : MonoBehaviour
 
     public List<Dropdown> formsDropdown;
 
-
     void Start()
     {
         for (int i = 0; i < objects.Count; i++)
@@ -31,7 +30,6 @@ public class Main : MonoBehaviour
                 DropdownFormChanged(newIndex, objects[newIndex], selectFormObject1);
             });
         }
-
     }
 
     void DropdownColorChanged(GameObject entity, Dropdown change)
@@ -47,11 +45,7 @@ public class Main : MonoBehaviour
         return tempObject;
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-
-
     }
 }

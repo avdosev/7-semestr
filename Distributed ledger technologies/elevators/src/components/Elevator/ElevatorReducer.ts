@@ -4,29 +4,35 @@ import {elevatorStore} from "./ElevatorStore";
 import {ElevatorManager} from "../../services/ElevatorManager";
 import {getDirection} from "../../services/Utils";
 import {ElevatorDispatcher} from "../../services/ElevatorDispatcher";
+import {BaseElevatorPayload, ElevatorCallPayload, FloorCallPayload} from "../../typings/elevatorsActionTypes";
+import {
+    CALL_ELEVATOR_FROM_FLOOR,
+    CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR,
+    ELEVATOR_TYPES,
+    MOVING_ELEVATOR
+} from "../../typings/actionNames";
 
 
 @injectable()
 export default class ElevatorReducer {
     public getReducer = () => {
-        return (state: ElevatorStore=elevatorStore, action: ActionTypePayload<any, AnyActionName>) =>
+        return (state: ElevatorStore=elevatorStore, action: ActionTypePayload<BaseElevatorPayload, ELEVATOR_TYPES>) =>
             this.reduce(state, action);
     }
 
-    public callFromFloor(state: ElevatorStore, payload: {fromFloor: number, direction: MoveDirection}) {
+    public callFromFloor(state: ElevatorStore, payload: FloorCallPayload) {
         const newState = {...state}
 
-        const newQueue = newState.elevators.addTask(payload.fromFloor, false, payload.direction)
+        const newQueue = newState.elevators.addFloorTask(payload)
         newState.elevators = new ElevatorDispatcher(newState.elevators.elevators)
 
         return newState
     }
 
-    public callFromElevator(state: ElevatorStore, payload: {toFloor: number, elevatorId: number}) {
+    public callFromElevator(state: ElevatorStore, payload: ElevatorCallPayload) {
         const newState = {...state}
 
-
-        const newQueue = newState.elevators.addTask(payload.toFloor,  true, "down", payload.elevatorId) // не оч корректно передал сюда дауна
+        const newQueue = newState.elevators.addElevatorTask(payload)
         newState.elevators = new ElevatorDispatcher(newState.elevators.elevators)
 
         return newState
@@ -42,13 +48,13 @@ export default class ElevatorReducer {
         return newState
     }
 
-    protected reduce = (state: ElevatorStore, action: ActionTypePayload<any, AnyActionName>): ElevatorStore => {
+    protected reduce = (state: ElevatorStore, action: ActionTypePayload<BaseElevatorPayload, ELEVATOR_TYPES>): ElevatorStore => {
         switch (action.type) {
-            case "CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR":
+            case CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR:
                 return this.callFromElevator(state, action.payload)
-            case "CALL_ELEVATOR_FROM_FLOOR":
+            case CALL_ELEVATOR_FROM_FLOOR:
                 return this.callFromFloor(state, action.payload)
-            case "MOVING_ELEVATOR":
+            case MOVING_ELEVATOR:
                 return this.movingElevator(state, action.payload)
             default: {
                 return state

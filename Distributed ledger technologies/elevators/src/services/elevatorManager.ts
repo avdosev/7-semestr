@@ -1,13 +1,9 @@
 import {elevatorSpeed} from "../config/config";
 import TinyQueue from 'tinyqueue';
 import {MoveDirection} from "../typings/common";
+import {ElevatorCallTask, MovingElevatorTask} from "../typings/elevators";
+import {FloorCallPayload} from "../typings/elevatorsActionTypes";
 
-export type MovingElevatorTask = {
-    toFloor: number
-    priority: number
-    calledFromElevator: boolean
-    direction?: MoveDirection
-}
 
 export class ElevatorManager {
     currentFloor: number
@@ -32,23 +28,33 @@ export class ElevatorManager {
         return this.currentMovingDirection === "up" || this.currentMovingDirection === "stopped"
     }
 
-    public addFloorToQueue(floorNumber: number, calledFromElevator: boolean, direction?: MoveDirection,) {
+    public addCallFromFloorToQueue(task: FloorCallPayload) {
         let currentPriority = 2
-        if (this.isPreferToMoveDown() && direction === "down" && this.currentFloor > floorNumber) {
+        if (this.isPreferToMoveDown() && task.direction === "down" && this.currentFloor > task.fromFloor) {
             currentPriority = 1
-        } else if (this.isPreferToMoveUp() && direction === "up" && this.currentFloor < floorNumber) {
+        } else if (this.isPreferToMoveUp() && task.direction === "up" && this.currentFloor < task.fromFloor) {
             currentPriority = 1
         }
         // меньше приоритет - быстрее выполнится
-
+        console.log(currentPriority)
         this.floorsQueue.push({
-            toFloor: floorNumber,
+            toFloor: task.fromFloor,
             priority: currentPriority,
-            direction: direction,
-            calledFromElevator: calledFromElevator
+            direction: task.direction,
+            calledFromElevator: false
         })
         return this.floorsQueue
     }
+
+    public addCallFromElevatorToQueue(task: ElevatorCallTask) {
+        this.floorsQueue.push({
+            toFloor: task.toFloor,
+            priority: 2,
+            calledFromElevator: true
+        })
+        return this.floorsQueue
+    }
+
 
     public resolve() {
         const lastFloor = this.floorsQueue.peek()

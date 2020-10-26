@@ -1,5 +1,6 @@
-import {ElevatorManager, MovingElevatorTask} from "./ElevatorManager";
+import {ElevatorManager} from "./ElevatorManager";
 import {MoveDirection} from "../typings/common";
+import {ElevatorCallPayload, FloorCallPayload} from "../typings/elevatorsActionTypes";
 
 
 export class ElevatorDispatcher {
@@ -26,8 +27,12 @@ export class ElevatorDispatcher {
         return this.elevators[elevatorId].currentMovingDirection
     }
 
-    public addTask = (floorNumber: number, calledFromElevator: boolean,  direction?: MoveDirection, elevatorId: number = 0) => {
-        return this.elevators[elevatorId].addFloorToQueue(floorNumber, calledFromElevator, direction)
+    public addFloorTask = (task: FloorCallPayload) => {
+        return this.elevators[0].addCallFromFloorToQueue(task)
+    }
+
+    public addElevatorTask = (task: ElevatorCallPayload) => {
+        return this.elevators[task.elevatorId].addCallFromElevatorToQueue(task)
     }
 
     public resolve = (elevatorId: number = 0) => {

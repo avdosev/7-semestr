@@ -42,6 +42,7 @@ export default class Elevator extends React.Component<IElevator> {
             }}
         >
             <LightBulb currentFloor={this.props.elevators.getCurrentFloor(this.props.elevatorId)}/>
+            <br />
             {buttons}
         </div>;
 

@@ -17,6 +17,7 @@ function App() {
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
     setInterval(() => {
         for (let i=0; i<elevatorsCount; i++) {
+            // @ts-ignore
             store.dispatch(elevator.movingElevator(i))
         }
     }, elevatorSpeed)
