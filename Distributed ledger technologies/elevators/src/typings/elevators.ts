@@ -9,9 +9,10 @@ export type MovingElevatorTask = {
 }
 
 
-export type FloorCallTask = { // без айдишника элеватора
+export type FloorCallTask = { // без айдишника элеватора и с приоритетом
     fromFloor: number
     direction: MoveDirection
+    priority: number
 }
 
 export type ElevatorCallTask = { // без айдишника элеватора

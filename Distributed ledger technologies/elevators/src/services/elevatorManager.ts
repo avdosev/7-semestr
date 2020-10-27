@@ -1,7 +1,7 @@
 import {elevatorSpeed} from "../config/config";
 import TinyQueue from 'tinyqueue';
 import {MoveDirection} from "../typings/common";
-import {ElevatorCallTask, MovingElevatorTask} from "../typings/elevators";
+import {ElevatorCallTask, FloorCallTask, MovingElevatorTask} from "../typings/elevators";
 import {FloorCallPayload} from "../typings/elevatorsActionTypes";
 
 
@@ -28,12 +28,12 @@ export class ElevatorManager {
         return this.currentMovingDirection === "up" || this.currentMovingDirection === "stopped"
     }
 
-    public addCallFromFloorToQueue(task: FloorCallPayload) {
-        let currentPriority = 2
+    public addCallFromFloorToQueue(task: FloorCallTask) {
+        let currentPriority = task.priority
         if (this.isPreferToMoveDown() && task.direction === "down" && this.currentFloor > task.fromFloor) {
-            currentPriority = 1
+            currentPriority--
         } else if (this.isPreferToMoveUp() && task.direction === "up" && this.currentFloor < task.fromFloor) {
-            currentPriority = 1
+            currentPriority--
         }
         // меньше приоритет - быстрее выполнится
         console.log(currentPriority)

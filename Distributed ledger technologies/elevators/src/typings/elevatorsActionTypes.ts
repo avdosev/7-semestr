@@ -3,7 +3,6 @@ import {MoveDirection} from "./common";
 export type FloorCallPayload = {
     fromFloor: number
     direction: MoveDirection
-    // elevatorId: number
 }
 
 export type ElevatorCallPayload = {
