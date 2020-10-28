@@ -27,6 +27,7 @@ export default class Elevator extends React.Component<IElevator> {
 
             buttons.push(<Button
                 size="mini"
+                key={i+1}
                 content={i + 1}
                 negative={isActiveButton}
                 onClick={() => this.props.actions.changeElevatorFloor(this.props.elevatorId, i + 1)}
@@ -37,10 +38,12 @@ export default class Elevator extends React.Component<IElevator> {
         return <div
             style={{
                 backgroundColor: 'grey',
-                width: 150, transition: "ease-in 0.3s",
+                width: 150,
+                transition: "ease-in 0.3s",
                 marginTop: (floorsCount - this.props.elevators.getCurrentFloor(this.props.elevatorId)) * 110
             }}
         >
+
             <LightBulb currentFloor={this.props.elevators.getCurrentFloor(this.props.elevatorId)}/>
             <br />
             {buttons}

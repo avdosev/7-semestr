@@ -9,11 +9,13 @@ export class ElevatorManager {
     currentFloor: number
     floorsQueue: TinyQueue<MovingElevatorTask>
     currentMovingDirection: MoveDirection
+    isArrived: boolean
 
     constructor(oldInstance?: ElevatorManager) {
         this.floorsQueue = oldInstance?.floorsQueue ?? new TinyQueue<MovingElevatorTask>([], this.comparator)
         this.currentFloor = oldInstance?.currentFloor ?? 1
         this.currentMovingDirection = oldInstance?.currentMovingDirection ?? "stopped"
+        this.isArrived = oldInstance?.isArrived  ?? false
     }
 
     public comparator(task1: MovingElevatorTask, task2: MovingElevatorTask) {
@@ -62,14 +64,18 @@ export class ElevatorManager {
             if (this.currentFloor < lastFloor.toFloor) {
                 this.currentFloor++;
                 this.currentMovingDirection = 'up'
+                this.isArrived = false
             } else if (this.currentFloor > lastFloor.toFloor) {
                 this.currentFloor--;
                 this.currentMovingDirection = 'down'
+                this.isArrived = false
             } else {
                 this.floorsQueue.pop()
+                this.isArrived = true
                 this.currentMovingDirection = 'stopped'
             }
         }
+
     }
 
 }

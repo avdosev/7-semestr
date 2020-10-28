@@ -14,18 +14,30 @@ import {store} from "../store";
 
 
 function App() {
+    const timeForStopOnFloor = 2000
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
+    const currentStore = store.getState().elevator.elevators
+
     setInterval(() => {
-        for (let i=0; i<elevatorsCount; i++) {
-            // @ts-ignore
-            store.dispatch(elevator.movingElevator(i))
+        for (let i = 0; i < elevatorsCount; i++) {
+            if (currentStore.elevators[i].isArrived) {
+                setTimeout(() => {
+                    console.log("is arrivied", i)
+                    // @ts-ignore
+                    store.dispatch(elevator.movingElevator(i))
+                }, timeForStopOnFloor)
+            } else {
+                // @ts-ignore
+                store.dispatch(elevator.movingElevator(i))
+            }
+
         }
     }, elevatorSpeed)
 
     const elevators = []
-    for (let i=0; i<elevatorsCount; i++) {
-        elevators.push(<GridColumn width={3}>
-            <ElevatorContainer elevatorId={i}/>
+    for (let i = 0; i < elevatorsCount; i++) {
+        elevators.push(<GridColumn key={i} width={3}>
+            <ElevatorContainer  elevatorId={i}/>
         </GridColumn>)
     }
 
@@ -33,7 +45,7 @@ function App() {
         <div className="App">
             <Grid>
                 <GridColumn width={2}>
-                    <Floors />
+                    <Floors/>
                 </GridColumn>
                 {elevators}
 

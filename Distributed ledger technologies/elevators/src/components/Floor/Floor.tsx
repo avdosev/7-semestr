@@ -32,7 +32,7 @@ export class Floor extends React.Component<IFloor> {
 
         const lighters = []
         for (let i = 0; i < elevatorsCount; i++) {
-            lighters.push(<LightBulb currentFloor={this.props.elevators.getCurrentFloor(i)}/>)
+            lighters.push(<LightBulb key={i} currentFloor={this.props.elevators.getCurrentFloor(i)}/>)
         }
 
         return <>
