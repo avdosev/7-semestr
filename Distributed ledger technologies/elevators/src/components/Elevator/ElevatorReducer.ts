@@ -16,7 +16,7 @@ import {
 @injectable()
 export default class ElevatorReducer {
     public getReducer = () => {
-        return (state: ElevatorStore=elevatorStore, action: ActionTypePayload<BaseElevatorPayload, ELEVATOR_TYPES>) =>
+        return (state: ElevatorStore=elevatorStore, action: ActionTypePayload<any, ELEVATOR_TYPES>) =>
             this.reduce(state, action);
     }
 
@@ -48,7 +48,7 @@ export default class ElevatorReducer {
         return newState
     }
 
-    protected reduce = (state: ElevatorStore, action: ActionTypePayload<BaseElevatorPayload, ELEVATOR_TYPES>): ElevatorStore => {
+    protected reduce = (state: ElevatorStore, action: ActionTypePayload<any, ELEVATOR_TYPES>): ElevatorStore => {
         switch (action.type) {
             case CHANGE_ELEVATOR_FLOOR_IN_ELEVATOR:
                 return this.callFromElevator(state, action.payload)

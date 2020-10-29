@@ -28,10 +28,10 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
     }
 }
 
-const authAction = (state: RootStore) => {
+const mapStateToProps = (state: RootStore) => {
     return {
         elevators: state.elevator.elevators
     }
 }
 
-export default connect(authAction, mapDispatchToProps)(FloorContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(FloorContainer);

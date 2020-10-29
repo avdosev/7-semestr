@@ -11,33 +11,38 @@ import {myContainer} from "../config/inversify.config";
 import {TYPES} from "../typings/types";
 import {ElevatorAction} from "./Elevator/ElevatorAction";
 import {store} from "../store";
+import {BaseElevatorPayload} from "../typings/elevatorsActionTypes";
 
 
-function App() {
-    const timeForStopOnFloor = 2000
+function sleep(time: number) {
+    return new Promise((resolve, reject) => {
+        setTimeout(resolve, time)
+    })
+}
+
+async function loop(stop: boolean) {
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
     const currentStore = store.getState().elevator.elevators
+    const timeForStopOnFloor = 2000
 
-    setInterval(() => {
+    while (!stop) {
+        await sleep(elevatorSpeed)
         for (let i = 0; i < elevatorsCount; i++) {
             if (currentStore.elevators[i].isArrived) {
-                setTimeout(() => {
-                    console.log("is arrivied", i)
-                    // @ts-ignore
-                    store.dispatch(elevator.movingElevator(i))
-                }, timeForStopOnFloor)
-            } else {
-                // @ts-ignore
-                store.dispatch(elevator.movingElevator(i))
+                await sleep(timeForStopOnFloor)
             }
-
+            store.dispatch(elevator.movingElevator(i))
         }
-    }, elevatorSpeed)
+    }
+}
+
+function App() {
+    loop(false)
 
     const elevators = []
     for (let i = 0; i < elevatorsCount; i++) {
         elevators.push(<GridColumn key={i} width={3}>
-            <ElevatorContainer  elevatorId={i}/>
+            <ElevatorContainer elevatorId={i}/>
         </GridColumn>)
     }
 
