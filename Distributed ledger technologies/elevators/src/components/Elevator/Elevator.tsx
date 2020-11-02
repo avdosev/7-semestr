@@ -35,13 +35,14 @@ export default class Elevator extends React.Component<IElevator> {
         }
         // const speedByFloor = `ease-in ${elevatorSpeed/1000}s`
         // console.log(speedByFloor)
+
         return <div
             style={{
                 // backgroundColor: 'grey',
                 backgroundImage: 'linear-gradient(to right, black 0% 30%, rgba(0,0,0,0) 30% 60%, black 60% 100%)',
                 width: 150,
                 transition: "ease-in 0.3s",
-                marginTop: (floorsCount - this.props.elevators.getCurrentFloor(this.props.elevatorId)) * 110
+                marginTop: (floorsCount - this.props.elevators.getCurrentFloor(this.props.elevatorId)) * 120
             }}
         >
 

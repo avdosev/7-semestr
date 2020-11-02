@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Floor} from "./Floor/Floor";
-import {Grid, GridColumn} from "semantic-ui-react";
+import {Grid, GridColumn, GridRow} from "semantic-ui-react";
 import Elevator from './Elevator/Elevator';
 import {elevatorsCount, elevatorSpeed, floorsCount} from "../config/config";
 import ElevatorContainer from "./Elevator/ElevatorContainer";
@@ -22,18 +22,20 @@ function sleep(time: number) {
 
 async function loop(stop: boolean) {
     const elevator = myContainer.get<ElevatorAction>(TYPES.ElevatorAction)
-    const currentStore = store.getState().elevator.elevators
     const timeForStopOnFloor = 2000
 
-    while (!stop) {
-        await sleep(elevatorSpeed)
-        for (let i = 0; i < elevatorsCount; i++) {
+    await Promise.race([0,1].map(async (i) => {
+        while (!stop) {
+            const currentStore = store.getState().elevator.elevators
+
+            await sleep(elevatorSpeed)
             if (currentStore.elevators[i].isArrived) {
+                console.log("sleepy", i)
                 await sleep(timeForStopOnFloor)
             }
             store.dispatch(elevator.movingElevator(i))
         }
-    }
+    }))
 }
 
 function App() {
