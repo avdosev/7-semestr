@@ -1,8 +1,11 @@
 
+.elevatorAnimated {
+    background: black;
+    animation: gradient 2s ease;
+}
+
 .elevator {
     background: black;
-    animation: gradient 2s ease infinite;
-
 }
 
 @keyframes gradient {
