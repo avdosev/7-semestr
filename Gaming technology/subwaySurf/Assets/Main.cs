@@ -11,28 +11,25 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
         var speed = 5;
-        // Debug.Log(street[0].transform.position.z);
+        var lengthOfPlatform = 7;
+        var destroyPointZ = -5;
 
-        var destroyPointZ = -10;
         if (street[0].transform.position.z < destroyPointZ) {
-            // Debug.Log(rand.Next(street.Count-1));
-            // var newStreetElement = street[0];
-            // newStreetElement.transform.position = new Vector3(0, 0, 25);
+            street.RemoveAt(0);
+        }
+
+        if (street.Count < 7) {
             var newStreetElement = street[rand.Next(street.Count-1)];
-            newStreetElement.transform.position = new Vector3(5, -12, 25);
+            
+            newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + lengthOfPlatform);
 
             street.Add(newStreetElement);
-
-            // Debug.Log(street[0].transform.position.z);
-
-            street.RemoveAt(0);
         }
 
         foreach (GameObject item in street)
