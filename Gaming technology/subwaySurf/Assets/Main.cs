@@ -18,23 +18,26 @@ public class Main : MonoBehaviour
     {
         var speed = 5;
         var lengthOfPlatform = 7;
-        var destroyPointZ = -5;
+        var destroyPointZ = 0;
+        var countOfPlatforms = 7;
 
-        if (street[0].transform.position.z < destroyPointZ) {
-            street.RemoveAt(0);
+        foreach (GameObject item in street)
+        {
+            item.transform.Translate(Vector3.back * (speed * Time.deltaTime));
         }
 
-        if (street.Count < 7) {
+        if (street.Count < countOfPlatforms) {
             var newStreetElement = street[rand.Next(street.Count-1)];
-            
+
             newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + lengthOfPlatform);
 
             street.Add(newStreetElement);
         }
-
-        foreach (GameObject item in street)
-        {
-            item.transform.position += new Vector3(0, 0, -speed * Time.deltaTime);
+        
+        if (street[0].transform.position.z < destroyPointZ) {
+            street.RemoveAt(0);
         }
+
+
     }
 }
