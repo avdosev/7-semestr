@@ -7,7 +7,7 @@ public class Main : MonoBehaviour
 {
     public List<GameObject> street = new List<GameObject>();
     public System.Random rand = new System.Random();
-
+    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,27 +17,18 @@ public class Main : MonoBehaviour
     void Update()
     {
         var speed = 5;
-        var lengthOfPlatform = 7;
-        var destroyPointZ = 0;
-        var countOfPlatforms = 7;
 
-        foreach (GameObject item in street)
-        {
-            item.transform.Translate(Vector3.back * (speed * Time.deltaTime));
-        }
-
-        if (street.Count < countOfPlatforms) {
-            var newStreetElement = street[rand.Next(street.Count-1)];
-
-            newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + lengthOfPlatform);
-
-            street.Add(newStreetElement);
-        }
-        
+        var destroyPointZ = -10;
         if (street[0].transform.position.z < destroyPointZ) {
+            var newStreetElement = street[0];
+            newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + 6);
+            street.Add(newStreetElement);
             street.RemoveAt(0);
         }
 
-
+        foreach (GameObject item in street)
+        {
+            item.transform.position += new Vector3(0, 0, -speed * Time.deltaTime);
+        }
     }
 }
