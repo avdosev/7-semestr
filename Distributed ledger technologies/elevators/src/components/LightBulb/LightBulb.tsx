@@ -8,6 +8,6 @@ export interface ILightBulb {
 export default class LightBulb extends React.Component<ILightBulb> {
 
     render() {
-        return <>{this.props.currentFloor} </>;
+        return <> {this.props.currentFloor} </>;
     }
 }

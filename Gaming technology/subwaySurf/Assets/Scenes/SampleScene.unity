@@ -506,11 +506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfb879e97ff985444ae6fc0646838546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformPrefabs: []
-  gamer: {fileID: 1464954658}
-  platform: {fileID: 1438941762}
-  speed: 5
-  offset: -10
 --- !u!1 &1464954658 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1953624966597844, guid: d6f93c619ac63a648b10bd76d31922e2, type: 3}
@@ -523,12 +518,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1464954658}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d3bc1ba019463b46a436fcc636b2b13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
+  player: {fileID: 9000000, guid: 07c4ef91a6ad63442ba51d1f34fe16be, type: 3}
 --- !u!1 &1550563750 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3916928490747038642, guid: 77109b1c1724cb74e8468ff3253e6c60, type: 3}
