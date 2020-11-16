@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float maxSpeed = 10f; 
-    /*private bool isMovingRight = false;
-    private bool isMovingLeft = false;*/
-    public Avatar player;
     public GameObject player2;
-    private float gravity = 20f;
     private Animator anim;
+    private int speed = 100;
 
-    private Rigidbody rb;
-    private float verticalSpeed = 500f;
+    public Rigidbody rb;
     private Lines line = Lines.middle;
 
     enum Lines
@@ -23,7 +18,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        InvokeRepeating("Move", 0f, 0.1f);
+        rb = GetComponent<Rigidbody>();
+        //InvokeRepeating("Move", 0f, 0.1f);
     }
 
     void Move()
@@ -36,7 +32,12 @@ public class PlayerController : MonoBehaviour
             if (line == Lines.left || line == Lines.middle)
             {
                 anim.SetTrigger("isMovingRight");
-                player2.transform.position += new Vector3(3f, 0.0f, 0.0f);;
+                Vector3 movement = new Vector3 (3f, 0.0f, 0f);
+ 
+                rb.AddForce(movement * speed);
+                /*
+                rb.MovePosition(rb.position + movement);
+                */
                 line++;
             }
             
@@ -46,7 +47,13 @@ public class PlayerController : MonoBehaviour
             if (line == Lines.right || line == Lines.middle)
             {
                 anim.SetTrigger("isMovingLeft");
-                player2.transform.position += new Vector3(-3f, 0.0f, 0.0f);;
+                Vector3 movement = new Vector3 (-3f, 0.0f, 0f);
+ 
+                rb.AddForce (movement * speed);
+                /*
+                rb.MovePosition(rb.position + movement);
+                */
+                
                 line--;
             }
         }
@@ -55,12 +62,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (Input.GetButtonDown("Jump"))
         {
             anim.SetTrigger("isJump");
         }
-        
+    }
 
+    void FixedUpdate()
+    {
+        Move();
     }
 }
