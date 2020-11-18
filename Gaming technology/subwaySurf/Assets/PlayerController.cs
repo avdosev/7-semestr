@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject player2;
     private Animator anim;
     private int speed = 100;
 
@@ -19,7 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        //InvokeRepeating("Move", 0f, 0.1f);
+        InvokeRepeating("Move", 0f, 0.1f);
     }
 
     void Move()
@@ -35,9 +34,6 @@ public class PlayerController : MonoBehaviour
                 Vector3 movement = new Vector3 (3f, 0.0f, 0f);
  
                 rb.AddForce(movement * speed);
-                /*
-                rb.MovePosition(rb.position + movement);
-                */
                 line++;
             }
             
@@ -50,10 +46,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 movement = new Vector3 (-3f, 0.0f, 0f);
  
                 rb.AddForce (movement * speed);
-                /*
-                rb.MovePosition(rb.position + movement);
-                */
-                
+
                 line--;
             }
         }
@@ -70,6 +63,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        
+        // Move(); // желательно move делать тут, но тогда срабатывает нажатие несколько раз, возможно, стоит анализировть keydown
+    
     }
 }
