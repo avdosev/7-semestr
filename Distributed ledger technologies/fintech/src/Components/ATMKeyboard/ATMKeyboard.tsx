@@ -1,37 +1,55 @@
+import { observer } from "mobx-react";
 import React from "react";
-import {Button, Grid, GridColumn, GridRow} from "semantic-ui-react";
+import { Button, Grid, GridColumn, GridRow } from "semantic-ui-react";
+import { ATMKeyboardStore } from "./ATMKeyboardStore";
 
+export interface IATMKeyboard {
+    store: ATMKeyboardStore
+}
 
-export class ATMKeyboard extends React.Component<any> {
+@observer
+export class ATMKeyboard extends React.Component<IATMKeyboard> {
+    
+    
+    onSubmit = () => {
+
+    }
+
+    onPressNumberButton = (buttonId: number) => () => {
+        this.props.store.addNumberToPinCode(buttonId)
+    }
+
     render() {
+        const store = this.props.store
 
         return <Grid>
 
             <GridRow>
-                <Button>1</Button>
-                <Button>2</Button>
-                <Button>3</Button>
-                <Button content="Отмена" negative={true}/>
+                {[1, 2, 3].map((num) => (
+                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                ))}
+
+                <Button content="Отмена" negative={true} />
             </GridRow>
             <GridRow>
-                <Button>4</Button>
-                <Button>5</Button>
-                <Button>6</Button>
-                <Button content="Сброс" color={'yellow'}/>
+                {[4, 5, 6].map((num) => (
+                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                ))}
+                <Button content="Сброс" color={'yellow'} />
 
             </GridRow>
             <GridRow>
-                <Button>7</Button>
-                <Button>8</Button>
-                <Button>9</Button>
-                <Button/>
+                {[7, 8, 9].map((num) => (
+                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                ))}
+                <Button />
 
             </GridRow>
             <GridRow>
                 <Button>0</Button>
-                <Button content="Ввод" positive={true}/>
+                <Button content="Ввод" positive={true} onClick={this.onSubmit} />
             </GridRow>
-            
+
         </Grid>;
     }
 }

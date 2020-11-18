@@ -1,0 +1,9 @@
+{
+  "users": [
+    {
+      "name": "Alex",
+      "cardNumber": 111133332222,
+      "pinCode": 1000
+    }
+  ]
+}
