@@ -1,12 +1,13 @@
-import {inject, injectable} from "inversify"
-import {observer} from "mobx-react"
-import {action, makeObservable, observable} from "mobx"
-import {ATMKeyboardStore} from "../ATMKeyboard/ATMKeyboardStore";
+import { inject, injectable } from "inversify"
+import { observer } from "mobx-react"
+import { action, makeObservable, observable } from "mobx"
+import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
-import {DB} from "../../typings/main";
-import {List} from "immutable";
-import {initOperation, inputCorrectPasswordOperation, insertCardOperation, Operation} from "../../typings/Operations"
-import {TYPES} from "../../config/Types"
+import { DB } from "../../typings/main";
+import { List } from "immutable";
+import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, Operation } from "../../typings/Operations"
+import { TYPES } from "../../config/Types"
+import {numDigits} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
@@ -32,22 +33,26 @@ export class ATMStore {
     public addNumberToPinCode = (pinCodeNumber: number) => {
         console.log(this.domainLevelOfOperation.type);
         console.log(this.keyboardStore.pinCodeNumber.value);
-        
+
         if (this.domainLevelOfOperation.type === "NoPassword") {  // Больше 4 знаков
-            this.keyboardStore.addNumberToPinCode(pinCodeNumber)
-            if (this.keyboardStore.pinCodeNumber.value! <= 9999) {
-                this.validatePinCode(this.keyboardStore.pinCodeNumber.value!)
+            if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) { 
+                this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
+            if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4)
+                this.validatePinCode(this.keyboardStore.pinCodeNumber.value!)
         }
     }
 
     public validatePinCode = (pinCode: number) => {
-        for (const user of this.database.users) {
-            if (user.pinCode === pinCode) {
-                this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
-            }
+        const userWithThisPinCode = this.database.users.find((user) => user.pinCode === pinCode)
+        // не очень точно, нужно проверять пароль носителя карточки
+        if (userWithThisPinCode) {
+            this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
+        } else {
+            this.domainLevelOfOperation = inputIncorrectPasswordOperation(this.domainLevelOfOperation)
         }
-        
+  
+
     }
 
 }

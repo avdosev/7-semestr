@@ -24,13 +24,13 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 break;
             case "NoPassword":
                 block = <NoPasswordOperation pinCode={this.props.domainStore.keyboardStore.pinCodeNumber.value!} />
-                console.log(this.props.domainStore.keyboardStore.pinCodeNumber);
                 break
             case "CorrectPassword":
                 block = <CorrectPasswordOperation />
                 break
             case "IncorrectPassword":
                 block = <IncorrectPasswordOperation />
+                break
             default:
                 break;
         }

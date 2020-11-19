@@ -20,14 +20,23 @@ export class ATMСardCollector extends Component<IATMCardCollector> {
     }
 
     render() {
-        return (
-            <div>
-                {this.props.domainStore.database.users.map((user) => (
+        const store = this.props.domainStore
+        if (store.domainLevelOfOperation.type === "NoCard") {
+            return (
+                <div>
+                    { 
+                    store.database.users.map((user) => (
                     <Button content={`Вставить карту ${user.name}`} key={user.name} onClick={this.onPutCard(user.cardNumber)} />
-                ))}
-                
-
-            </div>
-        );
+                    ))}
+                </div>
+            );
+        } else {
+            const currentUser = store.database.users.find((user) => user.cardNumber === store.domainLevelOfOperation.cardNumber)
+            return (<div>
+               Нелегальная подсказка: {currentUser?.name} {currentUser?.pinCode} 
+            </div>)
+        }
+        
+    
     }
 }

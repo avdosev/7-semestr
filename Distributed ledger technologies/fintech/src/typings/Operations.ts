@@ -33,7 +33,7 @@ export function inputCorrectPasswordOperation(operation: Operation): Operation {
     return {...operation, type: "CorrectPassword"}
 }
 
-export function inputInCorrectPasswordOperation(operation: Operation): Operation {
+export function inputIncorrectPasswordOperation(operation: Operation): Operation {
     return {...operation, type: "IncorrectPassword"}
 }
 
