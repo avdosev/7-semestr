@@ -28,14 +28,14 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
             <GridRow>
                 {[1, 2, 3].map((num) => (
-                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                    <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 ))}
 
                 <Button content="Отмена" negative={true} />
             </GridRow>
             <GridRow>
                 {[4, 5, 6].map((num) => (
-                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                    <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 ))}
                 <Button content="Сброс" color={'yellow'} />
 
@@ -48,8 +48,8 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
             </GridRow>
             <GridRow>
-                {['', 0, ''].map(num => (
-                    <Button>{num}</Button>
+                {['*', 0, '00'].map(num => (
+                    <Button key={num}>{num}</Button>
                 )) } 
                 <Button content="Ввод" positive={true} onClick={this.onSubmit} />
             </GridRow>

@@ -21,6 +21,7 @@ export class ATMStore {
     @action
     public insertCard = (cardNumber: number) => {
         this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, cardNumber)
+        console.log(this.domainLevelOfOperation.cardNumber);
     }
 
     @action

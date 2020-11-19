@@ -29,7 +29,8 @@ export class ATMKeyboardStore {
     public addNumberToPinCode = (num: number) => {
         const newPinCode = List(this.pinCode)
         this.pinCode = newPinCode.push(num)
-
+        console.log(this.pinCode);
+        
     }
 }
 
