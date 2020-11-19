@@ -2,9 +2,11 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Button, Grid, GridColumn, GridRow } from "semantic-ui-react";
 import { ATMKeyboardStore } from "./ATMKeyboardStore";
+import {ATMStore} from "../ATM/ATMStore";
 
 export interface IATMKeyboard {
-    store: ATMKeyboardStore
+    keyboardStore: ATMKeyboardStore
+    domainStore: ATMStore
 }
 
 @observer
@@ -16,11 +18,11 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
     }
 
     onPressNumberButton = (buttonId: number) => () => {
-        this.props.store.addNumberToPinCode(buttonId)
+        this.props.keyboardStore.addNumberToPinCode(buttonId)
+        this.props.domainStore.compute(this.props.keyboardStore.pinCode)
     }
 
     render() {
-        const store = this.props.store
 
         return <Grid>
 

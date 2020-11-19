@@ -4,6 +4,7 @@ import {Button, Container, Grid, GridRow} from "semantic-ui-react";
 import {observer} from "mobx-react";
 import {ATMKeyboardStore} from "../ATMKeyboard/ATMKeyboardStore";
 import {ATMWindow} from "../ATMWindow/ATMWindow";
+import {ATMStore} from "./ATMStore";
 
 
 @observer
@@ -18,7 +19,7 @@ export class ATM extends React.Component<any> {
                     <ATMWindow keyboardStore={keyboardStore}/>
                 </GridRow>
                 <GridRow>
-                    <ATMKeyboard store={keyboardStore}/>
+                    <ATMKeyboard keyboardStore={keyboardStore} domainStore={new ATMStore()} />
                 </GridRow>
                 <GridRow>
                     <Button content="Вставить карту"/>
