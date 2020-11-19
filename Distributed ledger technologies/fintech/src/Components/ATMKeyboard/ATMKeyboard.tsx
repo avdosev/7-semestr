@@ -5,7 +5,6 @@ import { ATMKeyboardStore } from "./ATMKeyboardStore";
 import {ATMStore} from "../ATM/ATMStore";
 
 export interface IATMKeyboard {
-    keyboardStore: ATMKeyboardStore
     domainStore: ATMStore
 }
 
@@ -17,9 +16,12 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
     }
 
+    onClear = () => {
+        this.props.domainStore.keyboardStore.clearPinCode()
+    }
+
     onPressNumberButton = (buttonId: number) => () => {
-        this.props.keyboardStore.addNumberToPinCode(buttonId)
-        this.props.domainStore.validatePinCode(this.props.keyboardStore.pinCodeNumber)
+        this.props.domainStore.addNumberToPinCode(buttonId)
     }
 
     render() {
@@ -37,7 +39,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
                 {[4, 5, 6].map((num) => (
                     <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 ))}
-                <Button content="Сброс" color={'yellow'} />
+                <Button content="Сброс" onClick={this.onClear} color={'yellow'} />
 
             </GridRow>
             <GridRow>

@@ -3,5 +3,5 @@ import React from "react"
 
 
 export const NoCardOperation = observer(() => (
-    <>Пожалуйста, Вставьте карту</>
+    <>Пожалуйста, вставьте карту</>
 ))

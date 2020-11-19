@@ -8,7 +8,7 @@ function App() {
     <div className="App">
 
       <Grid>
-        {[1,2].map((id) => (
+        {[1,2,3,4].map((id) => (
           <GridColumn key={id} width={4}>
             <ATM />
           </GridColumn>

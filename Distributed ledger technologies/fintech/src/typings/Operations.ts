@@ -10,19 +10,31 @@ export interface NoPasswordOperation {
 export interface CorrectPasswordOperation {
     type: "CorrectPassword"
     cardNumber: number
-    name: string
+}
+
+export interface IncorrectPasswordOperation {
+    type: "IncorrectPassword"
+    cardNumber: number
 }
 
 
-export type Operation = CorrectPasswordOperation | NoPasswordOperation | NoCardOperation
+export type Operation = CorrectPasswordOperation | IncorrectPasswordOperation | NoPasswordOperation | NoCardOperation
 
 
 export function initOperation(): NoCardOperation {
     return {type: "NoCard"}
 }
 
-export function insertCardOperation(operation: NoCardOperation, cardNumber: number): NoPasswordOperation {
+export function insertCardOperation(operation: Operation, cardNumber: number): Operation {
     return {...operation, type: "NoPassword", cardNumber: cardNumber}
+}
+
+export function inputCorrectPasswordOperation(operation: Operation): Operation {
+    return {...operation, type: "CorrectPassword"}
+}
+
+export function inputInCorrectPasswordOperation(operation: Operation): Operation {
+    return {...operation, type: "IncorrectPassword"}
 }
 
 function isNoCardOperation(n: Operation): n is NoCardOperation {

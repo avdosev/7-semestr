@@ -7,6 +7,8 @@ import { ATMWindow } from "../ATMWindow/ATMWindow";
 import { ATMStore } from "./ATMStore";
 import { ATMСardCollector } from "../ATMCardCollector/ATMCardCollector";
 import "./ATM.css"
+import {myContainer} from "../../config/inversify.config"
+import { TYPES } from "../../config/Types";
 
 export interface IATM {
 
@@ -17,13 +19,13 @@ export class ATM extends React.Component<IATM> {
 
 
     render() {
-        const keyboardStore = new ATMKeyboardStore()
-        const domainStore = new ATMStore()
+        const domainStore = myContainer.get<ATMStore>(TYPES.ATMStore)
+
         return <Container className='ATM'>
 
-            <ATMWindow domainStore={domainStore} keyboardStore={keyboardStore} />
+            <ATMWindow domainStore={domainStore}/>
             <ATMСardCollector domainStore={domainStore} />
-            <ATMKeyboard keyboardStore={keyboardStore} domainStore={domainStore} />
+            <ATMKeyboard domainStore={domainStore} />
 
         </Container>;
     }

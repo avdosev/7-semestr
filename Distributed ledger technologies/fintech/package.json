@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@sweet-monads/maybe": "^2.1.4",
     "immutable": "^4.0.0-rc.12",
     "inversify": "^5.0.1",
     "mobx": "^6.0.4",
