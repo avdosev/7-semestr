@@ -21,9 +21,9 @@ export class ATM extends React.Component<IATM> {
         const domainStore = new ATMStore()
         return <Container className='ATM'>
 
-            <ATMWindow keyboardStore={keyboardStore} />
-            {/* <ATMСardCollector  /> */}
-                <ATMKeyboard keyboardStore={keyboardStore} domainStore={domainStore} />
+            <ATMWindow domainStore={domainStore} keyboardStore={keyboardStore} />
+            <ATMСardCollector domainStore={domainStore} />
+            <ATMKeyboard keyboardStore={keyboardStore} domainStore={domainStore} />
 
         </Container>;
     }

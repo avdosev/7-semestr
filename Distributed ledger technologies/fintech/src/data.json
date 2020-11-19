@@ -4,6 +4,11 @@
       "name": "Alex",
       "cardNumber": 111133332222,
       "pinCode": 3232
+    },
+    {
+      "name": "Nikolay",
+      "cardNumber": 222233331111,
+      "pinCode": 1111
     }
   ]
 }

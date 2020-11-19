@@ -19,7 +19,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
     onPressNumberButton = (buttonId: number) => () => {
         this.props.keyboardStore.addNumberToPinCode(buttonId)
-        this.props.domainStore.compute(this.props.keyboardStore.pinCodeNumber)
+        this.props.domainStore.validatePinCode(this.props.keyboardStore.pinCodeNumber)
     }
 
     render() {

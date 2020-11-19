@@ -5,12 +5,13 @@ import {ATMKeyboardStore} from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
 import {DB} from "../../typings/main";
 import {List} from "immutable";
+import {initOperation, insertCardOperation, Operation} from "../../typings/Operations"
 
 
 @injectable()
 export class ATMStore {
     database: DB
-    @observable isCorrectPinCode: boolean = false
+    @observable domainLevelOfOperation: Operation = initOperation()
 
     constructor() {
         makeObservable(this)
@@ -18,12 +19,16 @@ export class ATMStore {
     }
 
     @action
-    public compute = (pinCode: number) => {
+    public insertCard = (cardNumber: number) => {
+        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, cardNumber)
+    }
+
+    @action
+    public validatePinCode = (pinCode: number) => {
         if (pinCode > 9999) { // Больше 4 знаков
             for (const user of this.database.users) {
                 if (user.pinCode === pinCode) {
-                    this.isCorrectPinCode = true
-                    console.log(this.isCorrectPinCode)
+                    
                 }
             }
         }
