@@ -8,11 +8,21 @@ import Json from "../../data.json"
 
 
 export class ATMKeyboardStore {
-    @observable pinCode: List<number> = List()
+    @observable private pinCode: List<number> = List()
 
     constructor() {
         makeObservable(this)
     }
+
+    
+    public get pinCodeNumber() : number {
+        return Number(this.pinCode.join(""))
+    }
+
+    public set pinCodeNumber(pinCode: number) {
+
+    }
+    
 
     @action
     public addNumberToPinCode = (num: number) => {

@@ -9,7 +9,6 @@ import {List} from "immutable";
 
 @injectable()
 export class ATMStore {
-    // keyboardStore: ATMKeyboardStore
     database: DB
     @observable isCorrectPinCode: boolean = false
 
@@ -19,12 +18,10 @@ export class ATMStore {
     }
 
     @action
-    public compute = (pinCode: List<number>) => {
-        if (pinCode.size === 4) {
+    public compute = (pinCode: number) => {
+        if (pinCode > 9999) { // Больше 4 знаков
             for (const user of this.database.users) {
-                console.log(user.pinCode)
-                console.log(Number(pinCode.toArray().join("")))
-                if (user.pinCode === Number(pinCode.toArray().join(""))) {
+                if (user.pinCode === pinCode) {
                     this.isCorrectPinCode = true
                     console.log(this.isCorrectPinCode)
                 }

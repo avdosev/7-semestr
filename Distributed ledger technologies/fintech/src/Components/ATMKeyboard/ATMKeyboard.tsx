@@ -19,12 +19,12 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
     onPressNumberButton = (buttonId: number) => () => {
         this.props.keyboardStore.addNumberToPinCode(buttonId)
-        this.props.domainStore.compute(this.props.keyboardStore.pinCode)
+        this.props.domainStore.compute(this.props.keyboardStore.pinCodeNumber)
     }
 
     render() {
 
-        return <Grid>
+        return <Grid className='ATMKeyboard'>
 
             <GridRow>
                 {[1, 2, 3].map((num) => (
@@ -42,13 +42,15 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
             </GridRow>
             <GridRow>
                 {[7, 8, 9].map((num) => (
-                    <Button onClick={this.onPressNumberButton(num)}>{num}</Button>
+                    <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 ))}
                 <Button />
 
             </GridRow>
             <GridRow>
-                <Button>0</Button>
+                {['', 0, ''].map(num => (
+                    <Button>{num}</Button>
+                )) } 
                 <Button content="Ввод" positive={true} onClick={this.onSubmit} />
             </GridRow>
 
