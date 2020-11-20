@@ -49,11 +49,9 @@ export class ATMStore {
             this.keyboardStore.clearPinCode()
         } else if (type === "NoPassword") {
             this.domainLevelOfOperation = initOperation()
-        } else if(type === "OpenWithdrawMoneyWindow") {
+        } else if(type === "OpenWithdrawMoneyWindow" || type === "OpenBalanceOperation") {
             this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
-        } else if(type === "OpenBalanceOperation")  {
-            this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
-        }
+        } 
     }
 
     @action
