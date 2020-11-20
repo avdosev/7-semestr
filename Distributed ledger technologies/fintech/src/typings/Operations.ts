@@ -1,76 +1,73 @@
+import {User} from "./main";
+
 export interface NoCardOperation {
     type: "NoCard"
 }
 
 export interface NoPasswordOperation {
     type: "NoPassword"
-    cardNumber: number
+    user: User
 }
 
 export interface CorrectPasswordOperation {
     type: "CorrectPassword"
-    cardNumber: number
-    balance: number
+    user: User
 }
 
 export interface IncorrectPasswordOperation {
     type: "IncorrectPassword"
-    cardNumber: number
+    user: User
 }
 
 export interface OpenWithdrawMoneyWindowOperation {
     type: "OpenWithdrawMoneyWindow"
-    cardNumber: number
-    balance: number
+    user: User
 }
 
 export interface WithdrawExistingMoneyOperation {
     type: "WithdrawExistingMoney"
-    cardNumber: number
-    balance: number
+    user: User
 
 }
 
 export interface WithdrawNotExistingMoneyOperation {
     type: "WithdrawNotExistingMoney"
-    cardNumber: number
-    balance: number
+    user: User
 
 }
 
 export interface WithdrawNotExistingCacheInATMOperation {
     type: "WithdrawNotExistingCacheInATM"
-    cardNumber: number
-    balance: number
+    user: User
 
 }
 
 export interface OpenBalanceWindowATMOperation {
     type: "OpenBalanceOperation"
-    cardNumber: number
-    balance: number
-
+    user: User
 }
 
+export type NoOperation = NoCardOperation
 
-export type Operation = 
-CorrectPasswordOperation | 
-IncorrectPasswordOperation | 
-NoPasswordOperation | 
-NoCardOperation |
-WithdrawNotExistingCacheInATMOperation |
-WithdrawNotExistingMoneyOperation |
-WithdrawExistingMoneyOperation |
-OpenWithdrawMoneyWindowOperation |
-OpenBalanceWindowATMOperation
+export type OperationUnion = NoOperation |
+    CorrectPasswordOperation |
+    IncorrectPasswordOperation |
+    NoPasswordOperation |
+    WithdrawNotExistingCacheInATMOperation |
+    WithdrawNotExistingMoneyOperation |
+    WithdrawExistingMoneyOperation |
+    OpenWithdrawMoneyWindowOperation |
+    OpenBalanceWindowATMOperation
+
+export type Operation = OperationUnion
 
 
 export function initOperation(): NoCardOperation {
     return {type: "NoCard"}
 }
 
-export function insertCardOperation(operation: Operation, cardNumber: number): Operation {
-    return {...operation, type: "NoPassword", cardNumber: cardNumber}
+export function insertCardOperation(operation: Operation, user: User): Operation {
+    return {...operation, type: "NoPassword", user: user}
 }
 
 export function inputCorrectPasswordOperation(operation: Operation): Operation {
@@ -81,7 +78,7 @@ export function inputIncorrectPasswordOperation(operation: Operation): Operation
     return {...operation, type: "IncorrectPassword"}
 }
 
-export function openWithdrawMoneyWindowOperation(operation: Operation): Operation {
+export function openWithdrawMoneyWindowOperation(operation: Operation): Operation  {
     return {...operation, type: "OpenWithdrawMoneyWindow"}
 }
 
@@ -102,6 +99,6 @@ export function withdrawNotExistingMoneyOperation(operation: Operation): Operati
 //     return n.type == 'NoCard'
 // }
 
-function isNoPasswordOperation(n: Operation): n is NoPasswordOperation {
-    return n.type == 'NoPassword' && Number.isInteger(n.cardNumber)
-}
+// function isNoPasswordOperation(n: Operation): n is NoPasswordOperation {
+//     return n.type == 'NoPassword' && Number.isInteger(n.cardNumber)
+// }

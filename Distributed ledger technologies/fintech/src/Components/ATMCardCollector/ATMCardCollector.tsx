@@ -11,7 +11,7 @@ export interface IATMCardCollector {
 }
 
 @observer
-export class ATMСardCollector extends Component<IATMCardCollector> {
+export class ATMCardCollector extends Component<IATMCardCollector> {
 
 
     onPutCard = (cardNumber: number) => () => {
@@ -31,7 +31,7 @@ export class ATMСardCollector extends Component<IATMCardCollector> {
                 </div>
             );
         } else {
-            const currentUser = store.database.users.find((user) => user.cardNumber === store.domainLevelOfOperation.cardNumber)
+            const currentUser = store.database.users.find((user) => user.cardNumber === store.domainLevelOfOperation.user.cardNumber)
             return (<div>
                Нелегальная подсказка: {currentUser?.name} {currentUser?.pinCode} 
             </div>)

@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
 import { ATMWindow } from "../ATMWindow/ATMWindow";
 import { ATMStore } from "./ATMStore";
-import { ATMСardCollector } from "../ATMCardCollector/ATMCardCollector";
+import { ATMCardCollector } from "../ATMCardCollector/ATMCardCollector";
 import "./ATM.css"
 import {myContainer} from "../../config/inversify.config"
 import { TYPES } from "../../config/Types";
@@ -24,7 +24,7 @@ export class ATM extends React.Component<IATM> {
         return <Container className='ATM'>
 
             <ATMWindow domainStore={domainStore}/>
-            <ATMСardCollector domainStore={domainStore} />
+            <ATMCardCollector domainStore={domainStore} />
             <ATMKeyboard domainStore={domainStore} />
 
         </Container>;

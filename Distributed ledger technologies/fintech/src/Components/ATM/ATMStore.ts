@@ -5,14 +5,24 @@ import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
 import { DB } from "../../typings/main";
 import { List, Map } from "immutable";
-import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, openBalanceOperation, openWithdrawMoneyWindowOperation, Operation, withdrawExistingMoneyOperation } from "../../typings/Operations"
+import {
+    initOperation,
+    inputCorrectPasswordOperation,
+    inputIncorrectPasswordOperation,
+    insertCardOperation,
+    NoOperation,
+    openBalanceOperation,
+    openWithdrawMoneyWindowOperation,
+    Operation,
+    withdrawExistingMoneyOperation
+} from "../../typings/Operations"
 import { TYPES } from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
     database: DB
-    @observable domainLevelOfOperation: Operation = initOperation()
+    @observable domainLevelOfOperation: Operation  = initOperation()
     keyboardStore: ATMKeyboardStore
     @observable cache: Map<number, number> = randomCacheGenerator()
 
@@ -28,10 +38,10 @@ export class ATMStore {
 
     @action
     public insertCard = (cardNumber: number) => {
-        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, cardNumber)
+        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.database.users.find((user) => cardNumber === user.cardNumber)!)
     }
 
-    @action 
+    @action
     openWithdrawWindow = () => {
         this.domainLevelOfOperation = openWithdrawMoneyWindowOperation(this.domainLevelOfOperation)
     }
@@ -43,16 +53,20 @@ export class ATMStore {
 
     @action
     onCancelPressed = () => {
-        const type = this.domainLevelOfOperation.type
-        if (type === "IncorrectPassword") {
-            this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.domainLevelOfOperation.cardNumber)
-            this.keyboardStore.clearPinCode()
-        } else if (type === "NoPassword") {
-            this.domainLevelOfOperation = initOperation()
-        } else if(type === "OpenWithdrawMoneyWindow" || type === "OpenBalanceOperation") {
-            this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
-        } 
-    }
+        switch (this.domainLevelOfOperation.type) {
+            case "IncorrectPassword":
+                this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.domainLevelOfOperation.user)
+                this.keyboardStore.clearPinCode()
+                break
+            case "NoPassword":
+                this.domainLevelOfOperation = initOperation()
+                break
+            case "OpenWithdrawMoneyWindow":
+            case "OpenBalanceOperation":
+                this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
+                break
+            }
+        }
 
     @action
     withdrawMoney = (count: number) => {
@@ -70,7 +84,7 @@ export class ATMStore {
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
             if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4)
-                this.validatePinCode(this.domainLevelOfOperation.cardNumber, this.keyboardStore.pinCodeNumber.value!)
+                this.validatePinCode(this.domainLevelOfOperation.user.cardNumber, this.keyboardStore.pinCodeNumber.value!)
         }
     }
 

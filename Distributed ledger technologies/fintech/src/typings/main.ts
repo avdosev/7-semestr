@@ -1,7 +1,8 @@
 export interface User {
-    "name": string,
-    "cardNumber": number,
-    "pinCode": number
+    name: string,
+    cardNumber: number,
+    pinCode: number
+    balance: number
 }
 
 export interface DB {

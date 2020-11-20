@@ -37,7 +37,7 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 block = <WithdrawMoney domainStore={this.props.domainStore} />
                 break
             case "OpenBalanceOperation":
-                block = <Balance balance={this.props.domainStore.database.users.find((user) => user.cardNumber === this.props.domainStore.domainLevelOfOperation.cardNumber).balance} />
+                block = <Balance balance={this.props.domainStore.domainLevelOfOperation.user.balance} />
                 break
             default:
                 break;
