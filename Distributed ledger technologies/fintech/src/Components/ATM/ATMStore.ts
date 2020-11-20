@@ -35,6 +35,15 @@ export class ATMStore {
     }
 
     @action
+    onCancelPressed = () => {
+        const type = this.domainLevelOfOperation.type
+        if (type === "IncorrectPassword") {
+            this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.domainLevelOfOperation.cardNumber)
+            this.keyboardStore.clearPinCode()
+        }
+    }
+
+    @action
     withdrawMoney = (count: number) => {
         
         // this.domainLevelOfOperation = withdrawExistingMoneyOperation()

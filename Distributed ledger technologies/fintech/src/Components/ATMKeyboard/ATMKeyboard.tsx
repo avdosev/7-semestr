@@ -24,6 +24,10 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
         this.props.domainStore.addNumberToPinCode(buttonId)
     }
 
+    onPressCancel = () => {
+        this.props.domainStore.onCancelPressed()
+    }
+
     render() {
 
         return <Grid className='ATMKeyboard'>
@@ -33,7 +37,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
                     <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 ))}
 
-                <Button content="Отмена" negative={true} />
+                <Button content="Отмена" onClick={this.onPressCancel} negative={true} />
             </GridRow>
             <GridRow>
                 {[4, 5, 6].map((num) => (
