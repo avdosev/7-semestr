@@ -34,18 +34,17 @@ export class ATMStore {
         console.log(this.domainLevelOfOperation.type);
         console.log(this.keyboardStore.pinCodeNumber.value);
 
-        if (this.domainLevelOfOperation.type === "NoPassword") {  // Больше 4 знаков
-            if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) { 
+        if (this.domainLevelOfOperation.type === "NoPassword") {  
+            if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) {  // Больше 4 знаков
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
             if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4)
-                this.validatePinCode(this.keyboardStore.pinCodeNumber.value!)
+                this.validatePinCode(this.domainLevelOfOperation.cardNumber, this.keyboardStore.pinCodeNumber.value!)
         }
     }
 
-    public validatePinCode = (pinCode: number) => {
-        const userWithThisPinCode = this.database.users.find((user) => user.pinCode === pinCode)
-        // не очень точно, нужно проверять пароль носителя карточки
+    public validatePinCode = (cardNumber: number, pinCode: number) => {
+        const userWithThisPinCode = this.database.users.find((user) => cardNumber === user.cardNumber && user.pinCode === pinCode)
         if (userWithThisPinCode) {
             this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
         } else {

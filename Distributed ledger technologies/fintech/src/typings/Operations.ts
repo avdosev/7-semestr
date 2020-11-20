@@ -17,8 +17,35 @@ export interface IncorrectPasswordOperation {
     cardNumber: number
 }
 
+export interface OpenWithdrawMoneyWindowOperation {
+    type: "OpenWithdrawMoneyWindow"
+    cardNumber: number
+}
 
-export type Operation = CorrectPasswordOperation | IncorrectPasswordOperation | NoPasswordOperation | NoCardOperation
+export interface WithdrawExistingMoneyOperation {
+    type: "WithdrawExistingMoney"
+    cardNumber: number
+}
+
+export interface WithdrawNotExistingMoneyOperation {
+    type: "WithdrawNotExistingMoney"
+    cardNumber: number
+}
+
+export interface WithdrawNotExistingCacheInATMOperation {
+    type: "WithdrawNotExistingCacheInATM"
+    cardNumber: number
+}
+
+export type Operation = 
+CorrectPasswordOperation | 
+IncorrectPasswordOperation | 
+NoPasswordOperation | 
+NoCardOperation |
+WithdrawNotExistingCacheInATMOperation |
+WithdrawNotExistingMoneyOperation |
+WithdrawExistingMoneyOperation |
+OpenWithdrawMoneyWindowOperation 
 
 
 export function initOperation(): NoCardOperation {
@@ -36,6 +63,12 @@ export function inputCorrectPasswordOperation(operation: Operation): Operation {
 export function inputIncorrectPasswordOperation(operation: Operation): Operation {
     return {...operation, type: "IncorrectPassword"}
 }
+
+export function openWithdrawMoneyWindowOperationOperation(operation: Operation): Operation {
+    return {...operation, type: "OpenWithdrawMoneyWindow"}
+}
+
+
 
 function isNoCardOperation(n: Operation): n is NoCardOperation {
     return n.type == 'NoCard'
