@@ -8,6 +8,7 @@ import { CorrectPasswordOperation } from "./CorrectPasswordOperation"
 import { NoCardOperation } from "./NoCardOperation"
 import { NoPasswordOperation } from "./NoPasswordOperation"
 import { IncorrectPasswordOperation } from "./IncorrectPasswordOperation"
+import {WithdrawMoney} from "./WithdrawMoney"
 
 export interface IATMWindow {
     domainStore: ATMStore
@@ -26,10 +27,13 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 block = <NoPasswordOperation pinCode={this.props.domainStore.keyboardStore.pinCodeNumber.value!} />
                 break
             case "CorrectPassword":
-                block = <CorrectPasswordOperation />
+                block = <CorrectPasswordOperation domainStore={this.props.domainStore} />
                 break
             case "IncorrectPassword":
                 block = <IncorrectPasswordOperation />
+                break
+            case "OpenWithdrawMoneyWindow":
+                block = <WithdrawMoney domainStore={this.props.domainStore} />
                 break
             default:
                 break;

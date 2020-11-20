@@ -4,16 +4,17 @@ import { action, makeObservable, observable } from "mobx"
 import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
 import { DB } from "../../typings/main";
-import { List } from "immutable";
-import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, Operation } from "../../typings/Operations"
+import { List, Map } from "immutable";
+import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, openWithdrawMoneyWindowOperation, Operation, withdrawExistingMoneyOperation } from "../../typings/Operations"
 import { TYPES } from "../../config/Types"
-import {numDigits} from "../../utils/utils"
+import {numDigits, randomCacheGenerator} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
     database: DB
     @observable domainLevelOfOperation: Operation = initOperation()
     keyboardStore: ATMKeyboardStore
+    @observable cache: Map<number, number> = randomCacheGenerator()
 
     constructor(
         @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore
@@ -28,6 +29,16 @@ export class ATMStore {
         this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, cardNumber)
     }
 
+    @action 
+    openWithdrawWindow = () => {
+        this.domainLevelOfOperation = openWithdrawMoneyWindowOperation(this.domainLevelOfOperation)
+    }
+
+    @action
+    withdrawMoney = (count: number) => {
+        
+        // this.domainLevelOfOperation = withdrawExistingMoneyOperation()
+    }
 
     @action
     public addNumberToPinCode = (pinCodeNumber: number) => {
@@ -43,6 +54,7 @@ export class ATMStore {
         }
     }
 
+    @action
     public validatePinCode = (cardNumber: number, pinCode: number) => {
         const userWithThisPinCode = this.database.users.find((user) => cardNumber === user.cardNumber && user.pinCode === pinCode)
         if (userWithThisPinCode) {

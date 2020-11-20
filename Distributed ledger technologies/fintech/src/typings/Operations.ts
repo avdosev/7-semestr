@@ -37,6 +37,7 @@ export interface WithdrawNotExistingCacheInATMOperation {
     cardNumber: number
 }
 
+
 export type Operation = 
 CorrectPasswordOperation | 
 IncorrectPasswordOperation | 
@@ -64,15 +65,22 @@ export function inputIncorrectPasswordOperation(operation: Operation): Operation
     return {...operation, type: "IncorrectPassword"}
 }
 
-export function openWithdrawMoneyWindowOperationOperation(operation: Operation): Operation {
+export function openWithdrawMoneyWindowOperation(operation: Operation): Operation {
     return {...operation, type: "OpenWithdrawMoneyWindow"}
 }
 
-
-
-function isNoCardOperation(n: Operation): n is NoCardOperation {
-    return n.type == 'NoCard'
+export function withdrawExistingMoneyOperation(operation: Operation): Operation {
+    return {...operation, type: "WithdrawExistingMoney"}
 }
+
+export function withdrawNotExistingMoneyOperation(operation: Operation): Operation {
+    return {...operation, type: "WithdrawNotExistingMoney"}
+}
+
+
+// function isNoCardOperation(n: Operation): n is NoCardOperation {
+//     return n.type == 'NoCard'
+// }
 
 function isNoPasswordOperation(n: Operation): n is NoPasswordOperation {
     return n.type == 'NoPassword' && Number.isInteger(n.cardNumber)

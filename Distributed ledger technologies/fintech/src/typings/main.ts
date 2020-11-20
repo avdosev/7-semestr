@@ -20,6 +20,6 @@ function isPinCode(n: number): n is PinCode {
     return Number.isInteger(n) && n <= 9999 // четырехзначное чесло
 }
 
-export function makePinCode(n: number): PinCode {
-    // return isPinCode(n) ? 
-}
+// export function makePinCode(n: number): PinCode {
+//     // return isPinCode(n) ? 
+// }

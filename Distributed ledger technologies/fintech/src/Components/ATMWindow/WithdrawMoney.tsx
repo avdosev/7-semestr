@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Button, Header, Input } from 'semantic-ui-react';
+import { ATMStore } from 'Components/ATM/ATMStore';
+
+export interface IWithdrawMoney {
+    domainStore: ATMStore
+}
 
 @observer
-export default class WithdrawMoney extends Component<any, any> {
+export class WithdrawMoney extends Component<IWithdrawMoney> {
     render() {
         return (
             <div>
                 <Header content={"Снять деньги"} />
-                <Button content={1000} />
-                <Button content={2000} />
-                <Button content={5000} />
-                <Button content={10000} />
+                {[1000, 2000, 5000, 10000].map(sum => (
+                    <Button content={sum} onClick={() => this.props.domainStore.withdrawMoney(sum)} />
+                ))}
 
                 <Header content={"Снять другую сумму"} />
-                <Input type="number"/>
+                <Input type="number" />
             </div>
         );
     }
