@@ -10,6 +10,7 @@ export interface NoPasswordOperation {
 export interface CorrectPasswordOperation {
     type: "CorrectPassword"
     cardNumber: number
+    balance: number
 }
 
 export interface IncorrectPasswordOperation {
@@ -20,21 +21,35 @@ export interface IncorrectPasswordOperation {
 export interface OpenWithdrawMoneyWindowOperation {
     type: "OpenWithdrawMoneyWindow"
     cardNumber: number
+    balance: number
 }
 
 export interface WithdrawExistingMoneyOperation {
     type: "WithdrawExistingMoney"
     cardNumber: number
+    balance: number
+
 }
 
 export interface WithdrawNotExistingMoneyOperation {
     type: "WithdrawNotExistingMoney"
     cardNumber: number
+    balance: number
+
 }
 
 export interface WithdrawNotExistingCacheInATMOperation {
     type: "WithdrawNotExistingCacheInATM"
     cardNumber: number
+    balance: number
+
+}
+
+export interface OpenBalanceWindowATMOperation {
+    type: "OpenBalanceOperation"
+    cardNumber: number
+    balance: number
+
 }
 
 
@@ -46,7 +61,8 @@ NoCardOperation |
 WithdrawNotExistingCacheInATMOperation |
 WithdrawNotExistingMoneyOperation |
 WithdrawExistingMoneyOperation |
-OpenWithdrawMoneyWindowOperation 
+OpenWithdrawMoneyWindowOperation |
+OpenBalanceWindowATMOperation
 
 
 export function initOperation(): NoCardOperation {
@@ -67,6 +83,10 @@ export function inputIncorrectPasswordOperation(operation: Operation): Operation
 
 export function openWithdrawMoneyWindowOperation(operation: Operation): Operation {
     return {...operation, type: "OpenWithdrawMoneyWindow"}
+}
+
+export function openBalanceOperation(operation: Operation): Operation {
+    return {...operation, type: "OpenBalanceOperation"}
 }
 
 export function withdrawExistingMoneyOperation(operation: Operation): Operation {

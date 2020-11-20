@@ -5,9 +5,9 @@ import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
 import { DB } from "../../typings/main";
 import { List, Map } from "immutable";
-import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, openWithdrawMoneyWindowOperation, Operation, withdrawExistingMoneyOperation } from "../../typings/Operations"
+import { initOperation, inputCorrectPasswordOperation, inputIncorrectPasswordOperation, insertCardOperation, openBalanceOperation, openWithdrawMoneyWindowOperation, Operation, withdrawExistingMoneyOperation } from "../../typings/Operations"
 import { TYPES } from "../../config/Types"
-import {numDigits, randomCacheGenerator} from "../../utils/utils"
+import {isHasChange, numDigits, randomCacheGenerator} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
@@ -22,6 +22,8 @@ export class ATMStore {
         makeObservable(this)
         this.database = Json
         this.keyboardStore = keyStore
+
+        console.log(isHasChange(randomCacheGenerator(), 5000))
     }
 
     @action
@@ -35,11 +37,22 @@ export class ATMStore {
     }
 
     @action
+    openBalanceOperation = () => {
+        this.domainLevelOfOperation = openBalanceOperation(this.domainLevelOfOperation)
+    }
+
+    @action
     onCancelPressed = () => {
         const type = this.domainLevelOfOperation.type
         if (type === "IncorrectPassword") {
             this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.domainLevelOfOperation.cardNumber)
             this.keyboardStore.clearPinCode()
+        } else if (type === "NoPassword") {
+            this.domainLevelOfOperation = initOperation()
+        } else if(type === "OpenWithdrawMoneyWindow") {
+            this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
+        } else if(type === "OpenBalanceOperation")  {
+            this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
         }
     }
 

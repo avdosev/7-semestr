@@ -16,6 +16,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
     }
 
+
     onClear = () => {
         this.props.domainStore.keyboardStore.clearPinCode()
     }

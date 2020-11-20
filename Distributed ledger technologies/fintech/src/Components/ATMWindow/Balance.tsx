@@ -6,7 +6,7 @@ export interface IBalance {
 }
 
 @observer
-export default class Balance extends Component<IBalance> {
+export class Balance extends Component<IBalance> {
     render() {
         return (
             <div>

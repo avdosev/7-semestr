@@ -8,7 +8,8 @@ import { CorrectPasswordOperation } from "./CorrectPasswordOperation"
 import { NoCardOperation } from "./NoCardOperation"
 import { NoPasswordOperation } from "./NoPasswordOperation"
 import { IncorrectPasswordOperation } from "./IncorrectPasswordOperation"
-import {WithdrawMoney} from "./WithdrawMoney"
+import { WithdrawMoney } from "./WithdrawMoney"
+import { Balance } from "./Balance"
 
 export interface IATMWindow {
     domainStore: ATMStore
@@ -34,6 +35,9 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 break
             case "OpenWithdrawMoneyWindow":
                 block = <WithdrawMoney domainStore={this.props.domainStore} />
+                break
+            case "OpenBalanceOperation":
+                block = <Balance balance={this.props.domainStore.database.users.find((user) => user.cardNumber === this.props.domainStore.domainLevelOfOperation.cardNumber).balance} />
                 break
             default:
                 break;

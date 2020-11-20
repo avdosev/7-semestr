@@ -18,7 +18,9 @@ export class CorrectPasswordOperation extends React.Component<ICorrectPasswordOp
                 <br />
                 <Button content={2}  /> Внести деньги
                 <br />
-                <Button content={3}  /> Посмотреть остаток
+                <Button content={3} onClick={() => this.props.domainStore.openBalanceOperation()} /> Посмотреть остаток
+                <br />
+                <Button content={4} /> Снять деньги
                 <br />
 
             </Container>
