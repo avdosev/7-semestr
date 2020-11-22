@@ -11,6 +11,7 @@ import {myContainer} from "../../config/inversify.config"
 import { TYPES } from "../../config/Types";
 import {ATMMoneyGiver} from "../ATMMoneyGiver/ATMMoneyGiver";
 import {ATMCache} from "../ATMCache/ATMCache";
+import {WithdrawMoneyStore} from "../ATMWindow/Windows/Withdraw/WithdrawMoneyStore";
 
 export interface IATM {
 
@@ -22,7 +23,6 @@ export class ATM extends React.Component<IATM> {
 
     render() {
         const domainStore = myContainer.get<ATMStore>(TYPES.ATMStore)
-
 
         return <Container className='ATM'>
 

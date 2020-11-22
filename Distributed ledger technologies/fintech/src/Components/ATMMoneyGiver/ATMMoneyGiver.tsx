@@ -11,9 +11,11 @@ export interface IATMMoneyGiver {
 export class ATMMoneyGiver extends React.Component<IATMMoneyGiver>{
     render() {
         if (this.props.domainStore.domainLevelOfOperation.type === "SuccessWithdrawExistingMoney") {
-            return this.props.domainStore.domainLevelOfOperation.nominalsCount.map((count, nominal) => (
-                <><Image size="small" src={`/nominals/${nominal}.jpg`}/> * {count}</>
+            const money: React.ReactElement[] = []
+            this.props.domainStore.domainLevelOfOperation.nominalsCount.forEach((count, nominal) => (
+                money.push(<><Image size="small" src={`/nominals/${nominal}.jpg`}/> * {count}</>)
             ))
+            return money
         }
         return null
     }

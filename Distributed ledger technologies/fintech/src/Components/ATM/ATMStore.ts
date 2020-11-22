@@ -19,6 +19,7 @@ import {
 import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 import {BankStore} from "../Bank/BankStore";
+import {WithdrawMoneyStore} from "../ATMWindow/Windows/Withdraw/WithdrawMoneyStore";
 
 @injectable()
 export class ATMStore {
@@ -27,14 +28,17 @@ export class ATMStore {
     bankStore: BankStore
     @observable cache: Map<number, number> = randomCacheGenerator()
     currentUser: User | null = null
+    withdrawMoneyStore: WithdrawMoneyStore
 
     constructor(
         @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore,
-        @inject(TYPES.BankStore) bank: BankStore
+        @inject(TYPES.BankStore) bank: BankStore,
+        @inject(TYPES.WithdrawMoneyStore) withdrawStore: WithdrawMoneyStore
     ) {
         makeObservable(this)
         this.keyboardStore = keyStore
         this.bankStore = bank
+        this.withdrawMoneyStore = withdrawStore
     }
 
     @action
@@ -79,16 +83,19 @@ export class ATMStore {
     public withdrawMoney = (count: number) => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
         const nominalsCount = isHasChange(this.cache, count)
-
+            console.log(count, this.currentUser!.balance, count > this.currentUser!.balance)
             if (count > this.currentUser!.balance) {
                 this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
-            }
-
-            if (!nominalsCount) {
-                this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
             } else {
-                this.cache = subtractCacheForClient(this.cache, nominalsCount)
-                this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+                if (!nominalsCount) {
+                    this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
+                } else {
+                    this.cache = subtractCacheForClient(this.cache, nominalsCount)
+                    this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+                    const index = this.bankStore.database.users.indexOf(this.currentUser!)
+                    this.currentUser!.balance -= count
+                    this.bankStore.database.users[index] = this.currentUser!
+                }
             }
         }
 
@@ -97,7 +104,7 @@ export class ATMStore {
     @action
     public submit = () => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
-            // this.withdrawMoney()
+            this.withdrawMoney(this.withdrawMoneyStore.withdrawMoneyCount)
         }
     }
 

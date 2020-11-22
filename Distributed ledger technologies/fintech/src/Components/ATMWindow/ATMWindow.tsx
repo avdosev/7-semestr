@@ -15,6 +15,9 @@ import {WithdrawNotExistingMoney} from "./Windows/Withdraw/WithdrawNotExistingMo
 import {WithdrawNotExistingCacheInATM} from "./Windows/Withdraw/WithdrawNotExistingCacheInATM";
 import {SuccessWithdrawMoney} from "./Windows/Withdraw/SuccessWithdrawMoney";
 import {exhaustiveCheck} from "../../utils/utils";
+import {myContainer} from "../../config/inversify.config";
+import {TYPES} from "../../config/Types";
+import {WithdrawMoneyStore} from "./Windows/Withdraw/WithdrawMoneyStore";
 
 export interface IATMWindow {
     domainStore: ATMStore
