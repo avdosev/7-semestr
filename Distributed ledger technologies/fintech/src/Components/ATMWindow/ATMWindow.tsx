@@ -14,16 +14,11 @@ import {Operation} from "../../typings/Operations";
 import {WithdrawNotExistingMoney} from "./Windows/Withdraw/WithdrawNotExistingMoney";
 import {WithdrawNotExistingCacheInATM} from "./Windows/Withdraw/WithdrawNotExistingCacheInATM";
 import {SuccessWithdrawMoney} from "./Windows/Withdraw/SuccessWithdrawMoney";
+import {exhaustiveCheck} from "../../utils/utils";
 
 export interface IATMWindow {
     domainStore: ATMStore
 }
-
-function exhaustiveCheck( param: never ) {
-    throw new Error(`Unhandled value: ${param}`)
-}
-
-
 
 @observer
 export class ATMWindow extends React.Component<IATMWindow>{
@@ -54,7 +49,6 @@ export class ATMWindow extends React.Component<IATMWindow>{
 
     render() {
         const window = this.Router(this.props.domainStore.domainLevelOfOperation.type, this.props.domainStore)
-        console.log(window)
         return <div className='ATMWindow' style={{ border: '1px solid black', height: '300px', width: '300px' }}>
             {window}
         </div>;

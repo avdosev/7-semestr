@@ -74,25 +74,32 @@ export class ATMStore {
 
     @action
     withdrawMoney = (count: number) => {
+        if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
         const nominalsCount = isHasChange(this.cache, count)
-        if (count > this.domainLevelOfOperation.user.balance) {
-            this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
-        }
 
-        if (!nominalsCount) {
-            this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
-        } else {
-            this.cache = subtractCacheForClient(this.cache, nominalsCount)
-            this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+            if (count > this.domainLevelOfOperation.user.balance) {
+                this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
+            }
+
+            if (!nominalsCount) {
+                this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
+            } else {
+                this.cache = subtractCacheForClient(this.cache, nominalsCount)
+                this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+            }
         }
 
     }
 
     @action
-    public addNumberToPinCode = (pinCodeNumber: number) => {
-        console.log(this.domainLevelOfOperation.type);
-        console.log(this.keyboardStore.pinCodeNumber.value);
+    public submit = () => {
+        if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
 
+        }
+    }
+
+    @action
+    public addNumberToPinCode = (pinCodeNumber: number) => {
         if (this.domainLevelOfOperation.type === "NoPassword") {
             if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) {  // Больше 4 знаков
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)

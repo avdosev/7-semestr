@@ -26,6 +26,8 @@ export class ATMKeyboardStore {
     public clearPinCode = () => {
         this.pinCode = this.pinCode.clear()        
     }
+
+
     
 
     @action

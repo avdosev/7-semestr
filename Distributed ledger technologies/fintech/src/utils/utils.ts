@@ -67,3 +67,7 @@ export function subtractCacheForClient(cache: Map<number, number>, subClientCach
         }
     })
 }
+
+export function exhaustiveCheck( param: never ) {
+    throw new Error(`Unhandled value: ${param}`)
+}

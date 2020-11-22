@@ -13,7 +13,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
     
     
     onSubmit = () => {
-
+        this.props.domainStore.submit()
     }
 
 
