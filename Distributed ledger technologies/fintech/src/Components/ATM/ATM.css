@@ -1,8 +1,8 @@
 
-.container .ATMWindow  {
-    margin-left: 20px !important;
-}
+
 
 .ATMKeyboard {
-    margin-left: 20px !important;
+    margin-top: 20px !important;
+    margin-left: 0px !important;
+    margin-bottom: 10px !important;
 }

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Button } from 'semantic-ui-react';
+import {Button, Container} from 'semantic-ui-react';
 import { ATMStore } from 'Components/ATM/ATMStore';
 import { User } from 'typings/main';
 
@@ -23,12 +23,12 @@ export class ATMCardCollector extends Component<IATMCardCollector> {
         const store = this.props.domainStore
         if (store.domainLevelOfOperation.type === "NoCard") {
             return (
-                <div>
+                <Container textAlign={"left"}>
                     { 
                     store.bankStore.database.users.map((user) => (
-                    <Button content={`Вставить карту ${user.name}`} key={user.name} onClick={this.onPutCard(user.cardNumber)} />
+                    <><Button content={`Вставить карту ${user.name}`} key={user.name} onClick={this.onPutCard(user.cardNumber)} /> <br /> </>
                     ))}
-                </div>
+                </Container>
             );
         } else {
             const currentUser = store.bankStore.database.users.find((user) => user.cardNumber === store.currentUser!.cardNumber)

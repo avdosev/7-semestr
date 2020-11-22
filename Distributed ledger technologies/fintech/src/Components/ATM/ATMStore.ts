@@ -82,23 +82,22 @@ export class ATMStore {
     @action
     public withdrawMoney = (count: number) => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
-        const nominalsCount = isHasChange(this.cache, count)
-            console.log(count, this.currentUser!.balance, count > this.currentUser!.balance)
+            const nominalsCount = isHasChange(this.cache, count)
             if (count > this.currentUser!.balance) {
                 this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
-            } else {
-                if (!nominalsCount) {
-                    this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
-                } else {
-                    this.cache = subtractCacheForClient(this.cache, nominalsCount)
-                    this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
-                    const index = this.bankStore.database.users.indexOf(this.currentUser!)
-                    this.currentUser!.balance -= count
-                    this.bankStore.database.users[index] = this.currentUser!
-                }
+                return
             }
-        }
+            if (!nominalsCount) {
+                this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
+                return
+            }
+            this.cache = subtractCacheForClient(this.cache, nominalsCount)
 
+            this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+            const index = this.bankStore.database.users.indexOf(this.currentUser!)
+            this.currentUser!.balance -= count
+            this.bankStore.database.users[index] = this.currentUser!
+        }
     }
 
     @action
@@ -114,8 +113,9 @@ export class ATMStore {
             if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) {  // Больше 4 знаков
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
-            if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4)
+            if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4) {
                 this.validatePinCode(this.currentUser!.cardNumber, this.keyboardStore.pinCodeNumber.value!)
+            }
         }
     }
 

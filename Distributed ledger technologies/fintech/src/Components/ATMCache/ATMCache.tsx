@@ -13,8 +13,8 @@ export class ATMCache extends React.Component<ICorrectPasswordOperation> {
     render() {
         const elements: React.ReactElement[] = []
         this.props.domainStore.cache.forEach((count, nominal) => (
-            elements.push(<Container>
-                <Image size="tiny" src={`/nominals/${nominal}.jpg`}/> * {count}
+            elements.push(<Container textAlign='left'>
+                <Image style={{marginTop: '5px'}}  size="tiny" src={`/nominals/${nominal}.jpg`} verticalAlign='middle' /> <span> * {count} </span>
             </Container>)
         ))
         return (elements);
