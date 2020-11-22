@@ -25,13 +25,13 @@ export class ATMCardCollector extends Component<IATMCardCollector> {
             return (
                 <div>
                     { 
-                    store.database.users.map((user) => (
+                    store.bankStore.database.users.map((user) => (
                     <Button content={`Вставить карту ${user.name}`} key={user.name} onClick={this.onPutCard(user.cardNumber)} />
                     ))}
                 </div>
             );
         } else {
-            const currentUser = store.database.users.find((user) => user.cardNumber === store.domainLevelOfOperation.user.cardNumber)
+            const currentUser = store.bankStore.database.users.find((user) => user.cardNumber === store.currentUser!.cardNumber)
             return (<div>
                Нелегальная подсказка: {currentUser?.name} {currentUser?.pinCode} 
             </div>)

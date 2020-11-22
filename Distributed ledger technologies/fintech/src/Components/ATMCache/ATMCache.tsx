@@ -14,7 +14,7 @@ export class ATMCache extends React.Component<ICorrectPasswordOperation> {
         const elements: React.ReactElement[] = []
         this.props.domainStore.cache.forEach((count, nominal) => (
             elements.push(<Container>
-                <Image size="small" src={`/nominals/${nominal}.jpg`}/> * {count}
+                <Image size="tiny" src={`/nominals/${nominal}.jpg`}/> * {count}
             </Container>)
         ))
         return (elements);

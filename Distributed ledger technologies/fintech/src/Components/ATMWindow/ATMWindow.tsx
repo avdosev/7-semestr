@@ -35,15 +35,15 @@ export class ATMWindow extends React.Component<IATMWindow>{
             case "OpenWithdrawMoneyWindow":
                 return <WithdrawMoney domainStore={domainStore} />
             case "OpenBalanceOperation":
-                return <Balance balance={domainStore.domainLevelOfOperation.user.balance} />
+                return <Balance balance={domainStore.currentUser!.balance} />
             case "WithdrawNotExistingMoney":
                 return <WithdrawNotExistingMoney />
             case "WithdrawNotExistingCacheInATM":
                 return <WithdrawNotExistingCacheInATM />
             case "SuccessWithdrawExistingMoney":
                 return <SuccessWithdrawMoney />
-
         }
+
         exhaustiveCheck(windowId)
     }
 

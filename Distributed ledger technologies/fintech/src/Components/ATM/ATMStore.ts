@@ -3,7 +3,7 @@ import {observer} from "mobx-react"
 import {action, makeObservable, observable} from "mobx"
 import {ATMKeyboardStore} from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
-import {DB} from "../../typings/main";
+import {DB, User} from "../../typings/main";
 import {List, Map} from "immutable";
 import {
     initOperation,
@@ -18,44 +18,47 @@ import {
 } from "../../typings/Operations"
 import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
+import {BankStore} from "../Bank/BankStore";
 
 @injectable()
 export class ATMStore {
-    database: DB
     @observable domainLevelOfOperation: Operation = initOperation()
     keyboardStore: ATMKeyboardStore
+    bankStore: BankStore
     @observable cache: Map<number, number> = randomCacheGenerator()
+    currentUser: User | null = null
 
     constructor(
-        @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore
+        @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore,
+        @inject(TYPES.BankStore) bank: BankStore
     ) {
         makeObservable(this)
-        this.database = Json
         this.keyboardStore = keyStore
+        this.bankStore = bank
     }
 
     @action
     public insertCard = (cardNumber: number) => {
-        const user = this.database.users.find((user) => cardNumber === user.cardNumber)
-        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, user!)
-        console.log(this.domainLevelOfOperation.type)
+        const user = this.bankStore.getUser(cardNumber)
+        this.currentUser = user! //  вообще мы не должны получать всю инфу о пользователя сюда
+        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation)
     }
 
     @action
-    openWithdrawWindow = () => {
+    public openWithdrawWindow = () => {
         this.domainLevelOfOperation = openWithdrawMoneyWindowOperation(this.domainLevelOfOperation)
     }
 
     @action
-    openBalanceOperation = () => {
+    public openBalanceOperation = () => {
         this.domainLevelOfOperation = openBalanceOperation(this.domainLevelOfOperation)
     }
 
     @action
-    onCancelPressed = () => {
+    public onCancelPressed = () => {
         switch (this.domainLevelOfOperation.type) {
             case "IncorrectPassword":
-                this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.domainLevelOfOperation.user)
+                this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation)
                 this.keyboardStore.clearPinCode()
                 break
             case "NoPassword":
@@ -73,11 +76,11 @@ export class ATMStore {
     }
 
     @action
-    withdrawMoney = (count: number) => {
+    public withdrawMoney = (count: number) => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
         const nominalsCount = isHasChange(this.cache, count)
 
-            if (count > this.domainLevelOfOperation.user.balance) {
+            if (count > this.currentUser!.balance) {
                 this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
             }
 
@@ -94,7 +97,7 @@ export class ATMStore {
     @action
     public submit = () => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
-
+            // this.withdrawMoney()
         }
     }
 
@@ -105,13 +108,13 @@ export class ATMStore {
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
             if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4)
-                this.validatePinCode(this.domainLevelOfOperation.user.cardNumber, this.keyboardStore.pinCodeNumber.value!)
+                this.validatePinCode(this.currentUser!.cardNumber, this.keyboardStore.pinCodeNumber.value!)
         }
     }
 
     @action
     public validatePinCode = (cardNumber: number, pinCode: number) => {
-        const userWithThisPinCode = this.database.users.find((user) => cardNumber === user.cardNumber && user.pinCode === pinCode)
+        const userWithThisPinCode = this.currentUser?.pinCode === pinCode // не очень верно,
         if (userWithThisPinCode) {
             this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
         } else {

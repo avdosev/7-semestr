@@ -7,46 +7,35 @@ export interface NoCardOperation {
 
 export interface NoPasswordOperation {
     type: "NoPassword"
-    user: User
 }
 
 export interface CorrectPasswordOperation {
     type: "CorrectPassword"
-    user: User
 }
 
 export interface IncorrectPasswordOperation {
     type: "IncorrectPassword"
-    user: User
 }
 
 export interface OpenWithdrawMoneyWindowOperation {
     type: "OpenWithdrawMoneyWindow"
-    user: User
 }
 
 export interface WithdrawExistingMoneyOperation {
     type: "SuccessWithdrawExistingMoney"
-    user: User
     nominalsCount: Map<number, number>
-
 }
 
 export interface WithdrawNotExistingMoneyOperation {
     type: "WithdrawNotExistingMoney"
-    user: User
-
 }
 
 export interface WithdrawNotExistingCacheInATMOperation {
     type: "WithdrawNotExistingCacheInATM"
-    user: User
-
 }
 
 export interface OpenBalanceWindowATMOperation {
     type: "OpenBalanceOperation"
-    user: User
 }
 
 export type NoOperation = NoCardOperation
@@ -67,8 +56,8 @@ export function initOperation(): NoCardOperation {
     return {type: "NoCard"}
 }
 
-export function insertCardOperation(operation: Operation, user: User): Operation {
-    return {...operation, type: "NoPassword", user: user}
+export function insertCardOperation(operation: Operation): Operation {
+    return {...operation, type: "NoPassword"}
 }
 
 export function inputCorrectPasswordOperation(operation: Operation): Operation {

@@ -24,7 +24,6 @@ export class ATM extends React.Component<IATM> {
         const domainStore = myContainer.get<ATMStore>(TYPES.ATMStore)
 
 
-
         return <Container className='ATM'>
 
             <ATMWindow domainStore={domainStore}/>
