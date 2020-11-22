@@ -1,4 +1,5 @@
 import {User} from "./main";
+import {Map} from "immutable"
 
 export interface NoCardOperation {
     type: "NoCard"
@@ -25,8 +26,9 @@ export interface OpenWithdrawMoneyWindowOperation {
 }
 
 export interface WithdrawExistingMoneyOperation {
-    type: "WithdrawExistingMoney"
+    type: "SuccessWithdrawExistingMoney"
     user: User
+    nominalsCount: Map<number, number>
 
 }
 
@@ -49,7 +51,7 @@ export interface OpenBalanceWindowATMOperation {
 
 export type NoOperation = NoCardOperation
 
-export type OperationUnion = NoOperation |
+export type Operation = NoOperation |
     CorrectPasswordOperation |
     IncorrectPasswordOperation |
     NoPasswordOperation |
@@ -59,7 +61,6 @@ export type OperationUnion = NoOperation |
     OpenWithdrawMoneyWindowOperation |
     OpenBalanceWindowATMOperation
 
-export type Operation = OperationUnion
 
 
 export function initOperation(): NoCardOperation {
@@ -86,12 +87,16 @@ export function openBalanceOperation(operation: Operation): Operation {
     return {...operation, type: "OpenBalanceOperation"}
 }
 
-export function withdrawExistingMoneyOperation(operation: Operation): Operation {
-    return {...operation, type: "WithdrawExistingMoney"}
+export function withdrawExistingMoneyOperation(operation: Operation, nominalsCount: Map<number, number>): Operation {
+    return {...operation, type: "SuccessWithdrawExistingMoney", nominalsCount: nominalsCount}
 }
 
 export function withdrawNotExistingMoneyOperation(operation: Operation): Operation {
     return {...operation, type: "WithdrawNotExistingMoney"}
+}
+
+export function withdrawNotExistingCacheInATMyOperation(operation: Operation): Operation {
+    return {...operation, type: "WithdrawNotExistingCacheInATM"}
 }
 
 

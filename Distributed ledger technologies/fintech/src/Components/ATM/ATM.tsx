@@ -9,6 +9,7 @@ import { ATMCardCollector } from "../ATMCardCollector/ATMCardCollector";
 import "./ATM.css"
 import {myContainer} from "../../config/inversify.config"
 import { TYPES } from "../../config/Types";
+import {ATMMoneyGiver} from "../ATMMoneyGiver/ATMMoneyGiver";
 
 export interface IATM {
 
@@ -24,6 +25,7 @@ export class ATM extends React.Component<IATM> {
         return <Container className='ATM'>
 
             <ATMWindow domainStore={domainStore}/>
+            <ATMMoneyGiver domainStore={domainStore} />
             <ATMCardCollector domainStore={domainStore} />
             <ATMKeyboard domainStore={domainStore} />
 

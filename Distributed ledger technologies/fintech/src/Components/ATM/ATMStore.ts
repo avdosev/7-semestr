@@ -14,10 +14,10 @@ import {
     openBalanceOperation,
     openWithdrawMoneyWindowOperation,
     Operation,
-    withdrawExistingMoneyOperation
+    withdrawExistingMoneyOperation, withdrawNotExistingCacheInATMyOperation, withdrawNotExistingMoneyOperation
 } from "../../typings/Operations"
 import { TYPES } from "../../config/Types"
-import {isHasChange, numDigits, randomCacheGenerator} from "../../utils/utils"
+import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
@@ -32,13 +32,13 @@ export class ATMStore {
         makeObservable(this)
         this.database = Json
         this.keyboardStore = keyStore
-
-        console.log(isHasChange(randomCacheGenerator(), 5000))
     }
 
     @action
     public insertCard = (cardNumber: number) => {
-        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, this.database.users.find((user) => cardNumber === user.cardNumber)!)
+        const user = this.database.users.find((user) => cardNumber === user.cardNumber)
+        this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation, user!)
+        console.log(this.domainLevelOfOperation.type)
     }
 
     @action
@@ -59,6 +59,7 @@ export class ATMStore {
                 this.keyboardStore.clearPinCode()
                 break
             case "NoPassword":
+            case "CorrectPassword":
                 this.domainLevelOfOperation = initOperation()
                 break
             case "OpenWithdrawMoneyWindow":
@@ -70,8 +71,18 @@ export class ATMStore {
 
     @action
     withdrawMoney = (count: number) => {
-        
-        // this.domainLevelOfOperation = withdrawExistingMoneyOperation()
+        const nominalsCount = isHasChange(this.cache, count)
+        if (count > this.domainLevelOfOperation.user.balance) {
+            this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
+        }
+
+        if (!nominalsCount) {
+            this.domainLevelOfOperation = withdrawNotExistingCacheInATMyOperation(this.domainLevelOfOperation)
+        } else {
+            this.cache = subtractCacheForClient(this.cache, nominalsCount)
+            this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
+        }
+
     }
 
     @action

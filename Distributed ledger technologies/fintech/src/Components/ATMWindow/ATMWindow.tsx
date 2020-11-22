@@ -4,47 +4,59 @@ import { observable } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
 import { Button, Container, Grid } from "semantic-ui-react";
-import { CorrectPasswordOperation } from "./CorrectPasswordOperation"
-import { NoCardOperation } from "./NoCardOperation"
-import { NoPasswordOperation } from "./NoPasswordOperation"
-import { IncorrectPasswordOperation } from "./IncorrectPasswordOperation"
-import { WithdrawMoney } from "./WithdrawMoney"
-import { Balance } from "./Balance"
+import { CorrectPasswordOperation } from "./Windows/Main/CorrectPasswordOperation"
+import { NoCardOperation } from "./Windows/Main/NoCardOperation"
+import { NoPasswordOperation } from "./Windows/Main/NoPasswordOperation"
+import { IncorrectPasswordOperation } from "./Windows/Main/IncorrectPasswordOperation"
+import { WithdrawMoney } from "./Windows/Withdraw/WithdrawMoney"
+import { Balance } from "./Windows/Balance/Balance"
+import {Operation} from "../../typings/Operations";
+import {WithdrawNotExistingMoney} from "./Windows/Withdraw/WithdrawNotExistingMoney";
+import {WithdrawNotExistingCacheInATM} from "./Windows/Withdraw/WithdrawNotExistingCacheInATM";
+import {SuccessWithdrawMoney} from "./Windows/Withdraw/SuccessWithdrawMoney";
 
 export interface IATMWindow {
     domainStore: ATMStore
 }
 
+function exhaustiveCheck( param: never ) {
+    throw new Error(`Unhandled value: ${param}`)
+}
+
+
 
 @observer
 export class ATMWindow extends React.Component<IATMWindow>{
-    render() {
-        let block
-        switch (this.props.domainStore.domainLevelOfOperation.type) {
+    Router = (windowId: Operation['type'], domainStore: ATMStore) => {
+        switch (windowId) {
             case "NoCard":
-                block = <NoCardOperation />
-                break;
+                return <NoCardOperation />
             case "NoPassword":
-                block = <NoPasswordOperation pinCode={this.props.domainStore.keyboardStore.pinCodeNumber.value!} />
-                break
+                return <NoPasswordOperation pinCode={domainStore.keyboardStore.pinCodeNumber.value!} />
             case "CorrectPassword":
-                block = <CorrectPasswordOperation domainStore={this.props.domainStore} />
-                break
+                return <CorrectPasswordOperation domainStore={domainStore} />
             case "IncorrectPassword":
-                block = <IncorrectPasswordOperation />
-                break
+                return <IncorrectPasswordOperation />
             case "OpenWithdrawMoneyWindow":
-                block = <WithdrawMoney domainStore={this.props.domainStore} />
-                break
+                return <WithdrawMoney domainStore={domainStore} />
             case "OpenBalanceOperation":
-                block = <Balance balance={this.props.domainStore.domainLevelOfOperation.user.balance} />
-                break
-            default:
-                break;
-        }
+                return <Balance balance={domainStore.domainLevelOfOperation.user.balance} />
+            case "WithdrawNotExistingMoney":
+                return <WithdrawNotExistingMoney />
+            case "WithdrawNotExistingCacheInATM":
+                return <WithdrawNotExistingCacheInATM />
+            case "SuccessWithdrawExistingMoney":
+                return <SuccessWithdrawMoney />
 
+        }
+        exhaustiveCheck(windowId)
+    }
+
+    render() {
+        const window = this.Router(this.props.domainStore.domainLevelOfOperation.type, this.props.domainStore)
+        console.log(window)
         return <div className='ATMWindow' style={{ border: '1px solid black', height: '300px', width: '300px' }}>
-            {block}
+            {window}
 
         </div>;
     }
