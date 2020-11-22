@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify"
-import { observer } from "mobx-react"
-import { action, makeObservable, observable } from "mobx"
-import { ATMKeyboardStore } from "../ATMKeyboard/ATMKeyboardStore";
+import {inject, injectable} from "inversify"
+import {observer} from "mobx-react"
+import {action, makeObservable, observable} from "mobx"
+import {ATMKeyboardStore} from "../ATMKeyboard/ATMKeyboardStore";
 import Json from "../../data.json";
-import { DB } from "../../typings/main";
-import { List, Map } from "immutable";
+import {DB} from "../../typings/main";
+import {List, Map} from "immutable";
 import {
     initOperation,
     inputCorrectPasswordOperation,
@@ -14,15 +14,15 @@ import {
     openBalanceOperation,
     openWithdrawMoneyWindowOperation,
     Operation,
-    withdrawExistingMoneyOperation, withdrawNotExistingCacheInATMyOperation, withdrawNotExistingMoneyOperation
+    withdrawExistingMoneyOperation, withdrawNotExistingCacheInATMOperation, withdrawNotExistingMoneyOperation
 } from "../../typings/Operations"
-import { TYPES } from "../../config/Types"
+import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 
 @injectable()
 export class ATMStore {
     database: DB
-    @observable domainLevelOfOperation: Operation  = initOperation()
+    @observable domainLevelOfOperation: Operation = initOperation()
     keyboardStore: ATMKeyboardStore
     @observable cache: Map<number, number> = randomCacheGenerator()
 
@@ -64,10 +64,13 @@ export class ATMStore {
                 break
             case "OpenWithdrawMoneyWindow":
             case "OpenBalanceOperation":
+            case "WithdrawNotExistingMoney":
+            case "WithdrawNotExistingCacheInATM":
+            case "SuccessWithdrawExistingMoney":
                 this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
                 break
-            }
         }
+    }
 
     @action
     withdrawMoney = (count: number) => {
@@ -77,7 +80,7 @@ export class ATMStore {
         }
 
         if (!nominalsCount) {
-            this.domainLevelOfOperation = withdrawNotExistingCacheInATMyOperation(this.domainLevelOfOperation)
+            this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
         } else {
             this.cache = subtractCacheForClient(this.cache, nominalsCount)
             this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
@@ -90,7 +93,7 @@ export class ATMStore {
         console.log(this.domainLevelOfOperation.type);
         console.log(this.keyboardStore.pinCodeNumber.value);
 
-        if (this.domainLevelOfOperation.type === "NoPassword") {  
+        if (this.domainLevelOfOperation.type === "NoPassword") {
             if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) {  // Больше 4 знаков
                 this.keyboardStore.addNumberToPinCode(pinCodeNumber)
             }
@@ -107,7 +110,7 @@ export class ATMStore {
         } else {
             this.domainLevelOfOperation = inputIncorrectPasswordOperation(this.domainLevelOfOperation)
         }
-  
+
 
     }
 

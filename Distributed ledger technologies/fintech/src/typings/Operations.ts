@@ -95,7 +95,7 @@ export function withdrawNotExistingMoneyOperation(operation: Operation): Operati
     return {...operation, type: "WithdrawNotExistingMoney"}
 }
 
-export function withdrawNotExistingCacheInATMyOperation(operation: Operation): Operation {
+export function withdrawNotExistingCacheInATMOperation(operation: Operation): Operation {
     return {...operation, type: "WithdrawNotExistingCacheInATM"}
 }
 

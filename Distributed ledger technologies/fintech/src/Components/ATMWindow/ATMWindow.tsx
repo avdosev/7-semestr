@@ -57,7 +57,6 @@ export class ATMWindow extends React.Component<IATMWindow>{
         console.log(window)
         return <div className='ATMWindow' style={{ border: '1px solid black', height: '300px', width: '300px' }}>
             {window}
-
         </div>;
     }
 }
