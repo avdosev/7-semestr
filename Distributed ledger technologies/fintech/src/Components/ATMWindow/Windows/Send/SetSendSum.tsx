@@ -3,12 +3,12 @@ import {observer} from 'mobx-react';
 import { ATMStore } from '../../../../Components/ATM/ATMStore';
 import { Input, InputOnChangeData, List, ListItem } from 'semantic-ui-react';
 
-export interface ISendMoney {
+export interface ISetSendMoney {
     store: ATMStore
 }
 
 @observer
-export class SendMoney extends Component<ISendMoney> {
+export class SetSendMoney extends Component<ISetSendMoney> {
     onChange = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
         this.props.store.sendMoneyStore.changeCardNumberForSend(data.value)
     }
@@ -17,16 +17,11 @@ export class SendMoney extends Component<ISendMoney> {
         const users = this.props.store.bankStore.database.users.filter((user) => user.cardNumber !== this.props.store.currentUser?.cardNumber)
         return (
             <div>
-                Отправить сумму на счет:
+                Укажите сумму:
 
-                <Input value={this.props.store.keyboardStore.input.value} disabled={true} onChange={this.onChange} />
-
-                Ваши друзья:
-                <List>
-                {users.map((user) => <ListItem>{user.name} {user.cardNumber}</ListItem>)}
-                </List>
+                <Input onChange={this.onChange} />
                 
-                
+            
             </div>
         );
     }

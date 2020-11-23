@@ -18,11 +18,11 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
 
     onClear = () => {
-        this.props.domainStore.keyboardStore.clearPinCode()
+        this.props.domainStore.keyboardStore.clearInput()
     }
 
     onPressNumberButton = (buttonId: number) => () => {
-        this.props.domainStore.addNumberToPinCode(buttonId)
+        this.props.domainStore.addNumberToInputField(buttonId)
     }
 
     onPressCancel = () => {
@@ -56,7 +56,7 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
             </GridRow>
             <GridRow>
                 {['*', 0, '00'].map(num => (
-                    <Button key={num}>{num}</Button>
+                    <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
                 )) } 
                 <Button content="Ввод" positive={true} onClick={this.onSubmit} />
             </GridRow>

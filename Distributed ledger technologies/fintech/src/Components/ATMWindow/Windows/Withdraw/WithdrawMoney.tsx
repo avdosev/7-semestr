@@ -24,7 +24,7 @@ export class WithdrawMoney extends Component<IWithdrawMoney> {
                 ))}
 
                 <Header content={"Снять другую сумму"} />
-                <Input onChange={this.onChange} type="number" />
+                <Input disabled={true} value={this.props.domainStore.keyboardStore.input.value} onChange={this.onChange} type="number" />
             </div>
         );
     }

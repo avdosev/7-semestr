@@ -10,30 +10,30 @@ import MaybeConstructor, { just, Maybe, none } from "@sweet-monads/maybe";
 
 @injectable()
 export class ATMKeyboardStore {
-    @observable private pinCode: List<number> = List()
+    @observable private inputNumber: List<number> = List()
 
     constructor() {
         makeObservable(this)
     }
 
     
-    public get pinCodeNumber() : Maybe<number> {
-        const stringablePinCode = this.pinCode.join("")
+    public get input() : Maybe<number> {
+        const stringablePinCode = this.inputNumber.join("")
         return stringablePinCode === "" ? none() : just(Number(stringablePinCode))
     }
 
     @action
-    public clearPinCode = () => {
-        this.pinCode = this.pinCode.clear()        
+    public clearInput = () => {
+        this.inputNumber = this.inputNumber.clear()        
     }
-
-
-    
 
     @action
-    public addNumberToPinCode = (num: number) => {
-        const newPinCode = List(this.pinCode)
-        this.pinCode = newPinCode.push(num)        
+    public addNumberToInput = (num: number) => {
+        const newPinCode = List(this.inputNumber)
+        this.inputNumber = newPinCode.push(num)  
+        console.log(this.input);
+        
     }
+    
 }
 

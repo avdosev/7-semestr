@@ -9,6 +9,7 @@ import {
     initOperation,
     inputCorrectPasswordOperation,
     inputIncorrectPasswordOperation,
+    inputSendSumWindowOperation,
     insertCardOperation,
     NoOperation,
     openBalanceOperation,
@@ -73,7 +74,7 @@ export class ATMStore {
         switch (this.domainLevelOfOperation.type) {
             case "IncorrectPassword":
                 this.domainLevelOfOperation = insertCardOperation(this.domainLevelOfOperation)
-                this.keyboardStore.clearPinCode()
+                this.keyboardStore.clearInput()
                 break
             case "NoPassword":
             case "CorrectPassword":
@@ -84,14 +85,20 @@ export class ATMStore {
             case "WithdrawNotExistingMoney":
             case "WithdrawNotExistingCacheInATM":
             case "SuccessWithdrawExistingMoney":
+            case "OpenSendMoneyWindow":
                 this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
                 break
+            case "InputSendSumOperation":
+                this.domainLevelOfOperation = openSendMoneyWindowOperation(this.domainLevelOfOperation)
+                break
         }
+        this.keyboardStore.clearInput() // при переходе вперед, очистим поле
+
     }
 
     @action
-    public sendMoney = (destCardNumber: number, sendingSum: number) => {
-        this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - sendingSum)
+    public sendMoney = (destCardNumber: number) => {
+        // this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - sendingSum)
         // this.bankStore.updateBalance(destCardNumber, sendingSum)
 
     }
@@ -121,19 +128,27 @@ export class ATMStore {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
             this.withdrawMoney(this.withdrawMoneyStore.withdrawMoneyCount)
         } else if (this.domainLevelOfOperation.type === "OpenSendMoneyWindow") {
-            // this.sendMoney(this.sendMoneyStore.cardNumber)
+            this.domainLevelOfOperation = inputSendSumWindowOperation(this.domainLevelOfOperation)
         }
+
+        this.keyboardStore.clearInput() // при переходе вперед, очистим поле
     }
 
     @action
-    public addNumberToPinCode = (pinCodeNumber: number) => {
+    public addNumberToInputField = (pinCodeNumber: number) => {
         if (this.domainLevelOfOperation.type === "NoPassword") {
-            if (this.keyboardStore.pinCodeNumber.isNone() || this.keyboardStore.pinCodeNumber.value <= 9999) {  // Больше 4 знаков
-                this.keyboardStore.addNumberToPinCode(pinCodeNumber)
+            if (this.keyboardStore.input.isNone() || this.keyboardStore.input.value <= 9999) {  // Больше 4 знаков
+                this.keyboardStore.addNumberToInput(pinCodeNumber)
             }
-            if (numDigits(this.keyboardStore.pinCodeNumber.value!) === 4) {
-                this.validatePinCode(this.currentUser!.cardNumber, this.keyboardStore.pinCodeNumber.value!)
+            if (numDigits(this.keyboardStore.input.value!) === 4) {
+                this.validatePinCode(this.currentUser!.cardNumber, this.keyboardStore.input.value!)
             }
+        } else if (this.domainLevelOfOperation.type === "OpenSendMoneyWindow") {
+            this.keyboardStore.addNumberToInput(pinCodeNumber)
+        } else if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
+            this.keyboardStore.addNumberToInput(pinCodeNumber)
+            console.log(this.keyboardStore.input);
+            
         }
     }
 
@@ -145,6 +160,7 @@ export class ATMStore {
         } else {
             this.domainLevelOfOperation = inputIncorrectPasswordOperation(this.domainLevelOfOperation)
         }
+        this.submit()
 
 
     }

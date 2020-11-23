@@ -19,6 +19,8 @@ import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../config/Types";
 import {WithdrawMoneyStore} from "./Windows/Withdraw/WithdrawMoneyStore";
 import {SendMoney} from "./Windows/Send/SendMoney"
+import {SetSendMoney} from "./Windows/Send/SetSendSum"
+
 
 export interface IATMWindow {
     domainStore: ATMStore
@@ -31,7 +33,7 @@ export class ATMWindow extends React.Component<IATMWindow>{
             case "NoCard":
                 return <NoCardOperation />
             case "NoPassword":
-                return <NoPasswordOperation pinCode={domainStore.keyboardStore.pinCodeNumber.value!} />
+                return <NoPasswordOperation pinCode={domainStore.keyboardStore.input.value!} />
             case "CorrectPassword":
                 return <CorrectPasswordOperation domainStore={domainStore} />
             case "IncorrectPassword":
@@ -48,6 +50,8 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 return <SuccessWithdrawMoney />
             case "OpenSendMoneyWindow":
                 return <SendMoney store={domainStore} />
+            case "InputSendSumOperation":
+                return <SetSendMoney store={domainStore} />
         }
 
         exhaustiveCheck(windowId)

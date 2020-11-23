@@ -43,6 +43,10 @@ export interface OpenBalanceWindowATMOperation {
     type: "OpenBalanceOperation"
 }
 
+export interface InputSendSumWindowOperation {
+    type: "InputSendSumOperation"
+}
+
 export type NoOperation = NoCardOperation
 
 export type Operation = NoOperation |
@@ -54,7 +58,8 @@ export type Operation = NoOperation |
     WithdrawExistingMoneyOperation |
     OpenWithdrawMoneyWindowOperation |
     OpenBalanceWindowATMOperation |
-    OpenSendMoneyWindowOperation
+    OpenSendMoneyWindowOperation |
+    InputSendSumWindowOperation
 
 
 
@@ -96,5 +101,9 @@ export function withdrawNotExistingCacheInATMOperation(operation: Operation): Op
 
 export function openSendMoneyWindowOperation(operation: Operation): Operation {
     return {...operation, type: "OpenSendMoneyWindow"}
+}
+
+export function inputSendSumWindowOperation(operation: Operation): Operation {
+    return {...operation, type: "InputSendSumOperation"}
 }
 
