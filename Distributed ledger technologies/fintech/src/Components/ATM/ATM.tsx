@@ -11,7 +11,6 @@ import {myContainer} from "../../config/inversify.config"
 import { TYPES } from "../../config/Types";
 import {ATMMoneyGiver} from "../ATMMoneyGiver/ATMMoneyGiver";
 import {ATMCache} from "../ATMCache/ATMCache";
-import {WithdrawMoneyStore} from "../ATMWindow/Windows/Withdraw/WithdrawMoneyStore";
 
 export interface IATM {
 

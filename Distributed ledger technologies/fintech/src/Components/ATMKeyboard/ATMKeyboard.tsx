@@ -55,9 +55,11 @@ export class ATMKeyboard extends React.Component<IATMKeyboard> {
 
             </GridRow>
             <GridRow>
-                {['*', 0, '00'].map(num => (
-                    <Button key={num} onClick={this.onPressNumberButton(num)}>{num}</Button>
-                )) } 
+                <Button >*</Button>
+                <Button onClick={this.onPressNumberButton(0)}>0</Button>
+                <Button >#</Button>
+
+                
                 <Button content="Ввод" positive={true} onClick={this.onSubmit} />
             </GridRow>
 

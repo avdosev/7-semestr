@@ -21,8 +21,7 @@ import {
 import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 import {BankStore} from "../Bank/BankStore";
-import {WithdrawMoneyStore} from "../ATMWindow/Windows/Withdraw/WithdrawMoneyStore";
-import {SendMoneyStore} from "../ATMWindow/Windows/Send/SendMoneyStore"
+
 
 @injectable()
 export class ATMStore {
@@ -31,20 +30,14 @@ export class ATMStore {
     bankStore: BankStore
     @observable cache: Map<number, number> = randomCacheGenerator()
     currentUser: User | null = null
-    withdrawMoneyStore: WithdrawMoneyStore
-    sendMoneyStore: SendMoneyStore
 
     constructor(
         @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore,
         @inject(TYPES.BankStore) bank: BankStore,
-        @inject(TYPES.WithdrawMoneyStore) withdrawStore: WithdrawMoneyStore,
-        @inject(TYPES.SendMoneyStore) sendMoneyStore:  SendMoneyStore
     ) {
         makeObservable(this)
         this.keyboardStore = keyStore
         this.bankStore = bank
-        this.withdrawMoneyStore = withdrawStore
-        this.sendMoneyStore = sendMoneyStore
     }
 
     @action
@@ -126,7 +119,9 @@ export class ATMStore {
     @action
     public submit = () => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
-            this.withdrawMoney(this.withdrawMoneyStore.withdrawMoneyCount)
+            console.log(this.keyboardStore.input.value);
+            
+            this.withdrawMoney(this.keyboardStore.input.value!)
         } else if (this.domainLevelOfOperation.type === "OpenSendMoneyWindow") {
             this.domainLevelOfOperation = inputSendSumWindowOperation(this.domainLevelOfOperation)
         }
@@ -148,7 +143,6 @@ export class ATMStore {
         } else if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
             this.keyboardStore.addNumberToInput(pinCodeNumber)
             console.log(this.keyboardStore.input);
-            
         }
     }
 

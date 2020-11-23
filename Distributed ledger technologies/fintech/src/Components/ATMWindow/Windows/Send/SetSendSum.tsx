@@ -10,11 +10,10 @@ export interface ISetSendMoney {
 @observer
 export class SetSendMoney extends Component<ISetSendMoney> {
     onChange = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.props.store.sendMoneyStore.changeCardNumberForSend(data.value)
+        this.props.store.keyboardStore.addNumberToInput(Number.parseInt(data.value))
     }
 
     render() {
-        const users = this.props.store.bankStore.database.users.filter((user) => user.cardNumber !== this.props.store.currentUser?.cardNumber)
         return (
             <div>
                 Укажите сумму:

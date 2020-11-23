@@ -3,7 +3,6 @@ import { observer } from 'mobx-react';
 import { Button, Header, Input } from 'semantic-ui-react';
 import { ATMStore } from 'Components/ATM/ATMStore';
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
-import {WithdrawMoneyStore} from "./WithdrawMoneyStore";
 
 export interface IWithdrawMoney {
     domainStore: ATMStore
@@ -12,7 +11,7 @@ export interface IWithdrawMoney {
 @observer
 export class WithdrawMoney extends Component<IWithdrawMoney> {
     onChange = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.props.domainStore.withdrawMoneyStore.changeWithdrawMoney(Number.parseInt(data.value))
+        this.props.domainStore.keyboardStore.addNumberToInput(Number.parseInt(data.value))
     }
 
     render() {
@@ -24,7 +23,7 @@ export class WithdrawMoney extends Component<IWithdrawMoney> {
                 ))}
 
                 <Header content={"Снять другую сумму"} />
-                <Input disabled={true} value={this.props.domainStore.keyboardStore.input.value} onChange={this.onChange} type="number" />
+                <Input disabled={true} value={this.props.domainStore.keyboardStore.input.value} onChange={this.onChange} />
             </div>
         );
     }

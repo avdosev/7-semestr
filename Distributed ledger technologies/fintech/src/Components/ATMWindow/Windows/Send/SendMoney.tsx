@@ -10,7 +10,7 @@ export interface ISendMoney {
 @observer
 export class SendMoney extends Component<ISendMoney> {
     onChange = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.props.store.sendMoneyStore.changeCardNumberForSend(data.value)
+        this.props.store.keyboardStore.addNumberToInput(Number.parseInt(data.value))
     }
 
     render() {

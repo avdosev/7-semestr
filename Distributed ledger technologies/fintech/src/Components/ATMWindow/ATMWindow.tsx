@@ -17,7 +17,6 @@ import {SuccessWithdrawMoney} from "./Windows/Withdraw/SuccessWithdrawMoney";
 import {exhaustiveCheck} from "../../utils/utils";
 import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../config/Types";
-import {WithdrawMoneyStore} from "./Windows/Withdraw/WithdrawMoneyStore";
 import {SendMoney} from "./Windows/Send/SendMoney"
 import {SetSendMoney} from "./Windows/Send/SetSendSum"
 
