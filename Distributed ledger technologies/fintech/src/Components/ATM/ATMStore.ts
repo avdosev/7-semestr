@@ -12,10 +12,12 @@ import {
     inputSendSumWindowOperation,
     insertCardOperation,
     NoOperation,
+    notExistingCardNumberOperation,
     openBalanceOperation,
     openSendMoneyWindowOperation,
     openWithdrawMoneyWindowOperation,
     Operation,
+    successSendMoneyOperation,
     withdrawExistingMoneyOperation, withdrawNotExistingCacheInATMOperation, withdrawNotExistingMoneyOperation
 } from "../../typings/Operations"
 import {TYPES} from "../../config/Types"
@@ -79,9 +81,11 @@ export class ATMStore {
             case "WithdrawNotExistingCacheInATM":
             case "SuccessWithdrawExistingMoney":
             case "OpenSendMoneyWindow":
+            case "SuccessSendMoneyOperation":
                 this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
                 break
             case "InputSendSumOperation":
+            case "NotExistingCardNumberOperation":
                 this.domainLevelOfOperation = openSendMoneyWindowOperation(this.domainLevelOfOperation)
                 break
         }
@@ -90,10 +94,10 @@ export class ATMStore {
     }
 
     @action
-    public sendMoney = (destCardNumber: number) => {
-        // this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - sendingSum)
-        // this.bankStore.updateBalance(destCardNumber, sendingSum)
-
+    public sendMoney = (destCardNumber: number, sendingSum: number) => {
+        this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - sendingSum)
+        const destUser = this.bankStore.getUser(destCardNumber)
+        this.bankStore.updateBalance(destCardNumber, destUser!.balance + sendingSum)
     }
 
     @action
@@ -112,18 +116,28 @@ export class ATMStore {
 
             this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
             this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - count)
-
         }
     }
 
+    destCardNumber: number | undefined = undefined
+
     @action
     public submit = () => {
-        if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
-            console.log(this.keyboardStore.input.value);
-            
+        if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {            
             this.withdrawMoney(this.keyboardStore.input.value!)
         } else if (this.domainLevelOfOperation.type === "OpenSendMoneyWindow") {
+            const cardNumber = this.keyboardStore.input.value
+            const user = this.bankStore.getUser(cardNumber!)
+            if (!user) { 
+                this.domainLevelOfOperation = notExistingCardNumberOperation(this.domainLevelOfOperation)
+                return
+            }
+            this.destCardNumber = cardNumber
             this.domainLevelOfOperation = inputSendSumWindowOperation(this.domainLevelOfOperation)
+        } else if (this.domainLevelOfOperation.type === "InputSendSumOperation") {
+            const sendingSum = this.keyboardStore.input.value
+            this.sendMoney(this.destCardNumber!, sendingSum!)
+            this.domainLevelOfOperation = successSendMoneyOperation(this.domainLevelOfOperation)
         }
 
         this.keyboardStore.clearInput() // при переходе вперед, очистим поле
@@ -142,7 +156,8 @@ export class ATMStore {
             this.keyboardStore.addNumberToInput(pinCodeNumber)
         } else if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
             this.keyboardStore.addNumberToInput(pinCodeNumber)
-            console.log(this.keyboardStore.input);
+        } else if (this.domainLevelOfOperation.type === "InputSendSumOperation") {
+            this.keyboardStore.addNumberToInput(pinCodeNumber)
         }
     }
 

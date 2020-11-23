@@ -10,7 +10,7 @@ import { NoPasswordOperation } from "./Windows/Main/NoPasswordOperation"
 import { IncorrectPasswordOperation } from "./Windows/Main/IncorrectPasswordOperation"
 import { WithdrawMoney } from "./Windows/Withdraw/WithdrawMoney"
 import { Balance } from "./Windows/Balance/Balance"
-import {Operation} from "../../typings/Operations";
+import { Operation} from "../../typings/Operations";
 import {WithdrawNotExistingMoney} from "./Windows/Withdraw/WithdrawNotExistingMoney";
 import {WithdrawNotExistingCacheInATM} from "./Windows/Withdraw/WithdrawNotExistingCacheInATM";
 import {SuccessWithdrawMoney} from "./Windows/Withdraw/SuccessWithdrawMoney";
@@ -19,6 +19,8 @@ import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../config/Types";
 import {SendMoney} from "./Windows/Send/SendMoney"
 import {SetSendMoney} from "./Windows/Send/SetSendSum"
+import {NotExistingCardNumber} from "./Windows/Send/NotExistingCardNumber"
+import {SuccessSendMoney} from "./Windows/Send/SuccessSendMoney"
 
 
 export interface IATMWindow {
@@ -51,6 +53,10 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 return <SendMoney store={domainStore} />
             case "InputSendSumOperation":
                 return <SetSendMoney store={domainStore} />
+            case "NotExistingCardNumberOperation":
+                return <NotExistingCardNumber />
+            case "SuccessSendMoneyOperation":
+                return <SuccessSendMoney />
         }
 
         exhaustiveCheck(windowId)

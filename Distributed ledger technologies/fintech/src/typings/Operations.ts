@@ -47,6 +47,14 @@ export interface InputSendSumWindowOperation {
     type: "InputSendSumOperation"
 }
 
+export interface NotExistingCardNumberOperation {
+    type: "NotExistingCardNumberOperation"
+}
+
+export interface SuccessSendMoneyOperation {
+    type: "SuccessSendMoneyOperation"
+}
+
 export type NoOperation = NoCardOperation
 
 export type Operation = NoOperation |
@@ -59,7 +67,9 @@ export type Operation = NoOperation |
     OpenWithdrawMoneyWindowOperation |
     OpenBalanceWindowATMOperation |
     OpenSendMoneyWindowOperation |
-    InputSendSumWindowOperation
+    InputSendSumWindowOperation |
+    NotExistingCardNumberOperation |
+    SuccessSendMoneyOperation
 
 
 
@@ -105,5 +115,13 @@ export function openSendMoneyWindowOperation(operation: Operation): Operation {
 
 export function inputSendSumWindowOperation(operation: Operation): Operation {
     return {...operation, type: "InputSendSumOperation"}
+}
+
+export function notExistingCardNumberOperation(operation: Operation): Operation {
+    return {...operation, type: "NotExistingCardNumberOperation"}
+}
+
+export function successSendMoneyOperation(operation: Operation): Operation {
+    return {...operation, type: "SuccessSendMoneyOperation"}
 }
 

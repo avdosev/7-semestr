@@ -18,9 +18,8 @@ export class SetSendMoney extends Component<ISetSendMoney> {
             <div>
                 Укажите сумму:
 
-                <Input onChange={this.onChange} />
+                <Input disabled={true} value={this.props.store.keyboardStore.input.value} onChange={this.onChange} />
                 
-            
             </div>
         );
     }
