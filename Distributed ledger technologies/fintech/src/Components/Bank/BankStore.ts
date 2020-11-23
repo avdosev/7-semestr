@@ -13,18 +13,25 @@ import {TYPES} from "../../config/Types";
 
 @injectable()
 export class BankStore {
-    database: DB
+    @observable database: DB
 
     public getUser(cardNumber: number) {
         return this.database.users.find((user) => user.cardNumber === cardNumber)
     }
 
     public updateBalance = (cardNumber: number, newBalance: number) => {
+        const user = this.getUser(cardNumber)
+        if (!user) return false
 
+        const index = this.database.users.indexOf(user)
+        user.balance = newBalance
+        this.database.users[index] = user
     }
 
+   
+
     constructor() {
-        // makeObservable(this)
+        makeObservable(this)
         this.database = Json
     }
 

@@ -12,6 +12,7 @@ import {
     insertCardOperation,
     NoOperation,
     openBalanceOperation,
+    openSendMoneyWindowOperation,
     openWithdrawMoneyWindowOperation,
     Operation,
     withdrawExistingMoneyOperation, withdrawNotExistingCacheInATMOperation, withdrawNotExistingMoneyOperation
@@ -20,6 +21,7 @@ import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 import {BankStore} from "../Bank/BankStore";
 import {WithdrawMoneyStore} from "../ATMWindow/Windows/Withdraw/WithdrawMoneyStore";
+import {SendMoneyStore} from "../ATMWindow/Windows/Send/SendMoneyStore"
 
 @injectable()
 export class ATMStore {
@@ -29,16 +31,19 @@ export class ATMStore {
     @observable cache: Map<number, number> = randomCacheGenerator()
     currentUser: User | null = null
     withdrawMoneyStore: WithdrawMoneyStore
+    sendMoneyStore: SendMoneyStore
 
     constructor(
         @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore,
         @inject(TYPES.BankStore) bank: BankStore,
-        @inject(TYPES.WithdrawMoneyStore) withdrawStore: WithdrawMoneyStore
+        @inject(TYPES.WithdrawMoneyStore) withdrawStore: WithdrawMoneyStore,
+        @inject(TYPES.SendMoneyStore) sendMoneyStore:  SendMoneyStore
     ) {
         makeObservable(this)
         this.keyboardStore = keyStore
         this.bankStore = bank
         this.withdrawMoneyStore = withdrawStore
+        this.sendMoneyStore = sendMoneyStore
     }
 
     @action
@@ -56,6 +61,11 @@ export class ATMStore {
     @action
     public openBalanceOperation = () => {
         this.domainLevelOfOperation = openBalanceOperation(this.domainLevelOfOperation)
+    }
+
+    @action
+    public openSendMoneyOperation = () => {
+        this.domainLevelOfOperation = openSendMoneyWindowOperation(this.domainLevelOfOperation)
     }
 
     @action
@@ -80,6 +90,13 @@ export class ATMStore {
     }
 
     @action
+    public sendMoney = (destCardNumber: number, sendingSum: number) => {
+        this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - sendingSum)
+        // this.bankStore.updateBalance(destCardNumber, sendingSum)
+
+    }
+
+    @action
     public withdrawMoney = (count: number) => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
             const nominalsCount = isHasChange(this.cache, count)
@@ -94,9 +111,8 @@ export class ATMStore {
             this.cache = subtractCacheForClient(this.cache, nominalsCount)
 
             this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
-            const index = this.bankStore.database.users.indexOf(this.currentUser!)
-            this.currentUser!.balance -= count
-            this.bankStore.database.users[index] = this.currentUser!
+            this.bankStore.updateBalance(this.currentUser!.cardNumber, this.currentUser!.balance - count)
+
         }
     }
 
@@ -104,6 +120,8 @@ export class ATMStore {
     public submit = () => {
         if (this.domainLevelOfOperation.type === "OpenWithdrawMoneyWindow") {
             this.withdrawMoney(this.withdrawMoneyStore.withdrawMoneyCount)
+        } else if (this.domainLevelOfOperation.type === "OpenSendMoneyWindow") {
+            // this.sendMoney(this.sendMoneyStore.cardNumber)
         }
     }
 

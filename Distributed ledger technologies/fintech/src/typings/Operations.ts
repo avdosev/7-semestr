@@ -21,6 +21,11 @@ export interface OpenWithdrawMoneyWindowOperation {
     type: "OpenWithdrawMoneyWindow"
 }
 
+export interface OpenSendMoneyWindowOperation {
+    type: "OpenSendMoneyWindow"
+}
+
+
 export interface WithdrawExistingMoneyOperation {
     type: "SuccessWithdrawExistingMoney"
     nominalsCount: Map<number, number>
@@ -48,7 +53,8 @@ export type Operation = NoOperation |
     WithdrawNotExistingMoneyOperation |
     WithdrawExistingMoneyOperation |
     OpenWithdrawMoneyWindowOperation |
-    OpenBalanceWindowATMOperation
+    OpenBalanceWindowATMOperation |
+    OpenSendMoneyWindowOperation
 
 
 
@@ -88,11 +94,7 @@ export function withdrawNotExistingCacheInATMOperation(operation: Operation): Op
     return {...operation, type: "WithdrawNotExistingCacheInATM"}
 }
 
+export function openSendMoneyWindowOperation(operation: Operation): Operation {
+    return {...operation, type: "OpenSendMoneyWindow"}
+}
 
-// function isNoCardOperation(n: Operation): n is NoCardOperation {
-//     return n.type == 'NoCard'
-// }
-
-// function isNoPasswordOperation(n: Operation): n is NoPasswordOperation {
-//     return n.type == 'NoPassword' && Number.isInteger(n.cardNumber)
-// }

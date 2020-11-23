@@ -18,6 +18,7 @@ import {exhaustiveCheck} from "../../utils/utils";
 import {myContainer} from "../../config/inversify.config";
 import {TYPES} from "../../config/Types";
 import {WithdrawMoneyStore} from "./Windows/Withdraw/WithdrawMoneyStore";
+import {SendMoney} from "./Windows/Send/SendMoney"
 
 export interface IATMWindow {
     domainStore: ATMStore
@@ -45,6 +46,8 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 return <WithdrawNotExistingCacheInATM />
             case "SuccessWithdrawExistingMoney":
                 return <SuccessWithdrawMoney />
+            case "OpenSendMoneyWindow":
+                return <SendMoney store={domainStore} />
         }
 
         exhaustiveCheck(windowId)
