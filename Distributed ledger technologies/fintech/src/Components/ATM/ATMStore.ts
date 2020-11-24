@@ -135,7 +135,12 @@ export class ATMStore {
             this.destCardNumber = cardNumber
             this.domainLevelOfOperation = inputSendSumWindowOperation(this.domainLevelOfOperation)
         } else if (this.domainLevelOfOperation.type === "InputSendSumOperation") {
-            const sendingSum = this.keyboardStore.input.value
+            const sendingSum = this.keyboardStore.input.value!
+            if (this.currentUser!.balance - sendingSum < 0) {
+                this.domainLevelOfOperation = withdrawNotExistingMoneyOperation(this.domainLevelOfOperation)
+                return
+            }
+            
             this.sendMoney(this.destCardNumber!, sendingSum!)
             this.domainLevelOfOperation = successSendMoneyOperation(this.domainLevelOfOperation)
         }
