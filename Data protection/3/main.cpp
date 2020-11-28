@@ -1,7 +1,6 @@
 // Including dependencies
 #include <iostream>
 #include <string>
-#include <cmath>
 #include "constants.h"
 #include "helpers.h"
 #include <vector>
@@ -81,6 +80,8 @@ string DES_16_cipher(string perm, vector<string> round_keys) {
         xored = Xor(perm2, left);
         // 3.7. The left and the right parts of the plain text are swapped
         left = xored;
+
+        // сделать каждый раз, кроме последней итерации
         if(i < 15){
             string temp = right;
             right = xored;
@@ -118,6 +119,7 @@ int main() {
     string key= "1010101010111011000010010001100000100111001101101100110011011101";
     // A block of plain text of 64 bits
     string pt= "1010101111001101111001101010101111001101000100110010010100110110";
+    string apt = pt;
 
     // Calling the function to generate 16 keys
     vector<string> round_keys = generate_keys(key);
@@ -126,4 +128,13 @@ int main() {
     // Applying the algo
     string ct= DES(pt, round_keys);
     cout<<"Ciphertext: "<<ct<<endl;
+
+    // Reversing the round_keys array for decryption
+    reverse(begin(round_keys), end(round_keys));
+    string decrypted = DES(ct, round_keys);
+    cout<<"Decrypted text:"<<decrypted<<endl;
+    // Comapring the initial plain text with the decrypted text
+    if (decrypted == apt){
+        cout<<"Plain text encrypted and decrypted successfully."<<endl;
+    }
 }
