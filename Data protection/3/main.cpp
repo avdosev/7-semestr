@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "helpers.h"
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -114,12 +115,19 @@ string DES(string block_plain_text, vector<string> round_keys) {
     return ciphertext;
 }
 
+std::string load_file(const std::string& path) {
+    std::ifstream file(path);
+    return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+}
+
 
 int main() {
     // A 64 bit key
     string key = "1010101010111011000010010001100000100111001101101100110011011101";
     // A block of plain text of 64 bits
     string pt = "1010101111001101111001101010101111001101000100110010010100110110";
+//    string pt = load_file("../Prime_Pantry_5.json");
+
 
     // Calling the function to generate 16 keys
     vector<string> round_keys = generate_keys(key);
