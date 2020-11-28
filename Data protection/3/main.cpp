@@ -4,25 +4,22 @@
 #include <cmath>
 #include "constants.h"
 #include "helpers.h"
+#include <vector>
 
 using namespace std;
 
-// Array to hold 16 keys
-string round_keys[16];
-// String to hold the plain text
-string pt;
-// Function to convert a number in decimal to binary
-
 // Function to generate the 16 keys.
-void generate_keys(string key){
+vector<string> generate_keys(string key){
     // 1. Compressing the key using the PC1 table
-    string perm_key ="";
+    string perm_key;
     for(int i : pc1){
         perm_key+= key[i-1];
     }
     // 2. Dividing the key into two equal halves
     string left= perm_key.substr(0, 28);
     string right= perm_key.substr(28, 28);
+
+    vector<string> round_keys;
     for(int i=0; i<16; i++){
         // 3.1. For rounds 1, 2, 9, 16 the key_chunks
         // are shifted by one.
@@ -38,23 +35,18 @@ void generate_keys(string key){
         }
         // Combining the two chunks
         string combined_key = left + right;
-        string round_key = "";
+        string round_key;
         // Finally, using the PC2 table to transpose the key bits
         for(int i : pc2){
             round_key += combined_key[i-1];
         }
-        round_keys[i] = round_key;
+        round_keys.push_back(round_key);
     }
+    return round_keys;
 
 }
-// Implementing the algorithm
-string DES(){
 
-    //1. Applying the initial permutation
-    string perm = "";
-    for(int i : initial_permutation){
-        perm += pt[i-1];
-    }
+string DES_16_cipher(string perm, vector<string> round_keys) {
     // 2. Dividing the result into two equal halves
     string left = perm.substr(0, 32);
     string right = perm.substr(32, 32);
@@ -95,8 +87,22 @@ string DES(){
             left = temp;
         }
     }
+
     // 4. The halves of the plain text are applied
     string combined_text = left + right;
+    return  combined_text;
+}
+
+
+string DES(string block_plain_text, vector<string> round_keys){
+    //1. Applying the initial permutation
+    string perm;
+    for(int i : initial_permutation){
+        perm += block_plain_text[i-1];
+    }
+
+    string combined_text = DES_16_cipher(perm, round_keys);
+
     string ciphertext;
     // The inverse of the initial permuttaion is applied
     for(int i : inverse_permutation){
@@ -105,15 +111,19 @@ string DES(){
     //And we finally get the cipher text
     return ciphertext;
 }
-int main(){
+
+
+int main() {
     // A 64 bit key
     string key= "1010101010111011000010010001100000100111001101101100110011011101";
     // A block of plain text of 64 bits
-    pt= "1010101111001101111001101010101111001101000100110010010100110110";
+    string pt= "1010101111001101111001101010101111001101000100110010010100110110";
+
     // Calling the function to generate 16 keys
-    generate_keys(key);
-    cout<<"Plain text: "<<pt<<endl;
+    vector<string> round_keys = generate_keys(key);
+
+    cout<<"Plain text: "<< pt<<endl;
     // Applying the algo
-    string ct= DES();
+    string ct= DES(pt, round_keys);
     cout<<"Ciphertext: "<<ct<<endl;
 }
