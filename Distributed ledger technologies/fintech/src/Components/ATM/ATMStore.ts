@@ -6,6 +6,7 @@ import Json from "../../data.json";
 import {DB, User} from "../../typings/main";
 import {List, Map} from "immutable";
 import {
+    dailyLimitExceededOperation,
     initOperation,
     inputCorrectPasswordOperation,
     inputIncorrectPasswordOperation,
@@ -24,14 +25,16 @@ import {TYPES} from "../../config/Types"
 import {isHasChange, numDigits, randomCacheGenerator, subtractCacheForClient} from "../../utils/utils"
 import {BankStore} from "../Bank/BankStore";
 
+type CardNumber = number
 
 @injectable()
 export class ATMStore {
     @observable domainLevelOfOperation: Operation = initOperation()
+    @observable cache: Map<CardNumber, number> = randomCacheGenerator()
     keyboardStore: ATMKeyboardStore
     bankStore: BankStore
-    @observable cache: Map<number, number> = randomCacheGenerator()
     currentUser: User | null = null
+    destCardNumber: CardNumber | undefined = undefined
 
     constructor(
         @inject(TYPES.ATMKeyboardStore) keyStore: ATMKeyboardStore,
@@ -82,6 +85,7 @@ export class ATMStore {
             case "SuccessWithdrawExistingMoney":
             case "OpenSendMoneyWindow":
             case "SuccessSendMoneyOperation":
+            case "DailyLimitExceeded":
                 this.domainLevelOfOperation = inputCorrectPasswordOperation(this.domainLevelOfOperation)
                 break
             case "InputSendSumOperation":
@@ -112,6 +116,12 @@ export class ATMStore {
                 this.domainLevelOfOperation = withdrawNotExistingCacheInATMOperation(this.domainLevelOfOperation)
                 return
             }
+            const isDailyLimitNotExceeded = this.bankStore.withdraw(this.currentUser!.cardNumber, count)
+            if (!isDailyLimitNotExceeded) {
+                this.domainLevelOfOperation = dailyLimitExceededOperation(this.domainLevelOfOperation)
+                return
+            }
+
             this.cache = subtractCacheForClient(this.cache, nominalsCount)
 
             this.domainLevelOfOperation = withdrawExistingMoneyOperation(this.domainLevelOfOperation, nominalsCount)
@@ -119,7 +129,6 @@ export class ATMStore {
         }
     }
 
-    destCardNumber: number | undefined = undefined
 
     @action
     public submit = () => {

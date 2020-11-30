@@ -55,6 +55,10 @@ export interface SuccessSendMoneyOperation {
     type: "SuccessSendMoneyOperation"
 }
 
+export interface DailyLimitExceeded {
+    type: "DailyLimitExceeded"
+}
+
 export type NoOperation = NoCardOperation
 
 export type Operation = NoOperation |
@@ -69,9 +73,8 @@ export type Operation = NoOperation |
     OpenSendMoneyWindowOperation |
     InputSendSumWindowOperation |
     NotExistingCardNumberOperation |
-    SuccessSendMoneyOperation
-
-
+    SuccessSendMoneyOperation |
+    DailyLimitExceeded
 
 export function initOperation(): NoCardOperation {
     return {type: "NoCard"}
@@ -111,6 +114,10 @@ export function withdrawNotExistingCacheInATMOperation(operation: Operation): Op
 
 export function openSendMoneyWindowOperation(operation: Operation): Operation {
     return {...operation, type: "OpenSendMoneyWindow"}
+}
+
+export function dailyLimitExceededOperation(operation: Operation): Operation {
+    return {...operation, type: "DailyLimitExceeded"}
 }
 
 export function inputSendSumWindowOperation(operation: Operation): Operation {

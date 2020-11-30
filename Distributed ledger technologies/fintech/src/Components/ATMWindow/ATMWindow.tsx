@@ -21,7 +21,7 @@ import {SendMoney} from "./Windows/Send/SendMoney"
 import {SetSendMoney} from "./Windows/Send/SetSendSum"
 import {NotExistingCardNumber} from "./Windows/Send/NotExistingCardNumber"
 import {SuccessSendMoney} from "./Windows/Send/SuccessSendMoney"
-
+import {WithdrawLimitExceeded} from "./Windows/Withdraw/WithdrawLimitExceeded"
 
 export interface IATMWindow {
     domainStore: ATMStore
@@ -57,6 +57,8 @@ export class ATMWindow extends React.Component<IATMWindow>{
                 return <NotExistingCardNumber />
             case "SuccessSendMoneyOperation":
                 return <SuccessSendMoney />
+            case "DailyLimitExceeded":
+                return <WithdrawLimitExceeded />
         }
 
         exhaustiveCheck(windowId)
