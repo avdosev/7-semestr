@@ -131,37 +131,33 @@ clock = pygame.time.Clock()
 done = False
 breedCells = False
 
+initGeneration(next_generation)
+
+historical_generation = []
+
 # Runs the game loop
 while not done:
+    breedNextGeneration()
+
+    
+    for i, gen in enumerate(historical_generation):
+        if i != 0 and i!=1 and gen == next_generation:
+            # done = True
+            print("Такой уже был", i, len(historical_generation))
+            break
+
+    historical_generation.append(next_generation)
+
     # The code here runs when every frame is drawn
     # Get any events that have occurred, like close button(X) clicked
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-            
-        # handle Mouse
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            pos = pygame.mouse.get_pos()
-            x = int(pos[0] / SIZE)
-            y = int(pos[1] / SIZE)
-            if next_generation[x][y] == WHITE:
-                createLiveCell(x,y)
-            else:
-                killLiveCell(x,y)
 
         # Check for q, g, s or w keys
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_q:
                 done = True
-            elif event.key == pygame.K_SPACE:
-                breedNextGeneration()
-            elif event.key == pygame.K_g:
-                breedCells = True
-            elif event.key == pygame.K_s:
-                breedCells = False
-            elif event.key == pygame.K_w:
-                breedCells = False
-                initGeneration(next_generation)
         
     if breedCells:
         breedNextGeneration()
@@ -174,6 +170,7 @@ while not done:
 
     # Limit the game to 30 frames per second
     clock.tick(60)
+
 
 print('Quitting')
 pygame.quit()
