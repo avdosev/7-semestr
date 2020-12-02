@@ -23,8 +23,8 @@ class GameOfLife:
     nextGeneration = []
 
     def __init__(self, displayWidth=640, displayHeight=480, size=16):
-        self.currentGeneration = self.init_generation()
-        self.nextGeneration = self.init_generation()
+        self.currentGeneration = self.allocateGenerationSize()
+        self.nextGeneration = self.allocateGenerationSize()
         self.DISPLAY_HEIGHT = displayHeight
         self.DISPLAY_WIDTH = displayWidth
         self.HALF_DISPLAY_HEIGHT = displayHeight / 2
@@ -35,17 +35,16 @@ class GameOfLife:
         self.YCELLS = int(displayHeight/size)
 
 
-    def init_generation(self):
+    def allocateGenerationSize(self):
         return [[ALIVE for y in range(self.YCELLS)] for x in range(self.XCELLS)]
 
     def createLiveCell(self, x, y):
         self.nextGeneration[x][y] = DEAD
 
-    # Kill a Live cell
     def killLiveCell(self, x, y):
         self.nextGeneration[x][y] = ALIVE
 
-    # Define a function to breed the next generation of cells
+
     def breedNextGeneration(self):
         for y in range(self.YCELLS):
             for x in range(self.XCELLS):
@@ -131,8 +130,8 @@ class GameOfLife:
         pygame.quit()
 
 
-    def drawCell(self, x, y, c):
-        pygame.draw.rect(self.screen, utils.getColors()[c], pygame.Rect(
+    def drawCell(self, x, y, cellState):
+        pygame.draw.rect(self.screen, utils.getColors()[cellState], pygame.Rect(
             x * self.SIZE, y * self.SIZE, self.SIZE-1, self.SIZE-1))
 
     def update(self):
@@ -140,7 +139,6 @@ class GameOfLife:
             for x in range(self.XCELLS):
                 cellState = self.nextGeneration[x][y]
                 self.drawCell(x, y, cellState)
-        # Update current_generation
         self.currentGeneration = list(self.nextGeneration)
 
     def checkNeighbour(self, x, y):
