@@ -8,7 +8,6 @@ from GameOfLife import GameOfLife
 
 
 game = GameOfLife()
-game.init_game()
 
 game.run()
 
