@@ -101,7 +101,7 @@ int main() {
             &hKey);
 
 
-    std::ifstream file("../Automotive_5.json");
+    std::ifstream file("../Arts_Crafts_and_Sewing_5.json");
     if (!file.is_open()) {
         std::cout << "File not opened";
         return 0;
@@ -131,7 +131,7 @@ int main() {
     //std::cout << string << std::endl;
     unsigned int end_time = clock(); // конечное время
     unsigned int search_time = end_time - start_time;
-    std::cout << "Encrypted time: " << search_time << "ms" << std::endl;
+    std::cout << "Encrypted speed: " << 208868 / search_time << "kb/s" << std::endl;
 
 
     unsigned int start_time2 = clock(); // начальное время
@@ -143,7 +143,8 @@ int main() {
     //std::cout << string << std::endl;
     unsigned int end_time2 = clock(); // конечное время
     unsigned int search_time2 = end_time2 - start_time2;
-    std::cout << "Decrypted time: " << search_time2 << "ms" << std::endl;
+    std::cout << "Decrypted speed: " << 208868 / search_time2 << "kb/s" << std::endl;
+
 
 
 
@@ -174,10 +175,6 @@ int main() {
         printf("The handle could not be released.\n");
     }
 
-
-    unsigned int end_time_all = clock(); // конечное время
-    unsigned int search_time_all = end_time_all - start_time_all;
-    std::cout << "All work time: " << search_time_all << "ms" << std::endl;
 
 }
 

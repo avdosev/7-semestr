@@ -1,7 +1,7 @@
 
 function cyfr(encryptedString, key, type) {
 
-    const blocks = encryptedString.match(/.{1,2}/g); // тут пока не переменное число
+    const blocks = encryptedString.match(/.{1,4}/g); 
     const isEven = encryptedString.length % key.length === 0
    
     const memo2 = type === "encrypt" ? encrypt(blocks, isEven, key) : decrypt(blocks, isEven, key) 
@@ -18,7 +18,7 @@ function reverseString(str) {
     return str.split("").reverse().join("");
 }
 
-function code(blocks, isEven) {
+function code(blocks, isEven, key) {
     // console.log("Input", blocks);
 
     const removed = !isEven ? blocks.splice(-1,1)[0] : []
@@ -39,17 +39,16 @@ function code(blocks, isEven) {
 
 
 function encrypt(blocks, isEven, key) {
-    return code(blocks, isEven)
+    return code(blocks, isEven, key)
 }
 
 function decrypt(blocks, isEven,  key) {
-    return code(blocks, isEven)
-
+    return code(blocks, isEven, key)
 }
 
 
 
-const edit = "3241"
+const edit = "1234"
 
 const memo1 = "Иван Петрович"
 
