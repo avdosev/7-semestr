@@ -1,9 +1,8 @@
-import pygame   # Provides what we need to make a game
-import random   # Can generate random numbers
+import pygame   
+import random 
+import utils
+from config import ALIVE, DEAD
 
-
-WHITE = 0
-BLACK = 1
 
 
 class GameOfLife:
@@ -19,29 +18,32 @@ class GameOfLife:
     XCELLS = int(DISPLAY_WIDTH/SIZE)
     YCELLS = int(DISPLAY_HEIGHT/SIZE)
 
-    colours = []
 
-    current_generation = []
-    next_generation    = []
-    
-    def __init__(self):
-        self.current_generation = self.init_generation()
-        self.next_generation = self.init_generation()
-        self.colours.append((255, 255, 255))
-        self.colours.append((  0,   0,   0))
-        
+    currentGeneration = []
+    nextGeneration = []
+
+    def __init__(self, displayWidth=640, displayHeight=480, size=16):
+        self.currentGeneration = self.init_generation()
+        self.nextGeneration = self.init_generation()
+        self.DISPLAY_HEIGHT = displayHeight
+        self.DISPLAY_WIDTH = displayWidth
+        self.HALF_DISPLAY_HEIGHT = displayHeight / 2
+        self.HALF_DISPLAY_WIDTH = displayWidth / 2
+        self.displaySize = (displayWidth, displayHeight)
+        self.SIZE = size
+        self.XCELLS = int(displayWidth/size)
+        self.YCELLS = int(displayHeight/size)
+
 
     def init_generation(self):
-        return [[WHITE for y in range(self.YCELLS)] for x in range(self.XCELLS)]
-
-    # Create a Live cell
+        return [[ALIVE for y in range(self.YCELLS)] for x in range(self.XCELLS)]
 
     def createLiveCell(self, x, y):
-        self.next_generation[x][y] = BLACK
+        self.nextGeneration[x][y] = DEAD
 
     # Kill a Live cell
     def killLiveCell(self, x, y):
-        self.next_generation[x][y] = WHITE
+        self.nextGeneration[x][y] = ALIVE
 
     # Define a function to breed the next generation of cells
     def breedNextGeneration(self):
@@ -49,28 +51,26 @@ class GameOfLife:
             for x in range(self.XCELLS):
                 # If cell is live, count neighbouring live cells
                 n = self.countCellNeighbours(x, y)
-                c = self.current_generation[x][y]
+                c = self.currentGeneration[x][y]
                 # If cell is live check rules 1, 2 and 3
-                if c == BLACK:
+                if c == DEAD:
                     if (n < 2) or (n > 3):
                         # Cell dies (rules 1 and 3)
-                        self.next_generation[x][y] = WHITE
+                        self.nextGeneration[x][y] = ALIVE
                     else:
                         # Cell lives on (rule 2)
-                        self.next_generation[x][y] = BLACK
+                        self.nextGeneration[x][y] = DEAD
                 else:
                     if (n == 3):
                         # Cell is reborn (rule 4)
-                        self.next_generation[x][y] = BLACK
+                        self.nextGeneration[x][y] = DEAD
 
-        # Define a function to initialise all the cells
 
     def initGeneration(self, generation):
         for y in range(self.YCELLS):
             for x in range(self.XCELLS):
-                color = WHITE if random.randint(0, 1) == 1 else BLACK
+                color = ALIVE if random.randint(0, 1) == 1 else DEAD
                 generation[x][y] = color
-
 
     def prerun(self):
         pygame.init()
@@ -78,18 +78,17 @@ class GameOfLife:
 
         # Create the window
         self.screen = pygame.display.set_mode(self.displaySize)
-        self.screen.fill(BLACK)
-        self.initGeneration(self.current_generation)
+        self.screen.fill(DEAD)
+        self.initGeneration(self.currentGeneration)
         pygame.display.flip()
-
 
     def run(self):
         self.prerun()
         clock = pygame.time.Clock()
+        self.initGeneration(self.nextGeneration)
 
         done = False
         breedCells = False
-
         while not done:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -99,10 +98,10 @@ class GameOfLife:
                     pos = pygame.mouse.get_pos()
                     x = int(pos[0] / self.SIZE)
                     y = int(pos[1] / self.SIZE)
-                    if self.next_generation[x][y] == WHITE:
-                        self.createLiveCell(x,y)
+                    if self.nextGeneration[x][y] == ALIVE:
+                        self.createLiveCell(x, y)
                     else:
-                        self.killLiveCell(x,y)
+                        self.killLiveCell(x, y)
 
                 # Check for q, g, s or w keys
                 if event.type == pygame.KEYUP:
@@ -116,14 +115,13 @@ class GameOfLife:
                         breedCells = False
                     elif event.key == pygame.K_w:
                         breedCells = False
-                        self.initGeneration(self.next_generation)
-                
+                        self.initGeneration(self.nextGeneration)
+
             if breedCells:
                 self.breedNextGeneration()
-                
-            # Update and draw 
+
+            # Update and draw
             self.update()
-            # Update the full display surface to the screen
             pygame.display.flip()
 
             # Limit the game to 30 frames per second
@@ -132,22 +130,18 @@ class GameOfLife:
         print('Quitting')
         pygame.quit()
 
-    # Define a function to draw a square of colour(c) at coordinates, x and y
 
     def drawCell(self, x, y, c):
-        pygame.draw.rect(self.screen, self.colours[c], pygame.Rect(
+        pygame.draw.rect(self.screen, utils.getColors()[c], pygame.Rect(
             x * self.SIZE, y * self.SIZE, self.SIZE-1, self.SIZE-1))
 
-    # Define a function to update cells on screen from next_generation array
-    def update(self, ):
+    def update(self):
         for y in range(self.YCELLS):
             for x in range(self.XCELLS):
-                c = self.next_generation[x][y]
-                self.drawCell(x, y, c)
+                cellState = self.nextGeneration[x][y]
+                self.drawCell(x, y, cellState)
         # Update current_generation
-        self.current_generation = list(self.next_generation)
-
-    # Function to check neighbour cell
+        self.currentGeneration = list(self.nextGeneration)
 
     def checkNeighbour(self, x, y):
         # Ignore cell off the edge of the grid
@@ -156,10 +150,7 @@ class GameOfLife:
         if (x >= self.XCELLS) or (y >= self.YCELLS):
             return 0
 
-        if self.current_generation[x][y] == BLACK:
-            return 1
-        else:
-            return 0
+        return self.currentGeneration[x][y] == DEAD
 
     # Define a function to count neigbouring 8 cells if live
     def countCellNeighbours(self, x, y):
