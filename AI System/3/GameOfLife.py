@@ -71,6 +71,14 @@ class GameOfLife:
                 color = ALIVE if random.randint(0, 1) == 1 else DEAD
                 generation[x][y] = color
 
+    def isNotAliveCells(self):
+        for y in range(self.YCELLS):
+            for x in range(self.XCELLS):
+                if self.currentGeneration[x][y] == ALIVE:
+                    return False
+        return True
+                    
+
     def prerun(self):
         pygame.init()
         pygame.display.set_caption("Conway's Game of Life")
@@ -87,8 +95,27 @@ class GameOfLife:
         self.initGeneration(self.nextGeneration)
 
         done = False
-        breedCells = False
+        breedCells = True
+        historicalGenerations = []
+        
         while not done:
+            if self.isNotAliveCells():
+                print("All cells are dead")
+                done = True
+            
+            if self.nextGeneration == self.currentGeneration:
+                print("System in a stable position")   
+                done = True  
+            
+            for i,gen in enumerate(historicalGenerations):
+                if gen == self.currentGeneration:
+                    print(f"Repeat on {i} iteration")
+                    done = True
+                    break
+            historicalGenerations.append(self.currentGeneration)
+            
+            
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
@@ -126,8 +153,15 @@ class GameOfLife:
             # Limit the game to 30 frames per second
             clock.tick(60)
 
-        print('Quitting')
+        
+        isQuit = False
+        while not isQuit:
+             for event in pygame.event.get():
+                if event.type == pygame.QUIT or event.type == pygame.KEYUP:
+                    isQuit = True
         pygame.quit()
+                    
+        
 
 
     def drawCell(self, x, y, cellState):
