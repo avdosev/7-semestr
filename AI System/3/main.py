@@ -105,7 +105,62 @@ def breedNextGeneration():
                 if (n == 3):
                     # Cell is reborn (rule 4)
                     next_generation[x][y] = BLACK
-                
+           
+def run():
+    initGeneration(current_generation)
+
+    # Update the full display surface to the screen
+    pygame.display.flip()
+        
+    # Create a clock to manage time
+    clock = pygame.time.Clock()
+
+    # Initialise variables
+    done = False
+    breedCells = False
+
+    initGeneration(next_generation)
+
+    historical_generation = []
+
+    # Runs the game loop
+    while not done:
+        breedNextGeneration()
+
+        
+        for i, gen in enumerate(historical_generation):
+            if i != 0 and i!=1 and gen == next_generation:
+                # done = True
+                print("Такой уже был", i, len(historical_generation))
+                break
+
+        historical_generation.append(next_generation)
+
+        # The code here runs when every frame is drawn
+        # Get any events that have occurred, like close button(X) clicked
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+
+            # Check for q, g, s or w keys
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_q:
+                    done = True
+            
+        if breedCells:
+            breedNextGeneration()
+            
+        # Update and draw 
+        update()
+
+        # Update the full display surface to the screen
+        pygame.display.flip()
+
+        # Limit the game to 30 frames per second
+        clock.tick(60)
+
+
+
 # Initialise pygame
 pygame.init()
 
@@ -119,58 +174,7 @@ screen = pygame.display.set_mode(displaySize)
 screen.fill(BLACK)
 
 # Initialise the generations
-initGeneration(current_generation)
-
-# Update the full display surface to the screen
-pygame.display.flip()
-      
-# Create a clock to manage time
-clock = pygame.time.Clock()
-
-# Initialise variables
-done = False
-breedCells = False
-
-initGeneration(next_generation)
-
-historical_generation = []
-
-# Runs the game loop
-while not done:
-    breedNextGeneration()
-
-    
-    for i, gen in enumerate(historical_generation):
-        if i != 0 and i!=1 and gen == next_generation:
-            # done = True
-            print("Такой уже был", i, len(historical_generation))
-            break
-
-    historical_generation.append(next_generation)
-
-    # The code here runs when every frame is drawn
-    # Get any events that have occurred, like close button(X) clicked
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-
-        # Check for q, g, s or w keys
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_q:
-                done = True
-        
-    if breedCells:
-        breedNextGeneration()
-        
-    # Update and draw 
-    update()
-
-    # Update the full display surface to the screen
-    pygame.display.flip()
-
-    # Limit the game to 30 frames per second
-    clock.tick(60)
-
+run()
 
 print('Quitting')
 pygame.quit()
