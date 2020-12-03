@@ -48,19 +48,18 @@ class GameOfLife:
     def breedNextGeneration(self):
         for y in range(self.YCELLS):
             for x in range(self.XCELLS):
-                # If cell is live, count neighbouring live cells
-                n = self.countCellNeighbours(x, y)
+                liveNeightbours = self.countCellNeighbours(x, y)
                 c = self.currentGeneration[x][y]
                 # If cell is live check rules 1, 2 and 3
                 if c == DEAD:
-                    if (n < 2) or (n > 3):
+                    if (liveNeightbours < 2) or (liveNeightbours > 3):
                         # Cell dies (rules 1 and 3)
                         self.nextGeneration[x][y] = ALIVE
                     else:
                         # Cell lives on (rule 2)
                         self.nextGeneration[x][y] = DEAD
                 else:
-                    if (n == 3):
+                    if (liveNeightbours == 3):
                         # Cell is reborn (rule 4)
                         self.nextGeneration[x][y] = DEAD
 
@@ -83,39 +82,40 @@ class GameOfLife:
         pygame.init()
         pygame.display.set_caption("Conway's Game of Life")
 
-        # Create the window
         self.screen = pygame.display.set_mode(self.displaySize)
         self.screen.fill(DEAD)
         self.initGeneration(self.currentGeneration)
         pygame.display.flip()
 
-    def run(self):
+
+    def runIteration(self, historicalGenerations):
+        self.breedNextGeneration()
+        if self.isNotAliveCells():
+            print("All cells are dead")
+            return True
+        
+        if self.nextGeneration == self.currentGeneration:
+            print("System in a stable position")  
+            return True  
+        
+        for i,gen in enumerate(historicalGenerations):
+            if gen == self.currentGeneration:
+                print(f"Repeat on {i} iteration")
+                return True
+        historicalGenerations.append(self.currentGeneration)
+        return False
+
+    def startGameLoop(self):
         self.prerun()
         clock = pygame.time.Clock()
-        self.initGeneration(self.nextGeneration)
+        # self.initGeneration(self.nextGeneration)
 
         done = False
-        breedCells = True
+        breedCells = False
         historicalGenerations = []
         
         while not done:
-            if self.isNotAliveCells():
-                print("All cells are dead")
-                done = True
-            
-            if self.nextGeneration == self.currentGeneration:
-                print("System in a stable position")   
-                done = True  
-            
-            for i,gen in enumerate(historicalGenerations):
-                if gen == self.currentGeneration:
-                    print(f"Repeat on {i} iteration")
-                    done = True
-                    break
-            historicalGenerations.append(self.currentGeneration)
-            
-            
-            
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
@@ -134,7 +134,7 @@ class GameOfLife:
                     if event.key == pygame.K_q:
                         done = True
                     elif event.key == pygame.K_SPACE:
-                        self.breedNextGeneration()
+                        done = self.runIteration(historicalGenerations)
                     elif event.key == pygame.K_g:
                         breedCells = True
                     elif event.key == pygame.K_s:
@@ -144,7 +144,7 @@ class GameOfLife:
                         self.initGeneration(self.nextGeneration)
 
             if breedCells:
-                self.breedNextGeneration()
+                done = self.runIteration(historicalGenerations)
 
             # Update and draw
             self.update()
