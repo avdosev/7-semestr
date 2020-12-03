@@ -136,7 +136,7 @@ class GameOfLife:
                     if event.key == pygame.K_q:
                         done = True
                     elif event.key == pygame.K_SPACE:
-                        self.breedNextGeneration()
+                        done = self.runIteration(historicalGenerations)
                     elif event.key == pygame.K_g:
                         breedCells = True
                     elif event.key == pygame.K_s:
@@ -146,7 +146,7 @@ class GameOfLife:
                         self.initGeneration(self.nextGeneration)
 
             if breedCells:
-                self.breedNextGeneration()
+                done = self.runIteration(historicalGenerations)
 
             # Update and draw
             self.update()
