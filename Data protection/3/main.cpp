@@ -5,6 +5,8 @@
 #include "helpers.h"
 #include <vector>
 #include <fstream>
+#include <algorithm>
+#include <ctime>
 
 using namespace std;
 
@@ -20,6 +22,8 @@ vector<string> generate_keys(string key) {
     string right = perm_key.substr(28, 28);
 
     vector<string> round_keys;
+
+    #pragma omp parallel for
     for (int i = 0; i < 16; i++) {
         // 3.1. For rounds 1, 2, 9, 16 the key_chunks
         // are shifted by one.
@@ -51,6 +55,8 @@ string DES_16_cipher(string perm, vector<string> round_keys) {
     string left = perm.substr(0, 32);
     string right = perm.substr(32, 32);
     // The plain text is encrypted 16 times
+
+    #pragma omp parallel for num_threads(8)
     for (int i = 0; i < 16; i++) {
         string right_expanded;
         // 3.1. The right half of the plain text is expanded
@@ -122,22 +128,34 @@ std::string load_file(const std::string& path) {
 
 
 int main() {
-    // A 64 bit key
-    string key = "1010101010111011000010010001100000100111001101101100110011011101";
-    // A block of plain text of 64 bits
-    string pt = "1010101111001101111001101010101111001101000100110010010100110110";
-//    string pt = load_file("../Prime_Pantry_5.json");
+
+    string key = "1010001010111011000010010001100000100111001101101100110011011101";
+
+//    string pt = "1010101111001101111001101010101111001101000100110010010100110110";
+    unsigned int start_time = clock(); // начальное время
+
+    string pt = load_file("../Software_5.json");
+//    cout << "Plain text: " << pt << endl;
 
 
-    // Calling the function to generate 16 keys
     vector<string> round_keys = generate_keys(key);
-
-    cout << "Plain text: " << pt << endl;
     string encrypted = DES(pt, round_keys);
-    cout << "Ciphertext: " << encrypted << endl;
+
+    unsigned int end_time = clock(); // конечное время
+    unsigned int search_time = end_time - start_time;
+    std::cout << "Decrypted speed: " <<  search_time << "ms"  << std::endl;
+//    cout << "Ciphertext: " << encrypted << endl;
+
 
     // Reversing the round_keys array for decryption
-    reverse(begin(round_keys), end(round_keys));
+    std::reverse(begin(round_keys), end(round_keys));
+
+    unsigned int start_time2 = clock(); // начальное время
+
     string decrypted = DES(encrypted, round_keys);
-    cout << "Decrypted text:" << decrypted << endl;
+
+    unsigned int end_time2 = clock(); // конечное время
+    unsigned int search_time2 = end_time2 - start_time2;
+//    std::cout << "Encrypted speed: " <<  search_time2  << std::endl;
+//    cout << "Decrypted text:" << decrypted << endl;
 }
