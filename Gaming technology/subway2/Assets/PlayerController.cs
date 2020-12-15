@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     private Animator anim;
     private int speed = 100;
+    private int coins = 0;
+    public Text loserUiText; 
+    public Text coinsScore; 
+
 
     public Rigidbody rb;
     private Lines line = Lines.middle;
@@ -19,36 +24,37 @@ public class PlayerController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        InvokeRepeating("Move", 0f, 0.1f);
+        loserUiText.text = "";
+
+        InvokeRepeating("Move", 0f, 0.2f);
+
     }
 
 
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Бах");
-        foreach (ContactPoint contact in collision.contacts)
-        {
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
-        }
+        loserUiText.text = "Проигрыш";
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Чпоньк");
+        coins += 10;
+        Debug.Log($"Чпоньк, Счет: {coins}");
+        coinsScore.text = $"Счет: {coins}";
     }
 
 
     void Move()
     {
         var inputHorizontal = Input.GetAxis("Horizontal");
-        // Debug.Log(line);
         
         if (inputHorizontal > 0.0)
         {
             if (line == Lines.left || line == Lines.middle)
             {
                 anim.SetTrigger("isMovingRight");
-                Vector3 movement = new Vector3 (3f, 0.0f, 0f);
+                Vector3 movement = new Vector3 (3.1f, 0.0f, 0f);
  
                 rb.AddForce(movement * speed);
                 line++;

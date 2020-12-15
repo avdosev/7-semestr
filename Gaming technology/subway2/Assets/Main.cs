@@ -20,7 +20,7 @@ public class Main : MonoBehaviour
         var destroyPointZ = -10;
         if (street[0].transform.position.z < destroyPointZ) {
             var newStreetElement = street[0];
-            newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + 6);
+            newStreetElement.transform.position = new Vector3(0, 0, street[street.Count-1].transform.position.z + 8);
             street.Add(newStreetElement);
             street.RemoveAt(0);
         }
