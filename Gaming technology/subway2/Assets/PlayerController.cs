@@ -11,6 +11,12 @@ public class PlayerController : MonoBehaviour
     public Text loserUiText; 
     public Text coinsScore; 
 
+    public AudioClip footSound;
+    public AudioSource effectSource;
+    public AudioClip loseSound;
+    public AudioClip coinSound;
+
+
 
     public Rigidbody rb;
     private Lines line = Lines.middle;
@@ -35,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Бах");
         loserUiText.text = "Проигрыш";
+        effectSource.PlayOneShot(loseSound);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,6 +49,13 @@ public class PlayerController : MonoBehaviour
         coins += 10;
         Debug.Log($"Чпоньк, Счет: {coins}");
         coinsScore.text = $"Счет: {coins}";
+        effectSource.PlayOneShot(coinSound);
+
+    }
+
+    private void PlayFootStep()
+    {
+        effectSource.PlayOneShot(footSound);
     }
 
 
