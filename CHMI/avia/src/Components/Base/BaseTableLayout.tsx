@@ -1,22 +1,25 @@
 import React, {ReactNode} from "react";
-import {convert, getMappingForCell} from "./BaseTableUtils";
-import {TableCell, Table, TableRow, TableBody, TableContainer, TableHead} from "@material-ui/core"
-import { HeadersBaseSettings } from "../../typings/common";
+import {StrictTableCellProps, StrictTableProps, StrictTableRowProps, Table} from "semantic-ui-react";
+import {HeadersBaseSettings} from "../../Typings/TableTypes";
+import {ButtonProps} from "semantic-ui-react/dist/commonjs/elements/Button/Button";
+import {convert, getCellProps, getMappingForCell} from "./BaseTableUtils";
 
 
 export interface IBaseTableLayout<T> {
     list?: Array<T>
     headers: HeadersBaseSettings<T>
+    strictTableProps?: StrictTableProps
+    rowProps?: (entity: T) => StrictTableRowProps
 }
 
 
-export class BaseTableLayout<T, U extends IBaseTableLayout<T>> extends React.Component<U> {
+class BaseTableLayout<T, U extends IBaseTableLayout<T>> extends React.Component<U> {
 
     public render(): React.ReactElement {
         return (
-            <Table  >
-                <TableHead><TableRow>{this.renderHeaders(this.props.headers)}</TableRow></TableHead>
-                <TableBody>{this.renderBody(this.props.list)}</TableBody>
+            <Table celled={true} {...this.props.strictTableProps} >
+                <Table.Header><Table.Row>{this.renderHeaders(this.props.headers)}</Table.Row></Table.Header>
+                <Table.Body>{this.renderBody(this.props.list)}</Table.Body>
             </Table>
         )
     }
@@ -26,9 +29,14 @@ export class BaseTableLayout<T, U extends IBaseTableLayout<T>> extends React.Com
 
         headerNames.forEach((header, name) => {
 
-            headerElements.push(<TableCell key={name.toString()}>
+            let widthParam = null
+            if (header.width) {
+                widthParam = {width: header.width}
+            }
+
+            headerElements.push(<Table.HeaderCell {...widthParam} key={name.toString()}>
                 {header.text}
-            </TableCell>)
+            </Table.HeaderCell>)
         })
         return headerElements
     }
@@ -39,27 +47,30 @@ export class BaseTableLayout<T, U extends IBaseTableLayout<T>> extends React.Com
             const {id, ...itemData} = item;
 
             const mappedFields = getMappingForCell(this.props.headers) // TODO проверить, правильно ли инициализирован
+            const rowProps = this.props.rowProps && this.props.rowProps(item)
 
             return (
-                <TableRow key={id.toString()}>
+                <Table.Row {...rowProps}  key={id.toString()}>
 
                     {mappedFields.map((nameOfField: any) => this.renderCell(item, nameOfField, id))}
 
-                </TableRow>
+                </Table.Row>
             );
         });
 
     protected renderCell = (item: any, column: keyof T, rowId: number): ReactNode => {
         const cellValue = item[column];
-        
+
         const convertedValue = convert(this.props.headers, column, cellValue, item) // работает не так уж долго, как я думал
-        
+        const cellProps = getCellProps(this.props.headers, column, cellValue, item)
+
         return (
-            <TableCell key={`${rowId}.${column}`}>
+            <Table.Cell {...cellProps} key={`${rowId}.${column}`}>
                 {convertedValue}
-            </TableCell>
+            </Table.Cell>
         )
     }
 
 }
 
+export default BaseTableLayout

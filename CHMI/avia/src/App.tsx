@@ -15,7 +15,6 @@ import {PersonalCompany} from "./Components/Pages/PersonalCompany";
 function App() {
     return (
         <Router>
-            <MainPage />
             <Switch>
                 <Route component={PersonalCompany} path={ClientRoutes.company} />
                 <Route component={Statistic} path={ClientRoutes.settings} />
