@@ -1,4 +1,4 @@
-export type PersonalCompanyDTO = {
+export type PersonalCompanyDetailDTO = {
     name: string
     cause: string
     group: string
@@ -8,10 +8,28 @@ export type PersonalCompanyDTO = {
     isPopularAtThisTime: boolean
 }
 
-export type CompanyDTO = {
+export type User = {
+    id: number
+    name: string
+    group: string
+}
+
+export interface CompanyDTO {
     id: number
     location: string,
     date: string,
-    group: string
+    group?: string
     label: string
+}
+
+export interface UserInCompany extends User {
+    degreeOfInvolvement: string
+}
+
+export interface GroupCompanyDTO extends CompanyDTO {
+    participants: UserInCompany[]
+}
+
+export interface PersonalCompanyDTO extends CompanyDTO {
+    user: UserInCompany
 }
