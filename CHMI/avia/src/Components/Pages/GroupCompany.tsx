@@ -3,10 +3,12 @@ import {getDataById} from "../../data";
 import {Link, useParams} from "react-router-dom";
 import {Card, Container, Grid, GridColumn, GridRow, Header, Image, Input} from "semantic-ui-react";
 import {ClientRoutes} from "../../Config/Config";
+import {GroupCompanyDTO} from "../../Typings/Common";
 
 export function GroupCompany() {
     const { id } = useParams();
-    const data = getDataById(id)
+    const data = getDataById(id) as GroupCompanyDTO
+    console.log(data)
 
     return <Container className="upper">
         {/*Статистика кампании*/}
@@ -21,11 +23,13 @@ export function GroupCompany() {
            </GridRow>
             <GridRow>
                 <GridColumn>
+                    {data.group}
+                </GridColumn>
+                <GridColumn>
                     <Card>
                         Дата кампании
                         <Input>{data.date} </Input>
                     </Card>
-
                 </GridColumn>
             </GridRow>
 

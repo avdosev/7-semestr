@@ -2,11 +2,8 @@ import {Button, Container, Table, TableCell, TableRow} from "semantic-ui-react";
 import React from "react";
 import {Link} from "react-router-dom";
 import {ClientRoutes} from "../../Config/Config";
-import BaseTableLayout from "../Base/BaseTableLayout";
-import {HeadersBaseSettings} from "../../Typings/TableTypes";
-import {archiveData, data} from "../../data";
-import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDTO} from "../../Typings/Common";
 import {BaseCompaniesList} from "../BaseCompanysList";
+import {data} from "../../data";
 
 
 
@@ -20,7 +17,7 @@ export function MainPage() {
 
         Запущенные рекламные кампании:
 
-        <BaseCompaniesList list={archiveData} isArchive={false} />
+        <BaseCompaniesList list={data} isArchive={false} />
 
         <Link to={ClientRoutes.runCompany}>Запустить кампанию вручную </Link>
 

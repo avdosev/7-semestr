@@ -16,6 +16,7 @@ export interface CompanyDTO {
     id: number
     location: string,
     date: string,
+    archive: boolean
 }
 
 export interface UserInCompany extends User {

@@ -1,7 +1,6 @@
 import {HeadersBaseSettings} from "../Typings/TableTypes";
 import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDTO} from "../Typings/Common";
 import BaseTableLayout from "./Base/BaseTableLayout";
-import {archiveData} from "../data";
 import {Button, Container} from "semantic-ui-react";
 import React from "react";
 import {ClientRoutes} from "../Config/Config";
@@ -52,7 +51,8 @@ export function BaseCompaniesList(props: {isArchive: boolean, list: Array<Person
         }
     })
     headers.set('', {text: "Действия", emptyDataColumn: true, convertFunction: getButtons(props.isArchive)})
+    const archiveList = props.list.filter((el) => props.isArchive ? el.archive : !el.archive)
 
-    return <BaseTableLayout<CompanyDTO, any> headers={headers} list={props.list}/>
+    return <BaseTableLayout<CompanyDTO, any> headers={headers} list={archiveList}/>
 
 }

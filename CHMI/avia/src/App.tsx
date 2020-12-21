@@ -4,7 +4,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from "react-router-dom";
 import {ClientRoutes} from "./Config/Config";
 import {RunCompany} from "./Components/Pages/RunCompany";
@@ -28,6 +29,7 @@ function App() {
                 <Route component={RunCompany} path={ClientRoutes.runCompany} />
                 <Route component={MainPage} path={ClientRoutes.index} />
 
+                <Redirect to={ClientRoutes.index} />
             </Switch>
         </Router>
     );

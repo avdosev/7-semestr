@@ -2,11 +2,9 @@ import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDTO} from "../../Typings/Com
 import {ClientRoutes} from "../../Config/Config";
 import {Link} from "react-router-dom";
 import {Button, Container} from "semantic-ui-react";
-import {HeadersBaseSettings} from "../../Typings/TableTypes";
-import BaseTableLayout from "../Base/BaseTableLayout";
-import {archiveData} from "../../data";
 import React from "react";
 import {BaseCompaniesList} from "../BaseCompanysList";
+import {data} from "../../data";
 
 
 export function ArchiveCompany() {
@@ -17,7 +15,7 @@ export function ArchiveCompany() {
         <Container>
         Завершенные рекламные кампании:
         </Container>
-        <BaseCompaniesList list={archiveData} isArchive={true} />
+        <BaseCompaniesList list={data} isArchive={true} />
 
     </Container>
 }

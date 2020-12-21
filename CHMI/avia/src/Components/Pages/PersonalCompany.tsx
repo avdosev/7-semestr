@@ -12,7 +12,7 @@ import {
     TableCell,
     TableRow
 } from "semantic-ui-react";
-import {getDataById} from "../../data";
+import {degreesOfInvolvement, getDataById} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {CompanyDTO, PersonalCompanyDetailDTO, PersonalCompanyDTO} from "../../Typings/Common";
@@ -23,7 +23,7 @@ export function PersonalCompany() {
     const { id } = useParams();
     const data = getDataById(id) as PersonalCompanyDTO
 
-    const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
+    const process = degreesOfInvolvement.indexOf(data.user.degreeOfInvolvement) * 100 / degreesOfInvolvement.length + 25 // т.к. первая операция это уже 25%
 
     return <Container className="upper">
         <Header>{data.location}</Header>
@@ -33,7 +33,7 @@ export function PersonalCompany() {
             <GridRow>
                 <GridColumn>
                     Степень вовлеченности:
-                    <Progress  percent={15} label={"Зашел на страницу"} />
+                    <Progress percent={process} autoSuccess={true} label={data.user.degreeOfInvolvement} />
                 </GridColumn>
                 <GridColumn>
                     <Card>
