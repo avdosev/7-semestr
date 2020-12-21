@@ -4,11 +4,11 @@ import {Link, useParams} from "react-router-dom";
 import {Card, Container, Grid, GridColumn, GridRow, Header, Image, Input} from "semantic-ui-react";
 import {ClientRoutes} from "../../Config/Config";
 
-export function Statistic() {
+export function GroupCompany() {
     const { id } = useParams();
     const data = getDataById(id)
 
-    return <Container style={{marginTop: '10px'}}>
+    return <Container className="upper">
         {/*Статистика кампании*/}
         <Grid columns={2}>
            <GridRow>

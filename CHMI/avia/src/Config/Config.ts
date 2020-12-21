@@ -7,7 +7,7 @@ export const ClientRoutes = {
         get: (id: number) => `/company/${id}`
     },
 
-    statistic: {
+    groupCompany: {
         template: '/company/:id/statistic',
         get: (id: number) => `/company/${id}/statistic`
     },

@@ -1,24 +1,24 @@
 import React from "react";
-import {Checkbox, Dropdown, Input, Table, TableCell} from "semantic-ui-react";
+import {Checkbox, Container, Dropdown, Input, Table, TableCell} from "semantic-ui-react";
 
 const directions = [
     {
-        key: 'Jenny Hess',
+        key: 'Россия-Чехия',
         text: 'Россия-Чехия',
-        value: 'Jenny Hess',
+        value: 'Россия-Чехия',
     },
 
 ]
 
 export function RunCompany() {
-    return <>
+    return <Container className="upper">
         <Table>
             <TableCell>
                 <Dropdown options={directions} />
             </TableCell>
             <TableCell>
-                <Input />
-                <Input />
+                <Input type={'date'} />
+                <Input type={'date'} />
             </TableCell>
             <TableCell>
                 <Dropdown />
@@ -30,5 +30,5 @@ export function RunCompany() {
             </TableCell>
         </Table>
 
-    </>
+    </Container>
 }

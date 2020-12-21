@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
-    Card,
+    Card, Container, Grid, GridColumn, GridRow,
     Header,
     Icon,
     Input,
@@ -15,32 +15,35 @@ import {
 import {getDataById} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
-import {CompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
+import {CompanyDTO, PersonalCompanyDetailDTO, PersonalCompanyDTO} from "../../Typings/Common";
 
-
-const personalData: PersonalCompanyDetailDTO[] = [
-    {
-        name: 'Петров Петр Петрович',
-        cause: 'Клиент просматривал билеты на агрегаторах на это направление',
-        group: "Юрист",
-        groupAttendancePercent: 7,
-        isPopularAtThisTime: true,
-        isPopularInGroup: false,
-        wasHere: false,
-    }
-]
 
 export function PersonalCompany() {
     const { id } = useParams();
-    const data = getDataById(id)
+    const data = getDataById(id) as PersonalCompanyDTO
 
     const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
 
-    return <>
+    return <Container className="upper">
         <Header>{data.location}</Header>
 
-        Степень вовлеченности:
-        <Progress  percent={15} label={"Зашел на страницу"} />
+        <Header>{data.user.name} </Header>
+        <Grid columns={2}>
+            <GridRow>
+                <GridColumn>
+                    Степень вовлеченности:
+                    <Progress  percent={15} label={"Зашел на страницу"} />
+                </GridColumn>
+                <GridColumn>
+                    <Card>
+                        Дата компании
+                        <Input disabled={true} > {data.date} </Input>
+                    </Card>
+                </GridColumn>
+            </GridRow>
+        </Grid>
+
+
 
 
         Рекомендации:
@@ -50,10 +53,7 @@ export function PersonalCompany() {
                 Алгоритм работает корректно, настройка не требуется.
             </MessageContent>
         </Message>
-        <Card>
-            Дата компании
-            <Input disabled={true} > {data.date} </Input>
-        </Card>
+
 
 
         Информация о кампании:
@@ -62,8 +62,20 @@ export function PersonalCompany() {
                 <TableCell>
                     Участник рекламной кампании
                 </TableCell>
+                <TableCell>
+                    {data.user.name}
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Участник рекламной кампании
+                </TableCell>
+                <TableCell>
+                    {data.user}
+                </TableCell>
             </TableRow>
         </Table>
 
-    </>
+    </Container>
 }

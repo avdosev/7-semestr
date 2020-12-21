@@ -1,7 +1,7 @@
 import React from "react";
 import {useParams} from "react-router-dom";
 import {getDataById} from "../../data";
-import {Header} from "semantic-ui-react";
+import {Container, Header} from "semantic-ui-react";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {GroupCompanyDTO, UserInCompany} from "../../Typings/Common";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
@@ -17,9 +17,9 @@ export function CompanyParticipants() {
     headers.set('degreeOfInvolvement', {text: "Степерь вовлеченности"})
     headers.set('group', {text: "Группа"})
 
-    return <>
+    return <Container className="upper">
         <Header>{data.location}</Header>
         Участники рекламной кампании:
         <BaseTableLayout<UserInCompany, any> headers={headers} list={data.participants} />
-    </>
+    </Container>
 }

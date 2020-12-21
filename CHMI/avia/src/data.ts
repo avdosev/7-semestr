@@ -1,4 +1,4 @@
-import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDTO, User} from "./Typings/Common";
+import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDetailDTO, PersonalCompanyDTO, User} from "./Typings/Common";
 
 export const users: User[] = [
     {
@@ -29,14 +29,26 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
         location: "Россия-Испания",
         date : "20 декабря - 8 января",
         user: {...users[1],  degreeOfInvolvement:  "Зашел на сайт"},
-        label: "Клиент просматривал билеты на агрегаторах на это направление",
+        detail: {
+            cause: 'Клиент просматривал билеты на агрегаторах на это направление',
+            groupAttendancePercent: 7,
+            isPopularAtThisTime: true,
+            isPopularInGroup: false,
+            wasHere: false,
+        },
     },
     {
         id: 3,
         location: "Россия-Куба",
         date: "22 декабря - 1 января",
         user: {...users[0],  degreeOfInvolvement:  "Зашел на сайт"},
-        label: "Клиент просматривал билеты на много направлений, а также летал в прошлом году в это время на это направление",
+        detail: {
+            cause: 'Клиент просматривал билеты на много направлений, а также летал в прошлом году в это время на это направление',
+            groupAttendancePercent: 7,
+            isPopularAtThisTime: true,
+            isPopularInGroup: false,
+            wasHere: false,
+        },
     }
 ]
 

@@ -13,9 +13,11 @@ export function getButtons(data: GroupCompanyDTO | PersonalCompanyDTO) {
     if ("user" in data) {
         url = ClientRoutes.company.get(data.id)
     } else {
-        url = ClientRoutes.statistic.get(data.id)
+        url = ClientRoutes.groupCompany.get(data.id)
     }
-    return <> <Link to={url}>Статистика </Link> <Button icon="settings"/> </>
+    return <>
+        <Link to={url}>Статистика </Link>
+        <Link to={ClientRoutes.settings.get(data.id)}> <Button icon="settings"/> </Link> </>
 }
 
 export function MainPage() {
@@ -36,10 +38,21 @@ export function MainPage() {
             }
         }
     )
-    headers.set('label', {text: "Пояснение"})
+
+    headers.set('label', {
+        text: "Пояснение",
+        emptyDataColumn: true,
+        convertFunction: (cellValue: PersonalCompanyDTO | GroupCompanyDTO, columnName) => {
+            if ("user" in cellValue) {
+                return cellValue.detail.cause
+            } else {
+                return cellValue.label
+            }
+        }
+    })
     headers.set('', {text: "Действия", emptyDataColumn: true, convertFunction: getButtons})
 
-    return <Container style={{marginTop: '10px'}}>
+    return <Container className="upper">
         <Link to={ClientRoutes.index}>Главная страница</Link>
         <Container textAlign="right">
             <Link to={ClientRoutes.archiveCompany}>Завершенные кампании </Link>
