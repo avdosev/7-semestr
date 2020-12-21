@@ -16,6 +16,7 @@ import {getDataById} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {CompanyDTO, PersonalCompanyDetailDTO, PersonalCompanyDTO} from "../../Typings/Common";
+import {BooleanViewer} from "../BooleanViewer";
 
 
 export function PersonalCompany() {
@@ -69,10 +70,57 @@ export function PersonalCompany() {
 
             <TableRow>
                 <TableCell>
-                    Участник рекламной кампании
+                    Причина
                 </TableCell>
                 <TableCell>
-                    {data.user}
+                    {data.detail.cause}
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Информация о группе
+                </TableCell>
+                <TableCell>
+                    {data.user.group}
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Место популярно в его группе?
+                </TableCell>
+                <TableCell>
+                    <BooleanViewer isTrue={data.detail.isPopularInGroup} />
+
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Сколько процентов группы посещало хотя бы раз это место?
+                </TableCell>
+                <TableCell>
+                    {data.detail.groupAttendancePercent}
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Посещал ли клиент это место ранее?
+                </TableCell>
+                <TableCell>
+                    <BooleanViewer isTrue={data.detail.wasHere} />
+                </TableCell>
+            </TableRow>
+
+            <TableRow>
+                <TableCell>
+                    Популярно ли это место среди
+                    всех клиентов в это время?
+                </TableCell>
+                <TableCell>
+                    <BooleanViewer isTrue={data.detail.isPopularAtThisTime} />
                 </TableCell>
             </TableRow>
         </Table>

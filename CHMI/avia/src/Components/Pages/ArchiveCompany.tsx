@@ -14,7 +14,9 @@ export function ArchiveCompany() {
     return <Container className="upper">
         <Link to={ClientRoutes.index}>Главная страница</Link>
 
+        <Container>
         Завершенные рекламные кампании:
+        </Container>
         <BaseCompaniesList list={archiveData} isArchive={true} />
 
     </Container>

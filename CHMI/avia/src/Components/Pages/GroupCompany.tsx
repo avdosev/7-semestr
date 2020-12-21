@@ -36,7 +36,10 @@ export function GroupCompany() {
                     <Image src="https://sun7-9.userapi.com/impg/f07vxn__Cl9OPQ03v-HNozB0724U3sqzWkZELg/ItF78iHCm-E.jpg?size=393x290&quality=96&proxy=1&sign=9c2874e76ed4b02e900ac8f436b7404c&type=album" />
                 </GridColumn>
                 <GridColumn>
-                    Рекомендации
+                    Рекомендации:
+                    <br />
+                    Разработчики оформили мало покупок, нужно что-то изменить.
+
                 </GridColumn>
             </GridRow>
 
