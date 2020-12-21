@@ -13,11 +13,14 @@ import {PersonalCompany} from "./Components/Pages/PersonalCompany";
 import {CompanyParticipants} from "./Components/Pages/CompanyParticipants";
 import "./App.css"
 import {CompanySettings} from "./Components/Pages/CompanySettings";
+import {ArchiveCompany} from "./Components/Pages/ArchiveCompany";
+
 
 function App() {
     return (
         <Router>
             <Switch>
+                <Route component={ArchiveCompany} path={ClientRoutes.archiveCompany} />
                 <Route component={CompanyParticipants} path={ClientRoutes.companyParticipants.template} />
                 <Route component={GroupCompany} path={ClientRoutes.groupCompany.template} />
                 <Route component={PersonalCompany} path={ClientRoutes.company.template} />

@@ -21,7 +21,7 @@ import {CompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
 
 export function CompanySettings() {
     const { id } = useParams();
-    const data = getDataById(id)
+    const data = getDataById(id)!
 
     const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
 
