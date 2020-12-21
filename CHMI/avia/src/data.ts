@@ -12,30 +12,41 @@ export const getRandomInvolvement = () => {
 }
 
 
+export const groups = [
+    "Нефтянники",
+    "Менеджеры",
+    "Разработчики",
+    "Сварщики",
+]
+
 export const users: User[] = [
     {
         id: 1,
         name: "Иванов Иван Иванович mail@mail.ru",
-        group: "Менеджеры"
+        group: groups[1]
     },
     {
         id: 2,
         name: "Петров Петр Петрович yandex@mail.ru",
-        group: "Менеджеры"
+        group: groups[1]
     },
     {
         id: 3,
         name: "Смирнов Константин Петрович yandex@mail.ru",
-        group: "Разработчики"
+        group: groups[2]
+    },
+    {
+        id: 4,
+        name: "Муравьев Сергей Павлович yandex@mail.ru",
+        group: groups[0],
+    },
+    {
+        id: 5,
+        name: "Сахаров Петр Константинович yandex@mail.ru",
+        group: groups[0]
     }
 ]
 
-export const groups = [
-    "Нефтянники",
-    "Менеджеры среднего звена",
-    "Разработчики",
-    "Сварщики",
-]
 
 export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
     {
@@ -43,10 +54,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
         location: "Россия-Чехия",
         archive: true,
         date : "10 июля 2020 - 10 августа  2020",
-        group: "Нефтянники",
+        group: groups[0],
         label: "Участники этой группы часто используют это направление в это время",
         participants: [
-            ...users.map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
+            ...users
+                .filter((user) => user.group === groups[0])
+                .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
         ]
     },
     {
@@ -79,18 +92,20 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
     },
     {
         id: 4,
-        location: "Россия-Чехия",
+        location: "Россия-Нидерланды",
         archive: false,
         date : "20 декабря - 8 января",
-        group: "Менеджеры среднего звена",
+        group: groups[1],
         label: "Участники этой группы часто используют это направление в это время",
         participants: [
-            ...users.map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
+            ...users
+                .filter((user) => user.group === groups[1])
+                .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
         ]
     },
     {
         id: 5,
-        location: "Россия-Испания",
+        location: "Россия-США",
         archive: false,
         date : "20 декабря - 8 января",
         user: {...users[1],  degreeOfInvolvement: getRandomInvolvement()},
@@ -104,7 +119,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
     },
     {
         id: 6,
-        location: "Россия-Куба",
+        location: "Россия-Новая зеландия",
         date: "22 декабря - 1 января",
         archive: false,
         user: {...users[0],  degreeOfInvolvement: getRandomInvolvement()},
