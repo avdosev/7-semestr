@@ -60,7 +60,8 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             ...users
                 .filter((user) => user.group === groups[0])
                 .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
-        ]
+        ],
+        resulting: 24,
     },
     {
         id: 2,
@@ -75,6 +76,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             isPopularInGroup: false,
             wasHere: false,
         },
+        resulting: 45,
     },
     {
         id: 3,
@@ -89,6 +91,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             isPopularInGroup: false,
             wasHere: false,
         },
+        resulting: 95,
     },
     {
         id: 4,
@@ -101,7 +104,8 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             ...users
                 .filter((user) => user.group === groups[1])
                 .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
-        ]
+        ],
+        resulting: 12,
     },
     {
         id: 5,
@@ -116,6 +120,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             isPopularInGroup: false,
             wasHere: false,
         },
+        resulting: 89,
     },
     {
         id: 6,
@@ -130,6 +135,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             isPopularInGroup: false,
             wasHere: false,
         },
+        resulting: 67,
     }
 ]
 

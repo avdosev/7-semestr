@@ -92,7 +92,7 @@ export function CompanySettings() {
         <Form className="checkboxFormFields">
             <Form.Field>
                 <Radio
-                    label='Анализировать  поиск по агрегаторам'
+                    label='Анализировать поиск по агрегаторам'
                     name='radioGroup'
                     value=""
                 />

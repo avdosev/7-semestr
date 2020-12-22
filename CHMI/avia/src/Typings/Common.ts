@@ -17,6 +17,7 @@ export interface CompanyDTO {
     location: string,
     date: string,
     archive: boolean
+    resulting: number // от 0 до 100
 }
 
 export interface UserInCompany extends User {
@@ -26,7 +27,7 @@ export interface UserInCompany extends User {
 export interface GroupCompanyDTO extends CompanyDTO {
     participants: UserInCompany[]
     label: string
-    group: string
+    group: string,
 }
 
 export interface PersonalCompanyDTO extends CompanyDTO {
