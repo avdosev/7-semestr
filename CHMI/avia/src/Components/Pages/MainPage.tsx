@@ -4,13 +4,14 @@ import {Link} from "react-router-dom";
 import {ClientRoutes} from "../../Config/Config";
 import {BaseCompaniesList} from "../BaseCompanysList";
 import {data} from "../../data";
+import {MainHeader} from "../Header";
 
 
 
 export function MainPage() {
 
     return <Container className="upper">
-        <Link to={ClientRoutes.index}>Главная страница</Link>
+        <MainHeader />
         <Container textAlign="right">
             <Link to={ClientRoutes.archiveCompany}>Завершенные кампании </Link>
         </Container>

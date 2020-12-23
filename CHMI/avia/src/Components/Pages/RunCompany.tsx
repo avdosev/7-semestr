@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Button, Checkbox, Container, Dropdown, Input, Tab, Table, TableCell, TableRow} from "semantic-ui-react";
 import {getOptions} from "../../utils";
 import {groups, users} from "../../data";
+import {MainHeader} from "../Header";
 
 
 const directions = getOptions(['Россия-Чехия', 'Россия-Испания'])
@@ -16,6 +17,8 @@ export function RunCompany() {
 
 
     return <Container className="upper">
+        <MainHeader />
+
         <Table>
             <TableRow>
                 <TableCell width={3}>

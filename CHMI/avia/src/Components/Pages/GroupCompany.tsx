@@ -19,6 +19,7 @@ import {ClientRoutes} from "../../Config/Config";
 import {GroupCompanyDTO} from "../../Typings/Common";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {getOptions} from "../../utils";
+import {MainHeader} from "../Header";
 
 export function GroupCompany() {
     const {id} = useParams();
@@ -26,7 +27,8 @@ export function GroupCompany() {
     console.log(data)
 
     return <Container className="upper">
-        {/*Статистика кампании*/}
+        <MainHeader />
+
         <Grid columns={2}>
             <GridRow>
                 <GridColumn>

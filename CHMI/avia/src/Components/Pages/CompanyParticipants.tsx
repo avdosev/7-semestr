@@ -5,6 +5,7 @@ import {Container, Header} from "semantic-ui-react";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {GroupCompanyDTO, UserInCompany} from "../../Typings/Common";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
+import {MainHeader} from "../Header";
 
 
 
@@ -18,6 +19,8 @@ export function CompanyParticipants() {
     headers.set('group', {text: "Группа"})
 
     return <Container className="upper">
+        <MainHeader />
+
         <Header>{data.location}</Header>
         Участники рекламной кампании:
         <BaseTableLayout<UserInCompany, any> headers={headers} list={data.participants} />

@@ -16,6 +16,7 @@ import {getDataById} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {CompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
+import {MainHeader} from "../Header";
 
 
 
@@ -26,6 +27,8 @@ export function CompanySettings() {
     const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
 
     return <Container className="upper">
+        <MainHeader />
+
         <Header>{data.location}</Header>
 
         <Grid columns={2}>

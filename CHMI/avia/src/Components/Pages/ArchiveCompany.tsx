@@ -5,11 +5,14 @@ import {Button, Container} from "semantic-ui-react";
 import React from "react";
 import {BaseCompaniesList} from "../BaseCompanysList";
 import {data} from "../../data";
+import {MainHeader} from "../Header";
 
 
 export function ArchiveCompany() {
 
     return <Container className="upper">
+        <MainHeader />
+
         <Link to={ClientRoutes.index}>Главная страница</Link>
 
         <Container>

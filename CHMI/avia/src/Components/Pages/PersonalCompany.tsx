@@ -17,6 +17,7 @@ import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {CompanyDTO, PersonalCompanyDetailDTO, PersonalCompanyDTO} from "../../Typings/Common";
 import {BooleanViewer} from "../BooleanViewer";
+import {MainHeader} from "../Header";
 
 
 export function PersonalCompany() {
@@ -26,6 +27,8 @@ export function PersonalCompany() {
     const process = degreesOfInvolvement.indexOf(data.user.degreeOfInvolvement) * 100 / degreesOfInvolvement.length + 25 // т.к. первая операция это уже 25%
 
     return <Container className="upper">
+        <MainHeader />
+
         <Header>{data.location}</Header>
 
         <Header>{data.user.name} </Header>
