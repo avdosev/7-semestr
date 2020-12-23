@@ -24,7 +24,6 @@ import {MainHeader} from "../Header";
 export function GroupCompany() {
     const {id} = useParams();
     const data = getDataById(id) as GroupCompanyDTO
-    console.log(data)
 
     return <Container className="upper">
         <MainHeader />
@@ -32,7 +31,7 @@ export function GroupCompany() {
         <Grid columns={2}>
             <GridRow>
                 <GridColumn>
-                    <Header>{data.location} </Header>
+                    <Header>Статистика кампании</Header>
                 </GridColumn>
                 <GridColumn>
                     <Link to={ClientRoutes.companyParticipants.get(id)}>Посмотреть участников кампании</Link>
@@ -41,6 +40,9 @@ export function GroupCompany() {
             <GridRow>
                 <Table>
                     <TableHeader>
+                        <TableHeaderCell>
+                            Направление
+                        </TableHeaderCell>
                         <TableHeaderCell>
                             Группа
                         </TableHeaderCell>
@@ -58,6 +60,9 @@ export function GroupCompany() {
                         </TableHeaderCell>
                     </TableHeader>
                     <TableRow>
+                        <TableCell>
+                            {data.location}
+                        </TableCell>
                         <TableCell>
                             {data.group}
                         </TableCell>
@@ -105,7 +110,7 @@ export function GroupCompany() {
 
                 </GridColumn>
                 <GridColumn>
-                    <Card>
+                    <Card fluid={true}>
                         <CardHeader>
                             Отношение покупок ко всем отправленным предложениям
                         </CardHeader>
@@ -128,19 +133,24 @@ export function GroupCompany() {
                     </Card>
                 </GridColumn>
                 <GridColumn>
-                    <Card>
+                    <Card fluid={true}>
                         <CardHeader>
-                            Отношение покупок от времени
+                            Покупки билетов среди мужчин и женщин
                         </CardHeader>
                         <CardContent>
                             <Image
-                                src="https://sun7-9.userapi.com/impg/f07vxn__Cl9OPQ03v-HNozB0724U3sqzWkZELg/ItF78iHCm-E.jpg?size=393x290&quality=96&proxy=1&sign=9c2874e76ed4b02e900ac8f436b7404c&type=album"/>
-
+                                size={"medium"}
+                                src="https://sun9-67.userapi.com/impg/Zi_WASt61BwEwtiJ6wi3V0l7CNmq99iXmSjddw/bBBU8gY-BtM.jpg?size=378x383&quality=96&proxy=1&sign=ea952d397205bca57079c411a7ef89f4&type=album" />
+                            Женщины совершили меньше покупок.
                         </CardContent>
-
                     </Card>
                 </GridColumn>
             </GridRow>
+
+            <GridRow>
+
+            </GridRow>
+
 
         </Grid>
 
