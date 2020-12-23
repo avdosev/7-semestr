@@ -8,9 +8,9 @@ import {
     Grid,
     GridColumn,
     GridRow,
-    Header,
+    Header, Icon,
     Image,
-    Input, List, ListIcon, ListItem, Message, MessageContent, MessageHeader, MessageItem, MessageList,
+    Input, List, ListIcon, ListItem, Message, MessageContent, MessageHeader, MessageItem, MessageList, Statistic,
     Table,
     TableCell, TableHeader, TableHeaderCell,
     TableRow
@@ -26,7 +26,7 @@ export function GroupCompany() {
     const data = getDataById(id) as GroupCompanyDTO
 
     return <Container className="upper">
-        <MainHeader />
+        <MainHeader/>
 
         <Grid columns={2}>
             <GridRow>
@@ -38,7 +38,7 @@ export function GroupCompany() {
                 </GridColumn>
             </GridRow>
             <GridRow>
-                <Table>
+                <Table style={{marginBottom: '20px'}}>
                     <TableHeader>
                         <TableHeaderCell>
                             Направление
@@ -76,17 +76,17 @@ export function GroupCompany() {
                             Низкая
                         </TableCell>
                         <TableCell positive={data.resulting > 75} negative={data.resulting < 25}>
-                            {data.resulting}%
+                            {data.resulting < 25 && <Icon name={"warning sign"}/>} {data.resulting}%
                         </TableCell>
                     </TableRow>
                 </Table>
             </GridRow>
-
             <GridRow columns={2}>
                 <GridColumn width={8}>
-                    <Card fluid={true} >
+                    <Card fluid={true}>
                         <CardHeader>
-                            Визуализации воронки для каждой группы
+                            Показать визуализацию воронки продаж
+                            <Dropdown style={{marginLeft: '5px'}} button={true}  defaultValue={0} options={getOptions(['для каждой группы', 'по гендеру'])} />
                         </CardHeader>
                         <CardContent>
                             <Image
@@ -96,10 +96,16 @@ export function GroupCompany() {
                                     Рекомендации
                                 </MessageHeader>
                                 <MessageList>
-                                    <MessageItem>Разработчики оформили мало покупок, необходимо отключить историческое посещение этого
-                                        места для этой группы.<Button content="Отключить" positive={true}/></MessageItem>
-                                    <MessageItem>Сварщики мало переходили на предложения, необходимо включить учет посещения этого места внутри
-                                        группы.<Button content="Включить" positive={true}/></MessageItem>
+                                    <MessageItem>Разработчики оформили мало покупок, необходимо отключить историческое
+                                        посещение этого
+                                        места для этой группы.
+                                        <br/>
+                                        <Button size={'tiny'} content="Отключить" positive={true}/></MessageItem>
+                                    <MessageItem>Сварщики мало переходили на предложения, необходимо включить учет
+                                        посещения этого места внутри
+                                        группы.
+                                        <br/>
+                                        <Button size={'tiny'} content="Включить" positive={true}/></MessageItem>
                                 </MessageList>
 
 
@@ -107,52 +113,64 @@ export function GroupCompany() {
 
                         </CardContent>
                     </Card>
-
                 </GridColumn>
                 <GridColumn>
+
                     <Card fluid={true}>
                         <CardHeader>
-                            Отношение покупок ко всем отправленным предложениям
+                            Статистика покупок билетов:
                         </CardHeader>
                         <CardContent>
+                            <Container textAlign={"center"}><Statistic label='Сегодняшние покупки' value='1' /> </Container>
+
                             <Image
-                                src="https://sun7-9.userapi.com/impg/f07vxn__Cl9OPQ03v-HNozB0724U3sqzWkZELg/ItF78iHCm-E.jpg?size=393x290&quality=96&proxy=1&sign=9c2874e76ed4b02e900ac8f436b7404c&type=album"/>
+                                src="https://sun9-12.userapi.com/impg/fVqWRxK1_eP7Z64fc61nNyuoxlX6_xuKxf19VA/je4O_1VGaD4.jpg?size=533x397&quality=96&proxy=1&sign=19c6000fe67bcdcff3d4d33f4a762d59&type=album" />
+
+                                <br />
+                            {/*<Message positive={true}>Сегодня было куплено 1 предложение! </Message>*/}
 
                         </CardContent>
 
                     </Card>
-                </GridColumn>
 
+            </GridColumn>
+        </GridRow>
 
-            </GridRow>
+        <GridRow>
+            <GridColumn>
+                <Card fluid={true}>
+                    <CardHeader>
+                        Отношение покупок ко всем отправленным предложениям
+                    </CardHeader>
+                    <CardContent>
+                        <Image
+                            src="https://sun7-9.userapi.com/impg/f07vxn__Cl9OPQ03v-HNozB0724U3sqzWkZELg/ItF78iHCm-E.jpg?size=393x290&quality=96&proxy=1&sign=9c2874e76ed4b02e900ac8f436b7404c&type=album"/>
 
-            <GridRow>
-                <GridColumn>
-                    <Card>
-                        Сегодня было куплено 1 предложение!
-                    </Card>
-                </GridColumn>
-                <GridColumn>
-                    <Card fluid={true}>
-                        <CardHeader>
-                            Покупки билетов среди мужчин и женщин
-                        </CardHeader>
-                        <CardContent>
-                            <Image
-                                size={"medium"}
-                                src="https://sun9-67.userapi.com/impg/Zi_WASt61BwEwtiJ6wi3V0l7CNmq99iXmSjddw/bBBU8gY-BtM.jpg?size=378x383&quality=96&proxy=1&sign=ea952d397205bca57079c411a7ef89f4&type=album" />
+                    </CardContent>
+                </Card>
+            </GridColumn>
+            <GridColumn>
+                <Card fluid={true}>
+                    <CardHeader>
+                        Покупки билетов среди мужчин и женщин
+                    </CardHeader>
+                    <CardContent>
+                        <Image
+                            size={"medium"}
+                            src="https://sun9-67.userapi.com/impg/Zi_WASt61BwEwtiJ6wi3V0l7CNmq99iXmSjddw/bBBU8gY-BtM.jpg?size=378x383&quality=96&proxy=1&sign=ea952d397205bca57079c411a7ef89f4&type=album"/>
+                        <br/>
                             Женщины совершили меньше покупок.
-                        </CardContent>
-                    </Card>
-                </GridColumn>
-            </GridRow>
+                    </CardContent>
+                </Card>
+            </GridColumn>
+        </GridRow>
 
-            <GridRow>
+        <GridRow>
 
-            </GridRow>
+        </GridRow>
 
 
-        </Grid>
+    </Grid>
 
-    </Container>
+</Container>
 }

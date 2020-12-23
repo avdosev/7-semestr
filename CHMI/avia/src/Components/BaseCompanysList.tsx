@@ -34,7 +34,7 @@ export function BaseCompaniesList(props: { isArchive: boolean, list: Array<Perso
         }),
         convertFunction: (cellValue, columnName) => {
 
-            return <>{cellValue < 25 && <Icon name={"warning sign"}/>} {cellValue}</>
+            return <>{cellValue < 25 && <Icon name={"warning sign"}/>} {cellValue}%</>
         }
     })
 
