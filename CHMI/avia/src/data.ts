@@ -109,6 +109,20 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
     },
     {
         id: 5,
+        location: "Россия-Нидерланды",
+        archive: false,
+        date : "20 декабря - 8 января",
+        group: groups[0],
+        label: "Участники этой группы часто используют это направление в это время",
+        participants: [
+            ...users
+                .filter((user) => user.group === groups[0])
+                .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
+        ],
+        resulting: 35,
+    },
+    {
+        id: 6,
         location: "Россия-США",
         archive: false,
         date : "20 декабря - 8 января",
@@ -123,7 +137,7 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
         resulting: 89,
     },
     {
-        id: 6,
+        id: 7,
         location: "Россия-Новая зеландия",
         date: "22 декабря - 1 января",
         archive: false,

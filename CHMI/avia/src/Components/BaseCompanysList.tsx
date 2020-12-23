@@ -18,7 +18,7 @@ export const getButtons = (isArchive: boolean) => (data: GroupCompanyDTO | Perso
         settingsColor = {color: "red"}
     }
     return <>
-        <Link to={url}>Статистика </Link>
+        <Link to={url}><Button icon={"line graph"}/> </Link>
         {!isArchive && <Link to={ClientRoutes.settings.get(data.id)}> <Button {...settingsColor} icon="settings"/> </Link>}
     </>
 }
@@ -70,7 +70,10 @@ export function BaseCompaniesList(props: { isArchive: boolean, list: Array<Perso
     headers.set('', {
         text: "Действия",
         emptyDataColumn: true,
-        convertFunction: getButtons(props.isArchive)
+        convertFunction: getButtons(props.isArchive),
+        cellProps: cellValue => {
+            return {width: 2}
+        }
     })
     const archiveList = props.list.filter((el) => props.isArchive ? el.archive : !el.archive)
 

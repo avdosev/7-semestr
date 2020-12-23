@@ -33,9 +33,10 @@ export function GroupCompany() {
                 <GridColumn>
                     <Header>Статистика кампании</Header>
                 </GridColumn>
-                <GridColumn>
-                    <Link to={ClientRoutes.companyParticipants.get(id)}>Посмотреть участников кампании</Link>
+                <GridColumn textAlign="right">
+                    <Link to={ClientRoutes.settings.get(id)} >Настройки</Link>
                 </GridColumn>
+
             </GridRow>
             <GridRow>
                 <Table style={{marginBottom: '20px'}}>
@@ -51,6 +52,9 @@ export function GroupCompany() {
                         </TableHeaderCell>
                         <TableHeaderCell>
                             Куплено предложений
+                        </TableHeaderCell>
+                        <TableHeaderCell>
+                            Участники
                         </TableHeaderCell>
                         <TableHeaderCell>
                             Релевантность кампании
@@ -73,6 +77,9 @@ export function GroupCompany() {
                             18 шт.
                         </TableCell>
                         <TableCell>
+                            <Link to={ClientRoutes.companyParticipants.get(id)}><Button icon="user" /></Link>
+                        </TableCell>
+                        <TableCell negative={true}>
                             Низкая
                         </TableCell>
                         <TableCell positive={data.resulting > 75} negative={data.resulting < 25}>
@@ -86,22 +93,22 @@ export function GroupCompany() {
                     <Card fluid={true}>
                         <CardHeader>
                             Показать визуализацию воронки продаж
-                            <Dropdown style={{marginLeft: '5px'}} button={true}  defaultValue={0} options={getOptions(['для каждой группы', 'по гендеру'])} />
+                            <Dropdown style={{marginLeft: '5px'}} button={true}  defaultValue={0} options={getOptions(['без фильтраций', 'по возрасту', 'по гендеру'])} />
                         </CardHeader>
                         <CardContent>
                             <Image
-                                src="https://sun9-75.userapi.com/impg/wKVCGuHI6qhso8znxNfkF_0nY0EigisSC_drcw/O-28uiXH-JE.jpg?size=482x313&quality=96&proxy=1&sign=7f2bcf4283acc0c4c2b94600786d9366&type=album"/>
+                                src="https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album" />
                             <Message>
                                 <MessageHeader>
                                     Рекомендации
                                 </MessageHeader>
                                 <MessageList>
-                                    <MessageItem>Разработчики оформили мало покупок, необходимо отключить историческое
+                                    <MessageItem>{data.group} оформили мало покупок, необходимо отключить историческое
                                         посещение этого
                                         места для этой группы.
                                         <br/>
                                         <Button size={'tiny'} content="Отключить" positive={true}/></MessageItem>
-                                    <MessageItem>Сварщики мало переходили на предложения, необходимо включить учет
+                                    <MessageItem>{data.group} мало переходили на предложения, необходимо включить учет
                                         посещения этого места внутри
                                         группы.
                                         <br/>

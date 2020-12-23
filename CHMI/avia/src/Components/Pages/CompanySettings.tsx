@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
-    Card, Container, Form, Grid, GridColumn, GridRow,
+    Card, Container, Dropdown, Form, Grid, GridColumn, GridRow,
     Header,
     Icon,
     Input,
@@ -12,11 +12,12 @@ import {
     TableCell,
     TableRow
 } from "semantic-ui-react";
-import {getDataById} from "../../data";
+import {getDataById, groups} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {CompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
 import {MainHeader} from "../Header";
+import {getOptions} from "../../utils";
 
 
 
@@ -58,11 +59,19 @@ export function CompanySettings() {
 
 
         Настройки алгоритма (изменять на свой риск, может повлиять на действия клиента)
+
+        <br />
+        <Container  className="checkboxFormFields" />
+        Выбрать группу:
+        <Dropdown style={{marginLeft: '10px'}} defaultValue={0} options={getOptions(groups)}/>
+
+
         <Form className="checkboxFormFields">
             <Form.Field>
                 <Radio
                     label='Учитывать историческое посещение этого места'
                     name='radioGroup'
+                    checked={true}
                     value=""
                 />
             </Form.Field>
@@ -79,6 +88,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Учитывать посещение этого места внутри группы'
+                    checked={true}
                     name='radioGroup'
                     value=""
                 />
@@ -96,6 +106,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Анализировать поиск по агрегаторам'
+                    checked={true}
                     name='radioGroup'
                     value=""
                 />
@@ -113,6 +124,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Включить подтверждение'
+                    checked={true}
                     name='radioGroup'
                     value=""
                 />
