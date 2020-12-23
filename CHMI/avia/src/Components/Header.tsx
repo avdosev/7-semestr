@@ -5,8 +5,11 @@ import React from "react";
 
 
 export function MainHeader() {
-    return <Container style={{marginBottom: '20px'}}>
-        <Link to={ClientRoutes.index}>Главная страница</Link>
+    return <div style={{marginBottom: '20px', marginTop: '10px'}}>
+        <Container>
+            <Link to={ClientRoutes.index}>Главная страница</Link>
+
+        </Container>
         < hr />
-    </Container>
+    </div>
 }

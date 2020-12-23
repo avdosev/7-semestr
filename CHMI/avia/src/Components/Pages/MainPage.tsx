@@ -11,7 +11,6 @@ import {MainHeader} from "../Header";
 export function MainPage() {
 
     return <Container className="upper">
-        <MainHeader />
         <Container textAlign="right">
             <Link to={ClientRoutes.archiveCompany}>Завершенные кампании </Link>
         </Container>

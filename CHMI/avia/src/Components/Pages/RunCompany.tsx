@@ -17,7 +17,6 @@ export function RunCompany() {
 
 
     return <Container className="upper">
-        <MainHeader />
 
         <Table>
             <TableRow>

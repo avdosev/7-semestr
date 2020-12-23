@@ -19,7 +19,6 @@ export function CompanyParticipants() {
     headers.set('group', {text: "Группа"})
 
     return <Container className="upper">
-        <MainHeader />
 
         <Header>{data.location}</Header>
         Участники рекламной кампании:

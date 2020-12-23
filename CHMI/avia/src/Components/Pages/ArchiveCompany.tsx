@@ -11,7 +11,6 @@ import {MainHeader} from "../Header";
 export function ArchiveCompany() {
 
     return <Container className="upper">
-        <MainHeader />
 
         <Link to={ClientRoutes.index}>Главная страница</Link>
 

@@ -27,7 +27,6 @@ export function PersonalCompany() {
     const process = degreesOfInvolvement.indexOf(data.user.degreeOfInvolvement) * 100 / degreesOfInvolvement.length + 25 // т.к. первая операция это уже 25%
 
     return <Container className="upper">
-        <MainHeader />
 
         <Header>{data.location}</Header>
 

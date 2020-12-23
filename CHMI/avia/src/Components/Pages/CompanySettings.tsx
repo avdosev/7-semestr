@@ -28,7 +28,6 @@ export function CompanySettings() {
     const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
 
     return <Container className="upper">
-        <MainHeader />
 
         <Header>{data.location}</Header>
 

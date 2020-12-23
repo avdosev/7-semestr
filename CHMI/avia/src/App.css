@@ -5,3 +5,17 @@
 .checkboxFormFields {
     margin-top: 40px;
 }
+
+body {
+    background-color: rgb(250, 248, 250) !important ;
+}
+
+.header {
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.shadowCard {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5) !important;
+}
