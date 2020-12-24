@@ -37,7 +37,7 @@ export function CompanySettings() {
                     <Header as={'h4'}>{data.group} </Header>
                 </GridColumn>
                 <GridColumn>
-                    <Card>
+                    <Card className="shadowCard" >
                         Дата кампании
                         <Input>{data.date} </Input>
                     </Card>
@@ -61,8 +61,8 @@ export function CompanySettings() {
 
         <br />
         <Container  className="checkboxFormFields" />
-        Выбрать группу:
-        <Dropdown style={{marginLeft: '10px'}} defaultValue={0} options={getOptions(groups)}/>
+        {/*Выбрать группу:*/}
+        {/*<Dropdown style={{marginLeft: '10px'}} defaultValue={0} options={getOptions(groups)}/>*/}
 
 
         <Form className="checkboxFormFields">

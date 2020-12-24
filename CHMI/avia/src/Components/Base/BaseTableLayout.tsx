@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {StrictTableCellProps, StrictTableProps, StrictTableRowProps, Table} from "semantic-ui-react";
+import {Card, StrictTableCellProps, StrictTableProps, StrictTableRowProps, Table} from "semantic-ui-react";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
 import {ButtonProps} from "semantic-ui-react/dist/commonjs/elements/Button/Button";
 import {convert, getCellProps, getMappingForCell} from "./BaseTableUtils";
@@ -17,7 +17,7 @@ class BaseTableLayout<T, U extends IBaseTableLayout<T>> extends React.Component<
 
     public render(): React.ReactElement {
         return (
-            <Table celled={true} {...this.props.strictTableProps} >
+            <Table className="shadowCard"  celled={true} {...this.props.strictTableProps} >
                 <Table.Header><Table.Row>{this.renderHeaders(this.props.headers)}</Table.Row></Table.Header>
                 <Table.Body>{this.renderBody(this.props.list)}</Table.Body>
             </Table>

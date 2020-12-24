@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {getDataById} from "../../data";
 import {Link, useParams} from "react-router-dom";
 import {
@@ -20,10 +20,20 @@ import {GroupCompanyDTO} from "../../Typings/Common";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {getOptions} from "../../utils";
 import {MainHeader} from "../Header";
+import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
 
 export function GroupCompany() {
     const {id} = useParams();
     const data = getDataById(id) as GroupCompanyDTO
+
+    const [img, setImg] = useState('https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album')
+
+    const options = ['без фильтраций', 'по возрасту', 'по гендеру']
+
+    const images = []
+    images.push('https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album')
+    images.push('')
+    images.push('https://sun9-55.userapi.com/impg/wFZcauM-BGQ0EAvrGIH_otPNB90-orIE8duSZQ/m9_PzODWssw.jpg?size=640x480&quality=96&proxy=1&sign=7c8ca8ffa615c861f81827ff77945509&type=album')
 
     return <Container className="upper">
 
@@ -39,7 +49,7 @@ export function GroupCompany() {
         </Grid>
 
         <Container textAlign={"center"}>
-            <Table style={{marginBottom: '40px', marginTop: '30px'}} textAlign={"center"}>
+            <Table className="shadowCard" style={{marginBottom: '40px', marginTop: '30px'}} textAlign={"center"}>
                 <TableHeader>
                     <TableHeaderCell>
                         Направление
@@ -92,11 +102,15 @@ export function GroupCompany() {
                         <CardHeader>
                             Показать визуализацию воронки продаж
                             <Dropdown style={{marginLeft: '5px'}} button={true} defaultValue={0}
-                                      options={getOptions(['без фильтраций', 'по возрасту', 'по гендеру'])}/>
+                                      onChange={(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+                                          const val = images[data.value]
+                                          setImg(val)
+                                      }}
+                                      options={getOptions(options)} />
                         </CardHeader>
                         <CardContent>
                             <Image
-                                src="https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album"/>
+                                src={img}/>
                             <Message>
                                 <MessageHeader>
                                     Рекомендации
@@ -122,7 +136,7 @@ export function GroupCompany() {
                 </GridColumn>
                 <GridColumn>
 
-                    <Card className="shadowCard"  fluid={true}>
+                    <Card className="shadowCard" fluid={true}>
                         <CardHeader>
                             Статистика покупок билетов:
                         </CardHeader>
@@ -145,7 +159,7 @@ export function GroupCompany() {
 
             <GridRow>
                 <GridColumn>
-                    <Card className="shadowCard"  fluid={true}>
+                    <Card className="shadowCard" fluid={true}>
                         <CardHeader>
                             Отношение покупок ко всем отправленным предложениям
                         </CardHeader>
@@ -157,7 +171,7 @@ export function GroupCompany() {
                     </Card>
                 </GridColumn>
                 <GridColumn>
-                    <Card className="shadowCard"  fluid={true}>
+                    <Card className="shadowCard" fluid={true}>
                         <CardHeader>
                             Покупки билетов среди мужчин и женщин
                         </CardHeader>
