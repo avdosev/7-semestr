@@ -97,15 +97,13 @@ class GameOfLife:
             return True
         
         if list(self.nextGeneration) == self.currentGeneration:
-            pass
-            # print("System in a stable position")   
-            # return True  
+            print("System in a stable position")   
+            return True  
         
         for i,gen in enumerate(self.historicalGenerations):
             if gen == self.currentGeneration:
-                pass
-                # print(f"Repeat on {i} iteration")
-                # return True
+                print(f"Repeat on {i} iteration")
+                return True
         self.historicalGenerations.append(self.currentGeneration)
         return False
 
@@ -145,12 +143,6 @@ class GameOfLife:
                     elif event.key == pygame.K_w:
                         breedCells = False
                         self.initGeneration(self.nextGeneration)
-                    elif event.key == pygame.K_k:
-                        print("System in a stable position") 
-                        done = True 
-                    elif event.key == pygame.K_l:
-                        print(f"Repeat state")
-                        done = True
 
 
             if breedCells:
@@ -162,7 +154,13 @@ class GameOfLife:
 
             # Limit the game to 30 frames per second
             clock.tick(60)
-            self.currentGeneration = list(self.nextGeneration)
+            self.currentGeneration = []
+
+            tempGen = []
+            for i in self.nextGeneration:
+                tempGen.append(i.copy())
+
+            self.currentGeneration = tempGen
 
             # print(self.currentGeneration)
 

@@ -33,7 +33,7 @@ export function GroupCompany() {
     const images = []
     images.push('https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album')
     images.push('')
-    images.push('https://sun9-55.userapi.com/impg/wFZcauM-BGQ0EAvrGIH_otPNB90-orIE8duSZQ/m9_PzODWssw.jpg?size=640x480&quality=96&proxy=1&sign=7c8ca8ffa615c861f81827ff77945509&type=album')
+    images.push('https://sun9-71.userapi.com/impg/oXLO6e3T4rWI1onHpk_6N8lKfZ0kLF24-Nwqmg/MPcy8EOpHw4.jpg?size=640x480&quality=96&proxy=1&sign=276da00a1ee7576c55341939bb9543c0&type=album')
 
     return <Container className="upper">
 
