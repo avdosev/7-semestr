@@ -1,9 +1,19 @@
+import sys
+from Cell import Empty
+import random
+import curses
 
 
 class WorldState:
     data = []
+    stdscr = None
+    fieldHeight = 5
+
     def __init__(self, worldStateArray):
         self.data = worldStateArray
+        self.stdscr = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
     
     def moveUnit(self, oldX, oldY, newX, newY):
         resX = 0
@@ -26,9 +36,10 @@ class WorldState:
         unit = self.data[oldX][oldY] 
         self.data[oldX][oldY] = Empty()
         self.data[resX][resY] = unit
-        print(f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
+        self.printLine(self.fieldHeight + 1, f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
 
-
+    def printLine(self, row, printableLine):
+        self.stdscr.addstr(row, 0, printableLine)
 
     def hasNearEnemy(self, row, cell):
         for i in range(-1, 2):
@@ -45,12 +56,13 @@ class WorldState:
         return None
 
     def die(self, row, cell):
+        self.printLine(self.fieldHeight + 1, f"Dyied {self.data[row][cell].impl}")
         self.data[row][cell] = Empty()
-        print(f"Dyied {self.data[row][cell].impl}")
 
     def attack(self, row, cell):
         self.data[row][cell].health -= 1
-        print(f"Клетка {self.data[row][cell].impl} атакована. Здоровье: {self.data[row][cell].health}")
+        self.printLine(self.fieldHeight + 1, f"Клетка {self.data[row][cell].impl} атакована. Здоровье: {self.data[row][cell].health}")
+
 
     def getFrom(self, oldX, oldY, newX, newY):
         if (abs(newX - oldX) <= 1 and abs(newY - oldY) <= 0):
@@ -58,11 +70,11 @@ class WorldState:
             unit = self.data[oldX][oldY]
             if (item.impl == "+"):
                 unit.health += 3
-                print(f"{unit.impl} вылечил 3 здоровья, его здоровье")
+                self.printLine(self.fieldHeight + 1, f"{unit.impl} вылечил 3 здоровья, его здоровье")
             elif (item.impl == "O"):
                 cost = random.randint(1, 3)
                 unit.points += cost
-                print(f"{unit.impl} подобрал монетку {cost}, его счет: {unit.points}")    
+                self.printLine(self.fieldHeight + 1, f"{unit.impl} подобрал {cost}, его счет: {unit.points}")    
         
         self.moveUnit(oldX, oldY, newX, newY)
         
@@ -79,7 +91,9 @@ class WorldState:
         return None
     
     def print(self):
-        for row in self.data:
-            for cell in row:
-                print(f"\'{cell.impl}\'", end=", ")
-            print()
+            for i, row in enumerate(self.data):
+                printableRow = ""
+                for cell in row:
+                    printableRow += f"\'{cell.impl}\', "
+                self.stdscr.addstr(i, 0, printableRow)
+            self.stdscr.refresh()
