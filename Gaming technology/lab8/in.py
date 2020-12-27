@@ -45,41 +45,24 @@ class WorldState:
         self.data = worldStateArray
     
     def moveUnit(self, oldX, oldY, newX, newY):
+        resX = 0
+        resY = 0
+        if (newX < oldX):
+            resX = oldX-1
+        else:
+            resX = oldX + 1
+
+        if (newY < oldY):
+            resY = oldY-1
+        else:
+            resY = oldY + 1
+
         unit = self.data[oldX][oldY] 
         self.data[oldX][oldY] = Empty()
-        self.data[newX][newY] = unit
+        self.data[resX][resY] = unit
+        print(f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
 
-    def moveDown(self, row, cell):
-        if row+1 < len(self.data):
-            if self.data[row+1][cell].isEmpty():
-                self.moveUnit(row, cell, row+1, cell)
-            elif self.data[row+1][cell].isIncludesItem():
-                self.getFrom(row, cell, row+1, cell)
-        return True
 
-    def moveUp(self, row, cell):       
-        if row -1 >= 0:
-            if self.data[row-1][cell].isEmpty():
-                self.moveUnit(row, cell, row-1, cell)
-            elif self.data[row-1][cell].isIncludesItem():
-                self.getFrom(row, cell, row-1, cell)
-        return True
-
-    def moveRight(self, row, cell):
-        if cell + 1 < len(self.data[row]):
-            if self.data[row][cell+1].isEmpty():
-                self.moveUnit(row, cell, row, cell+1)
-            elif self.data[row][cell+1].isIncludesItem():
-                self.getFrom(row, cell, row, cell+1)
-        return True
-
-    def moveLeft(self, row, cell):
-        if cell -1 >= 0:
-            if self.data[row][cell-1].isEmpty():
-                self.moveUnit(row, cell, row, cell-1)
-            elif self.data[row][cell-1].isIncludesItem():
-                self.getFrom(row, cell, row, cell-1)
-        return True
 
     def hasNearEnemy(self, row, cell):
         for i in range(1, 4):
@@ -159,8 +142,8 @@ while True:
                     worldState.attack(*attackDirection)                  
                 else:
                     itemDirection = worldState.hasItemNear(row, cell)
-                    if
-                    print(itemDirection)
+                    if (itemDirection):
+                        worldState.moveUnit(row, cell, *itemDirection)
 
                 time.sleep(1)
                 worldState.print()
