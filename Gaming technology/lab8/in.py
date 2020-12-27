@@ -34,6 +34,7 @@ class Unit(Cell):
     
     def __init__(self, implName):
         self.impl = implName
+        self.health = 10
     
     def move(self, xdiff, ydiff):
         pass
@@ -78,16 +79,22 @@ class WorldState:
 
     def hasNearEnemy(self, row, cell):
         for i in range(1, 4):
-            if row+i < len(worldState.data):
-                if (worldState.data[row+i][cell].isUnit()):
+            if row+i < len(self.data):
+                if (self.data[row+i][cell].isUnit()):
                     return (row+i, cell)
 
-            if cell + i < len(worldState.data[row]):
-                if (worldState.data[row][cell+i].isUnit()):
-                    return (row+i, cell+i)
+            if cell + i < len(self.data[row]):
+                if (self.data[row][cell+i].isUnit()):
+                    return (row, cell+i)
         return None
 
+    def die(self, row, cell):
+        self.data[row][cell] = Empty()
+        print("Dying")
 
+    def attack(self, row, cell):
+        self.data[row][cell].health -= 1
+        print(f"Клетка {row}/{cell} атакована. Здоровье: {self.data[row][cell].health}")
 
     def getFrom(self, oldX, oldY, newX, newY):
         unit = self.data[oldX][oldY] 
@@ -114,7 +121,7 @@ units = list(string.digits)[1:]
 worldState1 = [
     [Empty(), Unit("1"), Empty(), Empty(), Coin(), Empty()],
     [Empty(), Empty(), Empty(), Empty(), Coin(), Coin()],
-    [Empty(), Wall(), Unit("2"), Empty(), Empty(), Empty()],
+    [Empty(), Wall(), Unit("2"), Unit("3"), Empty(), Empty()],
     [Empty(), Wall(), Empty(), Empty(), Coin(), Empty()],
     [Empty(), Coin(), Empty(), Empty(), Empty(), Empty()]
 ]
@@ -129,10 +136,12 @@ while True:
             currentUnit = worldState.data[row][cell]
 
             if currentUnit.isUnit():
-                movingDirection = worldState.hasNearEnemy():
-                
-                    
+                if currentUnit.health <= 0:
+                    worldState.die(row, cell)
 
+                movingDirection = worldState.hasNearEnemy(row, cell)
+                if (movingDirection):
+                    worldState.attack(*movingDirection)                  
 
 
                 time.sleep(1)
