@@ -48,7 +48,47 @@ class WorldState:
         self.data[oldX][oldY] = Empty()
         self.data[newX][newY] = unit
 
+    def moveDown(self, row, cell):
+        if row+1 < len(self.data):
+            if self.data[row+1][cell].isEmpty():
+                self.moveUnit(row, cell, row+1, cell)
+            elif self.data[row+1][cell].isIncludesItem():
+                self.getFrom(row, cell, row+1, cell)
         
+    def moveUp(self, row, cell):       
+        if row -1 >= 0:
+            if self.data[row-1][cell].isEmpty():
+                self.moveUnit(row, cell, row-1, cell)
+            elif self.data[row-1][cell].isIncludesItem():
+                self.getFrom(row, cell, row-1, cell)
+
+    def moveRight(self, row, cell):
+        if cell + 1 < len(self.data[row]):
+            if self.data[row][cell+1].isEmpty():
+                self.moveUnit(row, cell, row, cell+1)
+            elif self.data[row][cell+1].isIncludesItem():
+                self.getFrom(row, cell, row, cell+1)
+
+    def moveLeft(self, row, cell):
+        if cell -1 >= 0:
+            if self.data[row][cell-1].isEmpty():
+                self.moveUnit(row, cell, row, cell-1)
+            elif self.data[row][cell-1].isIncludesItem():
+                self.getFrom(row, cell, row, cell-1)
+
+    def hasNearEnemy(self, row, cell):
+        for i in range(1, 4):
+            if row+i < len(worldState.data):
+                if (worldState.data[row+i][cell].isUnit()):
+                    return (row+i, cell)
+
+            if cell + i < len(worldState.data[row]):
+                if (worldState.data[row][cell+i].isUnit()):
+                    return (row+i, cell+i)
+        return None
+
+
+
     def getFrom(self, oldX, oldY, newX, newY):
         unit = self.data[oldX][oldY] 
         self.data[oldX][oldY] = Empty()
@@ -89,30 +129,12 @@ while True:
             currentUnit = worldState.data[row][cell]
 
             if currentUnit.isUnit():
-                if row+1 < len(worldState.data):
-                    if worldState.data[row+1][cell].isEmpty():
-                        worldState.moveUnit(row, cell, row+1, cell)
-                    if worldState.data[row+1][cell].isIncludesItem():
-                        worldState.moveUnit(row, cell, row+1, cell)
-            
-                if row -1 >= 0:
-                    if worldState.data[row-1][cell].isEmpty():
-                        worldState.moveUnit(row, cell, row-1, cell)
-                    if worldState.data[row-1][cell].isIncludesItem():
-                        worldState.moveUnit(row, cell, row-1, cell)
+                movingDirection = worldState.hasNearEnemy():
+                
+                    
 
 
-                if cell + 1 < len(worldState.data[row]):
-                    if worldState.data[row][cell+1].isEmpty():
-                        worldState.moveUnit(row, cell, row, cell+1)
-                    if worldState.data[row][cell+1].isIncludesItem():
-                        worldState.moveUnit(row, cell, row, cell+1)
 
-                if cell -1 >= 0:
-                    if worldState.data[row][cell-1].isEmpty():
-                        worldState.moveUnit(row, cell, row, cell-1)
-                    if worldState.data[row][cell-1].isIncludesItem():
-                        worldState.moveUnit(row, cell, row, cell-1)
-    time.sleep(1)
-    worldState.print()
+                time.sleep(1)
+                worldState.print()
 
