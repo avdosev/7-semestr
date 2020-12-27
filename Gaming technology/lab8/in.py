@@ -55,13 +55,15 @@ class WorldState:
                 self.moveUnit(row, cell, row+1, cell)
             elif self.data[row+1][cell].isIncludesItem():
                 self.getFrom(row, cell, row+1, cell)
-        
+        return True
+
     def moveUp(self, row, cell):       
         if row -1 >= 0:
             if self.data[row-1][cell].isEmpty():
                 self.moveUnit(row, cell, row-1, cell)
             elif self.data[row-1][cell].isIncludesItem():
                 self.getFrom(row, cell, row-1, cell)
+        return True
 
     def moveRight(self, row, cell):
         if cell + 1 < len(self.data[row]):
@@ -69,6 +71,7 @@ class WorldState:
                 self.moveUnit(row, cell, row, cell+1)
             elif self.data[row][cell+1].isIncludesItem():
                 self.getFrom(row, cell, row, cell+1)
+        return True
 
     def moveLeft(self, row, cell):
         if cell -1 >= 0:
@@ -76,6 +79,7 @@ class WorldState:
                 self.moveUnit(row, cell, row, cell-1)
             elif self.data[row][cell-1].isIncludesItem():
                 self.getFrom(row, cell, row, cell-1)
+        return True
 
     def hasNearEnemy(self, row, cell):
         for i in range(1, 4):
@@ -90,11 +94,11 @@ class WorldState:
 
     def die(self, row, cell):
         self.data[row][cell] = Empty()
-        print("Dying")
+        print(f"Dyied {self.data[row][cell].impl}")
 
     def attack(self, row, cell):
         self.data[row][cell].health -= 1
-        print(f"Клетка {row}/{cell} атакована. Здоровье: {self.data[row][cell].health}")
+        print(f"Клетка {self.data[row][cell].impl} атакована. Здоровье: {self.data[row][cell].health}")
 
     def getFrom(self, oldX, oldY, newX, newY):
         unit = self.data[oldX][oldY] 
@@ -102,6 +106,16 @@ class WorldState:
         self.data[newX][newY] = unit
         # а также еще сделать эффект
         
+    def hasItemNear(self, row, cell):
+        for i in range(1, 4):
+            if row+i < len(self.data):
+                if (self.data[row+i][cell].isIncludesItem()):
+                    return (row+i, cell)
+
+            if cell + i < len(self.data[row]):
+                if (self.data[row][cell+i].isIncludesItem()):
+                    return (row, cell+i)
+        return None
     
     def print(self):
         print("Стейт")
@@ -136,13 +150,17 @@ while True:
             currentUnit = worldState.data[row][cell]
 
             if currentUnit.isUnit():
+
                 if currentUnit.health <= 0:
                     worldState.die(row, cell)
 
-                movingDirection = worldState.hasNearEnemy(row, cell)
-                if (movingDirection):
-                    worldState.attack(*movingDirection)                  
-
+                attackDirection = worldState.hasNearEnemy(row, cell)
+                if (attackDirection):
+                    worldState.attack(*attackDirection)                  
+                else:
+                    itemDirection = worldState.hasItemNear(row, cell)
+                    if
+                    print(itemDirection)
 
                 time.sleep(1)
                 worldState.print()
