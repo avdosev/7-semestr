@@ -5,7 +5,9 @@ class Cell:
     def isEmpty(self):
         return self.impl == " "
     def isIncludesItem(self):
-        return self.impl == "+" or self.impl == "O"
+        return self.impl == "O"
+    def isIncludesHealer(self):
+        return self.impl == "+"  
 
 class Empty(Cell):
     impl = " "

@@ -1,0 +1,1 @@
+fullHealth = 10

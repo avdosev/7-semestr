@@ -7,11 +7,12 @@ import curses
 class WorldState:
     data = []
     stdscr = None
-    fieldHeight = 5
+    fieldHeight = 0
 
     def __init__(self, worldStateArray):
         self.data = worldStateArray
         self.stdscr = curses.initscr()
+        self.fieldHeight = len(worldStateArray)
         curses.noecho()
         curses.cbreak()
     
@@ -36,9 +37,11 @@ class WorldState:
         unit = self.data[oldX][oldY] 
         self.data[oldX][oldY] = Empty()
         self.data[resX][resY] = unit
-        self.printLine(self.fieldHeight + 1, f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
+        self.printLine(f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
 
-    def printLine(self, row, printableLine):
+    def printLine(self, printableLine, row=None):
+        if (row is None): 
+            row = self.fieldHeight + 1
         self.stdscr.addstr(row, 0, printableLine)
 
     def hasNearEnemy(self, row, cell):
@@ -56,12 +59,12 @@ class WorldState:
         return None
 
     def die(self, row, cell):
-        self.printLine(self.fieldHeight + 1, f"Dyied {self.data[row][cell].impl}")
+        self.printLine(f"Dyied {self.data[row][cell].impl}")
         self.data[row][cell] = Empty()
 
     def attack(self, row, cell):
         self.data[row][cell].health -= 1
-        self.printLine(self.fieldHeight + 1, f"Клетка {self.data[row][cell].impl} атакована. Здоровье: {self.data[row][cell].health}")
+        self.printLine(f"Клетка {self.data[row][cell].impl} атакована. Здоровье: {self.data[row][cell].health}")
 
 
     def getFrom(self, oldX, oldY, newX, newY):
@@ -70,30 +73,45 @@ class WorldState:
             unit = self.data[oldX][oldY]
             if (item.impl == "+"):
                 unit.health += 3
-                self.printLine(self.fieldHeight + 1, f"{unit.impl} вылечил 3 здоровья, его здоровье")
+                self.printLine(f"{unit.impl} вылечил 3 здоровья, его здоровье")
             elif (item.impl == "O"):
                 cost = random.randint(1, 3)
                 unit.points += cost
-                self.printLine(self.fieldHeight + 1, f"{unit.impl} подобрал {cost}, его счет: {unit.points}")    
+                self.printLine(f"{unit.impl} подобрал {cost}, его счет: {unit.points}")    
         
         self.moveUnit(oldX, oldY, newX, newY)
         
         
     def hasItemNear(self, row, cell):
-        for i in range(1, 4):
+        return self.hasObjectNear(row, cell, False)
+    
+    def hasHealerNear(self, row, cell):
+        return self.hasObjectNear(row, cell, True)
+
+    def hasObjectNear(self, row, cell, isSearchHealer):
+        for i in range(-1, 3):
+            if i == 0:
+                continue
             if row+i < len(self.data):
-                if (self.data[row+i][cell].isIncludesItem()):
+                operation = None
+                if (isSearchHealer):
+                    operation = self.data[row+i][cell].isIncludesHealer()
+                else:
+                    operation = self.data[row+i][cell].isIncludesItem()
+                
+                if (operation):
                     return (row+i, cell)
 
             if cell + i < len(self.data[row]):
                 if (self.data[row][cell+i].isIncludesItem()):
                     return (row, cell+i)
         return None
+
     
     def print(self):
-            for i, row in enumerate(self.data):
-                printableRow = ""
-                for cell in row:
-                    printableRow += f"\'{cell.impl}\', "
-                self.stdscr.addstr(i, 0, printableRow)
-            self.stdscr.refresh()
+        for i, row in enumerate(self.data):
+            printableRow = ""
+            for cell in row:
+                printableRow += f"{cell.impl} "
+            self.stdscr.addstr(i+1, 0, printableRow)
+        self.stdscr.refresh()
