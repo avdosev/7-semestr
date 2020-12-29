@@ -34,10 +34,11 @@ class WorldState:
             resY = oldY
         
 
-        unit = self.data[oldX][oldY] 
-        self.data[oldX][oldY] = Empty()
-        self.data[resX][resY] = unit
-        self.printLine(f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
+        if (self.data[resX][resY].isEmpty()):
+            unit = self.data[oldX][oldY] 
+            self.data[oldX][oldY] = Empty()
+            self.data[resX][resY] = unit
+            self.printLine(f"{unit.impl} переместился с {oldX}:{oldY} на {resX}:{resY}")
 
     def printLine(self, printableLine, row=None):
         if (row is None): 
@@ -45,7 +46,7 @@ class WorldState:
         self.stdscr.addstr(row, 0, printableLine)
 
     def hasNearEnemy(self, row, cell):
-        for i in range(-1, 2):
+        for i in range(-3, 6):
             if i == 0:
                 continue
 
@@ -89,7 +90,7 @@ class WorldState:
         return self.hasObjectNear(row, cell, True)
 
     def hasObjectNear(self, row, cell, isSearchHealer):
-        for i in range(-1, 3):
+        for i in range(-3, 6):
             if i == 0:
                 continue
             if row+i < len(self.data):
@@ -98,12 +99,18 @@ class WorldState:
                     operation = self.data[row+i][cell].isIncludesHealer()
                 else:
                     operation = self.data[row+i][cell].isIncludesItem()
-                
+            
                 if (operation):
                     return (row+i, cell)
 
             if cell + i < len(self.data[row]):
-                if (self.data[row][cell+i].isIncludesItem()):
+                operation = None
+                if (isSearchHealer):
+                    operation = self.data[row][cell+i].isIncludesHealer()
+                else:
+                    operation = self.data[row][cell+i].isIncludesItem()
+                
+                if (operation):
                     return (row, cell+i)
         return None
 
