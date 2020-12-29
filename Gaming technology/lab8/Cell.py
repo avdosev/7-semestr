@@ -3,7 +3,7 @@ class Cell:
     def isUnit(self):
         return self.impl.isdigit()
     def isEmpty(self):
-        return self.impl == " "
+        return self.impl != "!" or self.impl.isdigit()   
     def isIncludesItem(self):
         return self.impl == "O"
     def isIncludesHealer(self):

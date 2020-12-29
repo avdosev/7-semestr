@@ -12,14 +12,17 @@ worldState1 = [
     [Wall(), Empty(), Wall(), Unit("2"), Unit("3"), Empty(), Empty(), Empty(), Empty(), Empty(), Wall()],
     [Wall(), Empty(), Wall(), Empty(), Empty(), Coin(), Empty(), Empty(), Empty(), Empty(), Wall()],
     [Wall(), Empty(), Coin(), Empty(), Empty(), Healer(), Empty(), Empty(), Empty(), Empty(), Wall()],
-    [Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall()],
+    [Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Unit("1"), Empty(), Empty(), Wall()],
     [Wall(), Coin(), Empty(), Empty(), Empty(), Empty(), Coin(), Empty(), Empty(), Empty(), Wall()],
-    [Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Unit("1"), Empty(), Wall()],
+    [Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Coin(), Empty(), Wall()],
     [Wall(), Unit("4"), Empty(), Empty(), Empty(), Empty(), Healer(), Empty(), Empty(), Empty(), Wall()],
     [Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall(), Wall()],    
 
 ]
 
+def logState(ws):
+    time.sleep(1)
+    ws.print()
 
 if __name__ == "__main__":
 
@@ -43,25 +46,27 @@ if __name__ == "__main__":
                             healerDirection = worldState.hasHealerNear(row, cell)
                             if (healerDirection):
                                 worldState.getFrom(row, cell, *healerDirection)
+                                logState(worldState)
                                 continue
 
                         attackDirection = worldState.hasNearEnemy(row, cell)
                         if (attackDirection):
-                            worldState.attack(*attackDirection)                  
+                            worldState.attack(*attackDirection) 
+                            logState(worldState)                 
                             continue
 
                         itemDirection = worldState.hasItemNear(row, cell)
                         if (itemDirection):
                             worldState.getFrom(row, cell, *itemDirection)
+                            logState(worldState)
                             continue
 
                         if (cell + 1 < len(worldState.data[row]) + 1):
                             worldState.moveUnit(row, cell, row, cell+1)
                         else:
                             worldState.moveUnit(row, cell, row, cell-1)
+                        logState(worldState)
 
-                        time.sleep(1)
-                        worldState.print()
         finally:
             curses.echo()
             curses.nocbreak()

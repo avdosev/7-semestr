@@ -43,10 +43,13 @@ class WorldState:
     def printLine(self, printableLine, row=None):
         if (row is None): 
             row = self.fieldHeight + 1
+        # print(printableLine)
+        self.stdscr.clrtobot()
         self.stdscr.addstr(row, 0, printableLine)
+        self.stdscr.refresh()
 
     def hasNearEnemy(self, row, cell):
-        for i in range(-3, 6):
+        for i in range(-3, 4):
             if i == 0:
                 continue
 
@@ -69,7 +72,7 @@ class WorldState:
 
 
     def getFrom(self, oldX, oldY, newX, newY):
-        if (abs(newX - oldX) <= 1 and abs(newY - oldY) <= 0):
+        if (abs(newX - oldX) <= 0 and abs(newY - oldY) <= 0):
             item = self.data[newX][newY]
             unit = self.data[oldX][oldY]
             if (item.impl == "+"):
@@ -78,6 +81,7 @@ class WorldState:
             elif (item.impl == "O"):
                 cost = random.randint(1, 3)
                 unit.points += cost
+                item = Empty()
                 self.printLine(f"{unit.impl} подобрал {cost}, его счет: {unit.points}")    
         
         self.moveUnit(oldX, oldY, newX, newY)
@@ -90,6 +94,7 @@ class WorldState:
         return self.hasObjectNear(row, cell, True)
 
     def hasObjectNear(self, row, cell, isSearchHealer):
+        # сначала ищем по прямым линиям от объекта, потом везде
         for i in range(-3, 6):
             if i == 0:
                 continue
@@ -110,6 +115,13 @@ class WorldState:
                 else:
                     operation = self.data[row][cell+i].isIncludesItem()
                 
+            if row + i < len(self.data) and cell + i < len(self.data[row]):
+                operation = None
+                if (isSearchHealer):
+                    operation = self.data[row+i][cell+i].isIncludesHealer()
+                else:
+                    operation = self.data[row+i][cell+i].isIncludesItem()
+
                 if (operation):
                     return (row, cell+i)
         return None
@@ -120,5 +132,7 @@ class WorldState:
             printableRow = ""
             for cell in row:
                 printableRow += f"{cell.impl} "
+            #     print(printableRow, end=" ")
+            # print()
             self.stdscr.addstr(i+1, 0, printableRow)
         self.stdscr.refresh()
