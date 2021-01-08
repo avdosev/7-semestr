@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {getDataById} from "../../data";
+import {data, getDataById} from "../../data";
 import {Link, useParams} from "react-router-dom";
 import {
     Button,
@@ -24,7 +24,7 @@ import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dr
 
 export function GroupCompany() {
     const {id} = useParams();
-    const data = getDataById(id) as GroupCompanyDTO
+    const [currentCompany, setData] = useState(getDataById(id) as GroupCompanyDTO)
 
     const [img, setImg] = useState('https://sun9-72.userapi.com/impg/_GupIy0zhpD83QvZ7CHctVFptiY0cYz5XLgLWQ/ZV8ShWeCmZA.jpg?size=556x434&quality=96&proxy=1&sign=3672ba9a4bdd13eed248181d4b17508e&type=album')
 
@@ -44,9 +44,11 @@ export function GroupCompany() {
                 </GridColumn>
                 <GridColumn textAlign="right">
                     <Link to={ClientRoutes.settings.get(id)}>Настройки</Link>
+                    <Button style={{marginLeft: '30px'}} content="Завершить кампанию"/>
                 </GridColumn>
             </GridRow>
         </Grid>
+
 
         <Container textAlign={"center"}>
             <Table className="shadowCard" style={{marginBottom: '40px', marginTop: '30px'}} textAlign={"center"}>
@@ -73,13 +75,13 @@ export function GroupCompany() {
                 </TableHeader>
                 <TableRow>
                     <TableCell>
-                        {data.location}
+                        {currentCompany.location}
                     </TableCell>
                     <TableCell>
-                        {data.group}
+                        {currentCompany.group}
                     </TableCell>
                     <TableCell>
-                        {data.date}
+                        {currentCompany.date}
                     </TableCell>
                     <TableCell>
                         18 шт.
@@ -87,8 +89,8 @@ export function GroupCompany() {
                     <TableCell>
                         <Link to={ClientRoutes.companyParticipants.get(id)}><Button icon="user"/></Link>
                     </TableCell>
-                    <TableCell positive={data.resulting > 75} negative={data.resulting < 25}>
-                        {data.resulting < 25 && <Icon name={"warning sign"}/>} {data.resulting}%
+                    <TableCell positive={currentCompany.resulting > 75} negative={currentCompany.resulting < 25}>
+                        {currentCompany.resulting < 25 && <Icon name={"warning sign"}/>} {currentCompany.resulting}%
                     </TableCell>
                 </TableRow>
             </Table>
@@ -106,7 +108,7 @@ export function GroupCompany() {
                                           const val = images[data.value]
                                           setImg(val)
                                       }}
-                                      options={getOptions(options)} />
+                                      options={getOptions(options)}/>
                         </CardHeader>
                         <CardContent>
                             <Image
@@ -115,17 +117,52 @@ export function GroupCompany() {
                                 <MessageHeader>
                                     Рекомендации
                                 </MessageHeader>
+                                {
+                                    !data[id].settings.isHistoricalVisit && data[id].settings.isGroupVisit &&
+                                        <Message positive={true}>Действия не требуются</Message>
+                                }
                                 <MessageList>
-                                    <MessageItem>{data.group} оформили мало покупок, необходимо отключить историческое
-                                        посещение этого
-                                        места для этой группы.
-                                        <br/>
-                                        <Button size={'tiny'} content="Отключить" positive={true}/></MessageItem>
-                                    <MessageItem>{data.group} мало переходили на предложения, необходимо включить учет
-                                        посещения этого места внутри
-                                        группы.
-                                        <br/>
-                                        <Button size={'tiny'} content="Включить" positive={true}/></MessageItem>
+
+                                    {
+                                        data[id].settings.isHistoricalVisit &&
+                                        <MessageItem>{currentCompany.group} оформили мало покупок, необходимо отключить
+                                            историческое
+                                            посещение этого
+                                            места для этой группы.
+                                            <br/>
+                                            <Button size={'tiny'} onClick={() => {
+                                                data[id].settings.isHistoricalVisit = false;
+                                                setData({
+                                                    ...currentCompany,
+                                                    settings: {
+                                                        ...currentCompany.settings,
+                                                        isHistoricalVisit: false
+                                                    }
+                                                })
+                                            }} content="Отключить" positive={true}/>
+                                        </MessageItem>
+                                    }
+
+                                    {
+                                        !data[id].settings.isGroupVisit &&
+                                        <MessageItem>{currentCompany.group} мало переходили на предложения, необходимо включить
+                                            учет
+                                            посещения этого места внутри
+                                            группы.
+                                            <br/>
+                                            <Button size={'tiny'} onClick={() => {
+                                                data[id].settings.isGroupVisit = true;
+                                                console.log(data)
+                                                setData({
+                                                    ...currentCompany,
+                                                    settings: {
+                                                        ...currentCompany.settings,
+                                                        isGroupVisit: true
+                                                    }
+                                                })
+                                            }} content="Включить" positive={true}/></MessageItem>
+                                    }
+
                                 </MessageList>
 
 

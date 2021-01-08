@@ -12,12 +12,20 @@ export type User = {
     group: string
 }
 
+export type Settings = {
+    isHistoricalVisit: boolean
+    isGroupVisit: boolean
+    isAggregatorUse: boolean
+    isConfirmNeeded: boolean
+}
+
 export interface CompanyDTO {
     id: number
     location: string,
     date: string,
     archive: boolean
     resulting: number // от 0 до 100
+    settings: Settings
 }
 
 export interface UserInCompany extends User {

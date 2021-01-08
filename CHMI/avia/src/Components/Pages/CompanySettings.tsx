@@ -15,7 +15,7 @@ import {
 import {getDataById, groups} from "../../data";
 import BaseTableLayout from "../Base/BaseTableLayout";
 import {HeadersBaseSettings} from "../../Typings/TableTypes";
-import {CompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
+import {CompanyDTO, GroupCompanyDTO, PersonalCompanyDetailDTO} from "../../Typings/Common";
 import {MainHeader} from "../Header";
 import {getOptions} from "../../utils";
 
@@ -25,7 +25,6 @@ export function CompanySettings() {
     const { id } = useParams();
     const data = getDataById(id)!
 
-    const headers: HeadersBaseSettings<PersonalCompanyDetailDTO> = new Map()
 
     return <Container className="upper">
 
@@ -34,7 +33,7 @@ export function CompanySettings() {
         <Grid columns={2}>
             <GridRow>
                 <GridColumn>
-                    <Header as={'h4'}>{data.group} </Header>
+                    <Header as={'h4'}>{'group' in data ? data.group : data.user.name} </Header>
                 </GridColumn>
                 <GridColumn>
                     <Card className="shadowCard" >
@@ -61,16 +60,13 @@ export function CompanySettings() {
 
         <br />
         <Container  className="checkboxFormFields" />
-        {/*Выбрать группу:*/}
-        {/*<Dropdown style={{marginLeft: '10px'}} defaultValue={0} options={getOptions(groups)}/>*/}
-
 
         <Form className="checkboxFormFields">
             <Form.Field>
                 <Radio
                     label='Учитывать историческое посещение этого места'
                     name='radioGroup'
-                    checked={true}
+                    checked={data.settings.isHistoricalVisit}
                     value=""
                 />
             </Form.Field>
@@ -79,6 +75,7 @@ export function CompanySettings() {
                     label='Не учитывать'
                     name='radioGroup'
                     value=''
+                    checked={!data.settings.isHistoricalVisit}
                 />
             </Form.Field>
         </Form>
@@ -87,7 +84,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Учитывать посещение этого места внутри группы'
-                    checked={true}
+                    checked={data.settings.isGroupVisit}
                     name='radioGroup'
                     value=""
                 />
@@ -97,6 +94,8 @@ export function CompanySettings() {
                     label='Не учитывать'
                     name='radioGroup'
                     value=''
+                    checked={!data.settings.isGroupVisit}
+
                 />
             </Form.Field>
         </Form>
@@ -105,7 +104,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Анализировать поиск по агрегаторам'
-                    checked={true}
+                    checked={data.settings.isAggregatorUse}
                     name='radioGroup'
                     value=""
                 />
@@ -115,6 +114,7 @@ export function CompanySettings() {
                     label='Не учитывать'
                     name='radioGroup'
                     value=''
+                    checked={!data.settings.isAggregatorUse}
                 />
             </Form.Field>
         </Form>
@@ -123,7 +123,7 @@ export function CompanySettings() {
             <Form.Field>
                 <Radio
                     label='Включить подтверждение'
-                    checked={true}
+                    checked={data.settings.isConfirmNeeded}
                     name='radioGroup'
                     value=""
                 />
@@ -133,6 +133,7 @@ export function CompanySettings() {
                     label='Выключить, подтверждение не требуется'
                     name='radioGroup'
                     value=''
+                    checked={!data.settings.isConfirmNeeded}
                 />
             </Form.Field>
         </Form>

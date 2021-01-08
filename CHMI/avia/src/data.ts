@@ -62,6 +62,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
                 .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
         ],
         resulting: 24,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 2,
@@ -77,6 +83,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             wasHere: false,
         },
         resulting: 45,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 3,
@@ -92,6 +104,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             wasHere: false,
         },
         resulting: 95,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 4,
@@ -106,6 +124,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
                 .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
         ],
         resulting: 12,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: false,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 5,
@@ -120,6 +144,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
                 .map((user) => ({...user, degreeOfInvolvement: getRandomInvolvement()}))
         ],
         resulting: 35,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 6,
@@ -135,6 +165,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             wasHere: false,
         },
         resulting: 89,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     },
     {
         id: 7,
@@ -150,6 +186,12 @@ export const data: Array<PersonalCompanyDTO | GroupCompanyDTO>  = [
             wasHere: false,
         },
         resulting: 67,
+        settings: {
+            isAggregatorUse: true,
+            isConfirmNeeded: false,
+            isGroupVisit: true,
+            isHistoricalVisit: true
+        }
     }
 ]
 
